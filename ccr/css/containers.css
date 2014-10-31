@@ -1,0 +1,196 @@
+body,table,td,img {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+/* Main Wrapper Data Format */
+td.preHeader {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #455471;
+  height: 16px;
+  text-align: right;
+  background: url("../images/shadow_full.png") repeat-y;
+}
+td.headerFill {
+  background-color: #6c83b0;
+  border-bottom: 1px solid #000;
+}
+td.headerDisplay {
+  background-color: #6c83b0;
+  padding-left: 16px;
+}
+td.mainLinks {
+  background-color: #eee;
+  border-bottom: 1px solid #000;
+  height: 22px;
+  padding-left: 12px;
+}
+td.sideBar {
+  background-color: #fff;
+  text-align: center;
+  vertical-align: top;
+  width: 150px;
+}
+td.sideBarGrey {
+  background-color: #eee;
+  border-bottom: 1px solid #000;
+  text-align: left;
+  vertical-align: top;
+  width: 150px;
+}
+td.sideBarSmall {
+  background-color: #6c83b0;
+  border-bottom: 1px solid #000;
+  height: 16px;
+  text-align: right;
+  width: 150px;
+}
+td.sideBarSmallHeader {
+  background-color: #6c83b0;
+  vertical-align: top;
+  height: 16px;
+  padding-top: 1px;
+  padding-bottom: 2px;
+  text-align: right;
+  width: 150px;
+}
+td.subLinks {
+  background-color: #ffe4e8;
+  border-right: 1px solid #000;
+  color: #787878;
+  padding-left: 12px;
+  height: 19px;
+}
+td.contentDisplay {
+  background-color: #fff;
+  border: 1px solid #000;
+  border-top: none;
+  text-align: center;
+  vertical-align: top;
+  padding: 10px;
+}
+td.footerDisplay {
+  background-color: #eee;
+  border-bottom: 1px solid #000;
+  text-align: center;
+}
+/* Containers Used Globally */
+table.boxSoft {
+  width: 100%;
+  background-color: #F3F1E5;
+}
+td.boxSoft {
+  background-color: #fff;
+  padding: 4px;
+}
+td.boxSoftColumn {
+  padding-left: 16px;
+  padding-right: 16px;
+  text-align: justify;
+  vertical-align: top;
+  text-indent: 20px;
+}
+td.show_results_footer {
+  text-align: right;
+}
+td.div {
+  background-color: #eee;
+  width: 3px;
+}
+.boxSoftTitle {
+  background: #f2f2f2;
+  padding: 2px;
+  text-align: left;
+}
+table.boxSoftSmall {
+  width: 94px;
+  background-color: #ddd;
+}
+td.boxSoftSmall {
+  background-color: #fff;
+  text-align: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+td.boxSoftSmallTitle {
+  border-bottom: 1px solid #ccc;
+  background-color: #F3F1E5;
+  padding-left: 10px;
+}
+/* ss = small space */
+td.ss {
+  padding-left: 6px;
+  vertical-align: top;
+}
+td.display {
+  border-bottom: 1px solid #000;
+  padding-bottom: 6px;
+}
+td.features {
+  padding: 4px;
+  text-align: justify;
+  vertical-align:top;
+}
+td.formLeft {
+  padding: 6px;
+  text-align: left;
+  vertical-align: top;
+}
+td.data1 {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  vertical-align: top;
+  padding-left: .3em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+td.data2 {
+  border-top: 1px solid #ccc;
+  background-color: #EDF6FF;
+  vertical-align: top;
+  padding-left: .3em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.outofdate {
+  border-top: 1px solid #ccc;
+  background-color: #FFE2DF;
+  vertical-align: top;
+  padding-left: .3em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: left;
+}
+.outdatedlegend {
+  background-color: #FFE2DF;
+  padding-left: .5em;
+  text-align: left;
+}
+td.text {
+  color: #000;
+  font-size: 12px;
+}
+th {
+  color: #fff;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+th.header {
+  border-bottom: #666 1px solid;
+  vertical-align: bottom;
+}
+
+textarea,
+select {
+  background-color: #fff;
+  font-size: 10pt;
+  border: #000 1px solid;
+  color: #111;
+  padding: 2px;
+}
+input.button {
+  padding: 2px;
+}
+
+

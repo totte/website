@@ -1,0 +1,3 @@
+Name: Chakra
+Author: H W Tovetjärn (totte)
+Date: 31-10-2014

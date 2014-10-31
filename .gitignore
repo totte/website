@@ -1,0 +1,11 @@
+bugtracker/flyspray.conf.php
+ccr/lib/config.inc
+forum/config.php
+forum/register.php
+news/serendipity_config_local.inc.php
+packages/include/config.php
+wiki/LocalSettings.php
+.DS_Store
+.htaccess
+.cvsignore
+*~

@@ -1,0 +1,147 @@
+/* Standard Fonts */
+span /* Applicable by default in all fonts */
+{
+  color: #555;
+}
+span.f1 /* Important */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+span.f2 /* Title */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  font-size: 12px;
+  color: black;
+  font-weight: normal;
+  padding-right: 4px;
+}
+span.f3 /* Sub Title */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: black;
+  font-size: 12px;
+  font-weight: normal;
+  padding-right: 2px;
+}
+span.f4 /* Content Text */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #444;
+  font-size: 12px;
+}
+span.f5 /* Content Small */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #333;
+  font-size: 11px;
+}
+span.f6 /* Red Message */
+{
+  /* color: #b06d6e; */
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #C00000;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: bottom;
+}
+span.f7 /* Green Message */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #6db06d;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+span.f8 /* Description box Title */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  font-size: 12px;
+  color: #6c83b0;
+  font-weight: normal;
+  padding-right: 4px;
+}
+span.f9 /* Package details */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #888;
+  font-size: 12px;
+  font-weight: normal;
+  padding-right: 2px;
+}
+
+span.f10 /* Content Text */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  font-size: 12px;
+  overflow-x: scroll;
+  
+}
+
+span.fix /* Monospace fixed-font */
+{
+  font-family: monospace, "Courier new", Courier;
+  font-size: 12px;
+}
+span.error /* Content Text */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #900;
+  font-size: 12px;
+}
+span.warning /* Content Text */
+{
+  font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+  color: #c0c000;
+  font-size: 12px;
+}
+/* Font Attribute Change (#6c83b0)*/
+.blue { color: #DDDD; }
+.white { color: #fff; }
+.black { color: #000; }
+.green { color: #6db06d; }
+.link
+{
+  color: #6c83b0;
+  font-weight: normal;
+}
+/* Misc (c9d1e2) */
+span.preHeader
+{
+  color: #c9d1e2;
+  font-weight: normal;
+  font-size: 11px;
+  padding-right: 8px;
+  word-spacing: 8px;
+}
+span.sideBarSmallHeader
+{
+  color: #fff;
+  font-weight: normal;
+  font-size: 11px;
+  padding-right: 8px;
+}
+a {
+  color: #0771a6;
+  text-decoration: none;
+  padding-right: 4px;
+}
+a:hover {
+  color: #333;
+  text-decoration: none;
+}
+h1, h2, h3, h4 {
+  font-size: 16pt;
+}
+
+.important {
+	font-weight: normal;
+	color: #A10000;
+	/* color: #f00; */
+}
+.pkgoutput {
+	font-weight: normal;
+	text-align: center;
+}
+

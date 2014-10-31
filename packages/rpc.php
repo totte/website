@@ -1,0 +1,30 @@
+<?php
+include_once("akabeijson.class.php");
+
+if ( $_SERVER['REQUEST_METHOD'] == 'GET' ){
+    if ( isset($_GET['type']) ){
+        $rpc_o = new AkabeiJSON();
+        echo $rpc_o->handle($_GET);
+    }
+    else {
+        // dump a simple usage output for people to use.
+        // this could be moved to an api doc in the future, or generated from
+        // the AkabeiJSON class directly with phpdoc. For now though, just putting it here.
+        echo '<html><body>';
+        echo 'The methods currently allowed are: <br />';
+        echo '<ul>';
+        echo '<li>list_files</li>';
+        echo '</ul><br />';
+        echo 'Each method requires the following HTTP GET syntax:<br />';
+        echo '&nbsp;&nbsp; type=<i>methodname</i>&amp;arg=<i>data</i> <br /><br />';
+        echo 'Where <i>methodname</i> is the name of an allowed method, and <i>data</i> is the argument to the call.<br />';
+        echo '<br />';
+        echo 'If you need jsonp type callback specification, you can provide an additional variable <i>callback</i>.<br />';
+        echo 'Example URL: <br />&nbsp;&nbsp; http://url/rpc.php?type=list_files&amp;arg=foobar&callback=jsonp1192244621103';
+        echo '</body></html>';
+    }
+}
+else {
+    echo 'POST NOT SUPPORTED';
+}
+?>

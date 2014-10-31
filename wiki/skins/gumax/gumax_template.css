@@ -1,0 +1,844 @@
+/*
+ * ----------------------------------------------------------------------------
+ * This is the Chakra Linux modification of the
+ * 'gumax' style sheet for CSS2-capable browsers.
+ *	   Loosely based on the monobook style
+ *
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ * ----------------------------------------------------------------------------
+ */
+
+/* Basic Structure
+-----------------------------------------------------------------------------*/
+body
+{
+	font: 0.7em  Helvetica, Lucida Grande, Arial, sans-serif;
+	color: #343434;
+	/* background: #ffffff url('../../../home/img/background.png'); */
+        background: none repeat fixed center bottom #F0F0F0;
+	background-repeat:repeat;
+	background-attachment:fixed;
+	background-position:bottom;
+	margin: 0;
+	padding: 0;
+}
+
+body, td, th, input, textarea, pre, h1, h2, h3, h4, h5, h6 { color: #1a1a1a; }
+body, td, th, input, textarea { font-family: Helvetica, Lucida Grande, Arial, sans-serif; }
+pre { font-family: Monospace, Courier, Arial; }
+
+#gumax-rbox
+{
+	width: 944px;  /* page width */
+}
+
+#gumax-wrapper
+{
+	width: 944px;
+	margin: 30px auto;
+	background: white url("../../../home/img/header.png") no-repeat;
+	padding: 65px 0px 0px 0px;
+	/*border: 12px solid #2e2e2e;*/
+	position:relative;
+}
+
+/* Logo
+             The Chakra theme don't use this container !!
+-----------------------------------------------------------------------------*/
+#p-logo,
+#p-logo a,
+#p-logo a:hover
+{
+	width:  180px;      
+	height: 72px;
+}
+
+#p-logo
+{
+	/* border: 1px solid #CC0033; /* debuging */
+	z-index: 200;
+	position: absolute; /*needed to use z-index */
+	top:  20px;
+	left: 10px; /* left margin of the logo, which is same as content margin */
+	overflow: visible;
+}
+#p-logo h5 { display: none; }
+#p-logo a,
+#p-logo a:hover
+{
+	display: block;
+	background-repeat: no-repeat;
+	background-position: 35% 50% !important;
+	text-decoration: none;
+}
+
+
+
+/* Header
+-----------------------------------------------------------------------------*/
+/* gumax-header */
+#gumax-header
+{
+	/* border: 1px solid #CC0033; /* debuging */
+	position: relative;
+	z-index: 100;  /* make logo visible over content*/
+	min-height: 155px;  /* height of header */
+	height: 155px;  /* need for IE */
+	margin: 0 auto;
+	padding-bottom: 40px;
+}
+
+/* Login bar
+-----------------------------------------------------------------------------*/
+#gumax-p-login {
+	/* border:  1px solid #fff; /* debuging */
+	font-size: 12px;
+	margin-left: 0;
+	padding-left: 0;
+	text-transform: none;
+	position: absolute;
+	top: 100px;
+	right: 0;
+}
+
+#gumax-p-login ul {
+	position: relative;
+	width: auto;
+	list-style: none;
+	margin: 0 22px;
+}
+
+#gumax-p-login ul li {
+	position: relative;
+	display: inline;  /* display in line  */
+	margin: 0;
+	color: #eee; /* color of "|" */
+	font-size: 100%; /* font size of items */
+}
+
+#gumax-p-login ul li a
+{
+	padding: 2px 0 3px 12px;
+	background: transparent url("nav_rrow.gif") left 1px no-repeat;
+}
+
+#gumax-pt-login a
+{
+	font-weight: bold;
+	/* text-transform: uppercase; /* uppercase, capitalize */
+}
+
+/* Search bar
+-----------------------------------------------------------------------------*/
+#gumax-p-search {
+	/* border:  1px solid #FFCC00; /* debuging */
+	position: absolute;
+	z-index: 3;
+	top: 130px;
+	right: 12px;
+	font: 0.9em  Helvetica, Lucida Grande, Arial, sans-serif;
+	font-size: 100%;
+}
+
+#gumax-p-search .gumax-pBody,
+#gumax-searchBody {
+	/* border: 1px solid #99FF00;  /* testing */
+	background: none;
+	position: relative;
+	padding: 0;
+	margin-right:  10px;  /* right side margin of search, same as content margin */
+	text-align: left;
+	white-space: nowrap;	/* for Opera */
+	vertical-align: middle;
+}
+
+#gumax-p-search form #searchInput {
+	font: 0.9em  Helvetica, Lucida Grande, Arial, sans-serif;
+	width: 15em;   /* text field width */
+	text-align: left;
+	vertical-align: middle;
+	border: 1px solid #bbb; /* text field border style */
+	background: #f7f7f7; /* background color of the text field */
+        margin-top: 2px;
+}
+
+#gumax-p-search form #searchGoButton,
+#gumax-p-search form #mw-searchButton {
+	ont: 0.9em  Helvetica, Lucida Grande, Arial, sans-serif;
+	vertical-align: middle;
+	color: #555;  /* font color */
+	text-decoration: none;
+	padding: 2px;
+	margin: 0;
+}
+
+#searchGoButton:link, #searchGoButton:visited, #searchGoButton:hover, #searchGoButton:active,
+#mw-searchButton:link, #mw-searchButton:visited, #mw-searchButton:hover, #mw-searchButton:active
+{
+	/* background: #FFCC00; */
+	cursor: pointer;
+}
+
+/* dynamic article picture
+-----------------------------------------------------------------------------*/
+#gumax-article-picture {
+	/* background: #fff; */
+	border:  1px solid #ccc;
+	background: #fff;
+	text-align: left;
+	padding: 0;
+	margin: 2px 15px; /* same margin as content */
+	/* display: none; /* disable gumax-article-picture */
+}
+
+#gumax-article-picture,
+#gumax-article-picture a,
+#gumax-article-picture a:hover {
+	/* border: 3px solid #99FF00;  /* testing */
+	height:	 148px;
+	min-height: 148px; /* height of header */
+	display: block;
+	background-repeat: no-repeat;
+	background-position: center center;
+	text-decoration: none;
+	color: #eee;
+	font-weight: bolder;
+	font-size: 100%;
+}
+
+/* Navigation Menu
+-----------------------------------------------------------------------------*/
+.gumax-portlet h5 { display: none; } /* hide menu title */
+
+#gumax-p-navigation-wrapper
+{
+	/* border: 1px solid red; /* debuging */
+	height: 22px;
+	padding-right: 15px;
+}
+
+#gumax-p-navigation {
+	/* border: 1px solid #000; /* debuging */
+	float: right; /* main menu position */
+}
+
+#gumax-p-navigation ul {
+	/* border: 1px solid red; /* debuging */
+	margin: 0;
+}
+
+#gumax-p-navigation ul li {
+	 float: left; /* fix the gap between <li> list */
+	/* display: inline;  /* display in one line with gaps */
+	font-family: Helvetica, Lucida Grande, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	font-weight: bold; /* the font weight of '|' */
+	font-size: 13px;   /* the font size of the navigation menu */
+	color: #7FBAFF;	/* the font color of '|' */
+	list-style: none;
+}
+
+#gumax-p-navigation ul li a {
+	padding: 4px 9px 4px 9px; /* padding inside the tab */
+	margin: 0;
+	font-weight: bold;
+	color: #808080;
+}
+
+#gumax-p-navigation ul li a:hover {
+	padding: 4px 9px 4px 9px; /* padding inside the tab */
+	margin: 0;
+	font-weight: bold;
+	color: black;
+	background: transparent;
+}
+
+
+/* need for IE to display as block */
+* html #gumax-p-navigation ul li a {
+	display: block; /* Make the hyperlinks as a block element, sort of a hover effect */
+	position: relative; /* need for IE */
+}
+
+#gumax_mainmenu_spacer
+{
+	height: 10px;
+	border-top: 2px solid #989870;
+	margin: 0 15px;
+}
+
+/* siteNotice
+-----------------------------------------------------------------------------*/
+#siteNotice
+{
+	border: 1px solid #FF9933;
+	background: #FFFFCC;
+	margin: 0;
+	padding: .9em;
+	font-size: 100%;
+}
+#siteNotice p {
+	margin: 0;
+	padding: 0;
+}
+#siteNotice table {
+	background: transparent;
+	margin: 0;
+	padding: 0;
+}
+
+/* content
+-----------------------------------------------------------------------------*/
+#gumax-content-body {
+	/* border:  1px solid #CC6600;  /* debuging */
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	text-align: left;
+}
+
+/* Here goes all the main body stuff */
+#content {
+	border: none;
+	background: transparent;
+	margin-left: 5px;
+	margin-right: 5px;
+	/* padding: 15px;  /* content margin */
+	/* position: relative !important;  */
+	position: static; /* need for IE positioning problem */
+	z-index: 2;
+	clear: both;
+	color: black;
+	line-height: 1.4em; /* value other than 'normal' needed for WinIE */
+	overflow-x: visible;	/* need for Firefox, extreme long string :( */
+}
+
+/* content page title */
+.page-Home .firstHeading { display: none; } /* Hide Home Page title */
+
+#content .firstHeading
+{
+	font-size: 110%;
+	color: #989870;
+	font-weight: bolder;
+	padding: 1em 0 0 0;  /* position of the title */
+	margin: 0;
+	border: none;  /* No border for page title */
+	background: none;
+	display: none;  /* disable papge title */
+}
+
+#bodyContent {
+	/* border: 1px solid #ddd;  /* debuging */
+	width: 100%;
+}
+
+/* AJax search style */
+div#searchTargetContainer {
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	background: white;
+	overflow-x: visible;  /* need for Firefox, extreme long string :( */
+	word-wrap: break-word;  /* need for IE, extreme long string :( */
+}
+
+div#searchTarget {
+	padding: 10px;
+	margin:	 5px;
+	background: #fefefe;
+	border:	 solid 1px #FFCC00;
+}
+
+div#searchTarget h2 {
+	padding-top: 1em;
+	margin-bottom: .5em;
+}
+
+div#searchTarget a {
+	position: relative;
+	z-index: 300; /* fix the hide link button */
+}
+
+/* table of content styles */
+#toc, .toc, .mw-warning {
+	font-size: 90%;
+	border: 1px solid #AAAAAA;
+	/* background-color: #F5F5F5; */
+	background: url('../../../home/img/box-1-bg.png');
+	padding: .5em;
+	margin-bottom: 1.2em;
+}
+
+#toc h2, .toc h2 {
+	font-size: 100%;
+	border: none;
+	margin: 0;  /* fix toc top margin */
+	padding-right: .2em;  /* margin between title and hide/show link */
+	display: inline;  /* display the hide/show link after Contents */
+}
+
+#toc #toctitle,
+.toc #toctitle,
+#toc .toctitle,
+.toc .toctitle {
+	text-align: left; /* left adjust of title */
+}
+
+#toc ul, .toc ul {
+	list-style-type: none;
+	list-style-image: none;
+	margin:  0;
+	padding: .3em 0 0 .7em; /* margin of the item list */
+	text-align: left;
+}
+#toc ul ul, .toc ul ul,
+#toc ul ul ul, .toc ul ul ul {
+	margin: 0 0 0 .7em; /* toclevel-2 margin */
+}
+
+#toc .tocindent  { margin-left: 1em; }
+#toc .tocline { margin-bottom: 0; }
+#toc p { margin: 0 }
+#toc .toctoggle { font-size: 90%; }
+
+#toc .editsection {
+	margin-top: .3em;
+	font-size: 90%;
+}
+
+/*
+ * --- body content ---
+ */
+/*
+h1, h2 {
+	padding-top: 1.32em;
+	padding-bottom: .2em;
+	border-bottom: 3px solid #ccc;
+}
+*/
+h1, h2 {
+	margin-top: 1.32em;
+	padding: .35em .1em .3em 0;
+	border-bottom: 3px solid #989870;
+}
+h3, h4, h5, h6 {
+	margin-top: 1em;
+	padding: .2em .1em .3em 0;
+	border-bottom: 1px solid #989870;
+}
+
+ul {
+	margin: .3em 0 0 1.5em;
+	list-style-image: url("arrow.gif");
+}
+li {
+	margin-left: .5em;
+	margin-bottom: .1em;
+	padding: 0; /* margin between bullet and content */
+}
+
+#editform { width: 100%; }  /* prevent overflow in IE when editing */
+
+textarea {
+	font-size: 100%;
+	width: 99%;	 /* fix the textarea oversize in IE */
+	padding: 2px 0 0 2px;
+	margin: 0;
+	border: 1px solid #3399FF;
+	height: 600px;
+}
+
+/* pre{ */
+/* white-space: pre;			/* CSS2 */
+/* white-space: -moz-pre-wrap;  /* Mozilla */
+/* white-space: -hp-pre-wrap;   /* HP printers */
+/* white-space: -o-pre-wrap;	/* Opera 7 */
+/* white-space: -pre-wrap;	  /* Opera 4-6 */
+/* white-space: pre-wrap;	   /* CSS 2.1 */
+/* white-space: pre-line;	   /* CSS 3 (and 2.1 as well, actually) */
+/* word-wrap: break-word;	   /* IE */
+/* } */
+
+pre {
+	white-space: -moz-pre-wrap;  /* need for Firefox */
+	overflow-x: visible;  /* need for Firefox, extreme long string :( */
+	padding: 1em;
+	border: 1px dashed #2f6fab;
+	color: black;
+	background: #F1FFFF;
+	line-height: 1.2em;
+	margin: 1.1em 0;
+}
+* html pre {
+	word-wrap: break-word;  /* IE */
+}
+.visualClear { clear: both;}
+
+.errorbox, .successbox {
+	margin-top:	 .2em;
+	margin-bottom:  1em;
+}
+
+#contentSub, #contentSub2 {
+	font-size: 90%;
+	line-height: 1.2em;
+	margin: 0.5em 0 1.4em 0;
+	color: #7d7d7d;
+	width: auto;
+}
+
+/* edit section
+-----------------------------------------------------------------------------*/
+* html div.editsection {
+	font-size: 90%;
+}
+.editsection {
+	font-size: 90%;
+	margin-top: 1px;
+	color: #ddd; /* color for [] */
+}
+.editsection a,
+.editsection a:visited {
+	color: #2A80C7;
+}
+.editsection a:hover {
+	color: #FF3300;
+}
+
+/* category
+-----------------------------------------------------------------------------*/
+#catlinks {
+	border: 1px solid #aaa;
+	/* background-color: #f9f9f9; */
+	background: url('../../../home/img/box-1-bg.png');
+	padding: .3em;
+	margin-top: 1em;
+	clear: both;
+}
+#catlinks p, .catlinks {
+	margin:  0;
+	padding: 0;
+}
+
+/* content-actions
+-----------------------------------------------------------------------------*/
+#gumax-content-actions
+{
+	/* border:  1px solid #000; /* debuging */
+	text-align: left; /* menu location */
+	height: 1.5em;  /* need for IE win */
+	font-size: 110%;
+	margin: .2em 15px .7em 15px;
+	white-space: nowrap;
+}
+
+.gumax-content-actions-top {
+	border-top: 5px solid #808080;
+	border-collapse: collapse;
+}
+.gumax-content-actions-bottom {
+	border-bottom: 5px solid #808080;
+	border-collapse: collapse;
+}
+
+#gumax-content-actions ul
+{
+	list-style: none;
+	margin: 0;
+}
+#gumax-content-actions ul li
+{
+	display: inline;
+	overflow: visible;
+	/* color: #999;  /* the font color of '|' */
+	margin: 0 .3em 0 0;
+}
+#gumax-content-actions ul li a
+{
+	padding: .1em .5em .2em .5em;
+	text-decoration: none;
+	/* border: 1px solid #ddd; /* menu border */
+	font-size: 100%;
+	background: transparent;
+}
+
+#gumax-content-actions ul li a:visited
+{
+	color: black;
+	background: #F5E7E7;
+}
+
+#gumax-content-actions ul li a:hover
+{
+	color: black;
+	background: #EFF1DA;
+}
+
+#gumax-content-actions ul li a:active
+{
+	color: black;
+	background: #EFF1DA;
+}
+
+
+.gumax-firstHeading {
+	font-weight: bold;
+	font-size: 150%;
+	color:  #1a1a1a;
+	float: left;
+	margin: 0 15px 0 15px;
+}
+.gumax-content-actions-top li#ca-edit {
+
+}
+
+/* Footer
+-----------------------------------------------------------------------------*/
+#gumax_footer_spacer
+{
+	height: 1px;
+	background: transparent center center repeat-x;  /* footer spacer background */
+}
+
+#gumax-footer
+{
+	/* border:  1px solid #000; /* debuging */
+	padding-bottom: 15px;
+	color: #999;
+	font-size: 12px;
+	text-align: right; /* page footer location */
+	margin-left:  15px;
+	margin-right: 25px;
+}
+
+#gumax-footer ul
+{
+	list-style: none;
+}
+#gumax-footer ul li {
+	display: inline;
+	overflow: visible;
+	color: #bbb; /* the font color of '|' */
+	margin: 0;
+}
+#gumax-footer ul li a
+{
+	padding: 2px 0px 2px 12px;
+	background: transparent url("nav_rrow.gif") left 1px no-repeat;
+}
+
+#gumax-f-message {
+	padding-top: 20px;
+}
+
+/* Special:Specialpages
+-----------------------------------------------------------------------------*/
+#allmessagestable { /* system message table fix */
+	table-layout: fixed;
+	width:	 100%;
+	max-width: 100%;
+	margin-top: 20px;
+}
+#allmessagestable.left td {
+	width: 30%;
+}
+
+table.imagelist, table.TablePager { /* image list table fix */
+	/* table-layout: fixed; /**/
+	width:	 100%;
+	max-width: 100%;
+	margin-top: 0.3em;
+}
+.TablePager td, .TablePager th {
+	border: 1px solid #777;
+}
+.imagelist td, .imagelist th {
+	white-space: normal;
+}
+/* remove line wrapping for TablePager_col_links */
+.imagelist .TablePager_col_links {
+	white-space: nowrap;
+}
+
+/* file gallery fix */
+/*
+table.gallery {
+	margin: 2px 0;
+	padding: 2px 0;
+}
+div.gallerybox {
+	margin: 2px 1px;
+	width:  125px;
+}
+div.gallerybox div.thumb {
+	margin: 2px 0;
+}
+*/
+
+/* Random HTML
+-----------------------------------------------------------------------------*/
+hr {
+	height: 1px;
+	color: #aaa;
+	background-color: #aaa;
+	border: 0;
+	margin: .2em 0 .2em 0;
+}
+
+input[type="submit"] { font-weight: bold; }
+
+/* for margin between paragraphs */
+.cc {
+	font-size: 10%;
+	padding: 0.2em 0 0.2em 0;
+	margin: 0;
+}
+/*-------------------------------------
+	<div class="cc">&nbsp;</div>
+-------------------------------------*/
+
+/*
+ * Force Opera / Moz / Netscape
+ * to display an _IN_active vertical scrollbar
+ * (like IE).
+ */
+html {
+	overflow-y: scroll;
+}
+
+
+* html #preferences {
+	width: 90%;
+}
+
+/* login form fix */
+div#userloginForm form,
+form#userlogin2 {
+	width: 500px;
+}
+
+/* page borders
+----------------------------------------------------------------------------- */
+
+.gumax-rbcontentwrap {
+    width: 944px;
+    background: transparent url('../../../home/img/shadow_l.png') repeat-y;
+    margin: 0px auto; 
+}
+.gumax-rbcontent { 
+    width: 960px;
+     background: transparent url('../../../home/img/shadow_r.png') repeat-y right; 
+
+}
+.gumax-rbcontent       { padding: 0px 0px; }
+
+/* IE fix
+* html .gumax-rbcontentwrap { background: none; }
+* html .gumax-rbcontent	 { background: none; }
+* html .gumax-page { border-left:  3px solid #e7e7e7; border-right:  3px solid #e7e7e7; }
+
+
+/*  Chakra menu bar
+----------------------------------------------------------------------------*/
+#main_nav {
+	list-style: none;
+	padding-right: 2px;
+	right: 0px;
+	margin: 0 0 0 0;
+	top: 50px;
+	position: absolute;
+        z-index: 1;
+	width: 942px;
+	background: #1a1a1a;
+	display: block;
+	overflow: hidden;
+	font-size: 0.9em;
+	font-weight: normal;
+	height:36px;
+	text-transform:capitalize;
+}
+
+#main_nav li {
+	display: inline;
+	margin: 0 3px;
+	padding: 0;
+	text-align: center;
+	font-size: 13px;
+	line-height: 33px;
+	background: transparent;
+	float: right;
+}
+
+#main_nav .selected {
+        color: #FFF;
+        text-decoration: none;
+        background-color: #ec4530;
+        background: #32ADF1;
+        -moz-border-radius: 4px; border-radius: 4px;
+}
+
+#main_nav a {
+	display: block;
+	float: right;
+	padding: 0 8px;
+	color: #f2f2f2;
+	text-decoration: none;
+}
+
+#main_nav a:hover {
+	border: none;
+	background: url("../../../home/img/nav_bar_r.jpg") repeat-x bottom center;
+	-moz-border-radius: 4px; border-radius: 4px;
+}
+
+/* Chakra FOOTER 
+-------------------------------------------------------------*/
+/* FOOTER */
+#foot {
+	padding: 15px;
+	background: transparent url("../../../home/img/footer.png") no-repeat;
+        /* background: #32adf1; */
+	color: #f2f2f2;
+	text-align: center;
+	margin: 0px 0 0 0;
+	font-size: 10pt;
+}
+#foot a:link {
+	color: #f2f2f2;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#foot a:visited {
+	color: #f2f2f2;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#foot a:hover{
+	color: #32adf1;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#foot a:active {
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+}

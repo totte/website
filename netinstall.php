@@ -1,0 +1,1 @@
+home/netinstall.php

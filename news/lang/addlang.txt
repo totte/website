@@ -1,0 +1,1 @@
+@define('PLAIN_ASCII_NAMES', '(no special characters, umlauts)');

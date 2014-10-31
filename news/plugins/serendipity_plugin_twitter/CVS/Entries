@@ -1,0 +1,18 @@
+/.cvsignore/1.1/Wed Jun 17 11:42:54 2009//
+/.htaccess/1.1/Wed Jun 17 11:42:54 2009//
+/documentation_de.html/1.4/Sun Nov 27 12:00:42 2011//
+/documentation_en.html/1.1/Wed Jun 17 11:42:54 2009//
+/lang_cs.inc.php/1.9/Sat Feb 18 01:34:02 2012//
+/lang_cz.inc.php/1.9/Sat Feb 18 01:34:02 2012//
+D/UTF-8////
+D/classes////
+D/documentation////
+D/img////
+D/tweeter////
+D/twitteroauth////
+/serendipity_plugin_twitter.php/1.36/Thu Oct 25 00:32:11 2012//
+/ChangeLog/1.51/Sun Nov  4 01:34:50 2012//
+/lang_de.inc.php/1.21/Sun Nov  4 01:34:50 2012//
+/lang_en.inc.php/1.21/Sun Nov  4 01:34:50 2012//
+/plugin_version.inc.php/1.47/Sun Nov  4 01:34:50 2012//
+/serendipity_event_twitter.php/1.64/Sun Nov  4 01:34:50 2012//

@@ -1,0 +1,36 @@
+# MAINTAINER
+H W Tovetjärn (totte) <totte@tott.es>
+
+# CONTRIBUTORS
+
+# LICENSE
+See each subdirectory for license information. The bugtracker is
+Flyspray, the CCR is based on AUR, the forum is FluxBB, Home is
+original, the blog is Serendipity, the Packages is original, the
+wiki is MediaWiki.
+
+# DEPENDENCIES
+To run on a Debian "Wheezy" system:
+
+imagemagick                                                                     
+imagemagick-common
+mysql-client                                                                    
+mysql-client-5.5                                                                
+mysql-common
+nginx                                                                           
+nginx-common                                                                    
+nginx-full
+php-apc                                                                         
+php-geshi                                                                       
+php-pear                                                                        
+php5-cli                                                                        
+php5-common                                                                     
+php5-dev                                                                        
+php5-fpm                                                                        
+php5-gd                                                                         
+php5-imagick                                                                    
+php5-intl                                                                       
+php5-mcrypt                                                                     
+php5-memcache                                                                   
+php5-memcached                                                                  
+php5-mysql

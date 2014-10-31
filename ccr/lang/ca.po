@@ -1,0 +1,759 @@
+<?php
+# INSTRUCTIONS TO TRANSLATORS
+#
+# This file contains the i18n translations for a subset of the
+# Arch Linux User Community Repository (AUR).  This is a PHP
+# script, and as such, you MUST pay great attention to the syntax.
+# If your text contains any double-quotes ("), you MUST escape
+# them with a backslash (\).
+#
+
+global $_t;
+
+$_t["Confirm your e-mail address:"]
+  = "Confirmeu la vostra adreça de correu:";
+
+$_t["This package has been flagged out of date."]
+  = "Aquest paquet s'ha marcat com a obsolet.";
+
+$_t["Remember to vote for your favourite packages!"]
+  = "Recordeu-vos de votar pels vostres paquets preferits!";
+
+$_t["Missing a required field."]
+  = "Falta un camp necessari.";
+
+$_t["Logged-in as: %s"]
+  = "Connectat com: %s";
+
+$_t["Error trying to modify account, %h%s%h: %s."]
+  = "Error en provar de modificar el compte, %h%s%h: %s.";
+
+$_t["Username does not exist."]
+  = "L'usuari no existeix.";
+
+$_t["Tarball"]
+  = "Arxiu";
+
+$_t["Can contain only one period, underscore or hyphen."]
+  = "Només pot tenir una barra baixa o un guió.";
+
+$_t["Unflag Out-of-date"]
+  = "Desmarca com obsolet";
+
+$_t["Missing package ID."]
+  = "Falta l'ID del paquet.";
+
+$_t["You cannot vote in an proposal about you."]
+  = "No podeu votar en una proposta quant a vós.";
+
+$_t["No results matched your search criteria."]
+  = "Cap paquet coincideix amb la cerca.";
+
+$_t["Enter your new password:"]
+  = "Introduïu la nova contrasenya:";
+
+$_t["Update"]
+  = "Actualitza";
+
+$_t["Sort order"]
+  = "Ordre";
+
+$_t["The selected packages have been adopted."]
+  = "S'han adoptat els paquets seleccionats.";
+
+$_t["Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Linux Packaging Standards%h otherwise they will be deleted!"]
+  = "Els PKGBUILD proporcionats %hhan%h de ser conforme als %hestàndards d'empaquetatge de Chakra%h o seran esborrats!";
+
+$_t["Your votes have been cast for the selected packages."]
+  = "S'han emès els vots per als paquets seleccionats.";
+
+$_t["Package details could not be found."]
+  = "No s'han pogut trobar els detalls del paquet.";
+
+$_t["change category"]
+  = "canvia la categoria";
+
+$_t["Error retrieving package list."]
+  = "Error en recuperar la llista de paquets.";
+
+$_t["Reset"]
+  = "Inicialitza";
+
+$_t["Submitted: %s by %s"]
+  = "Enviat: %s per %s";
+
+$_t["string"]
+  = "cadena";
+
+$_t["Remember me"]
+  = "Recorda'm";
+
+$_t["This vote is still running."]
+  = "La votació encara està oberta.";
+
+$_t["Package category updated."]
+  = "S'ha actualitzat la categoria del paquet.";
+
+$_t["%s already has proposal running for them."]
+  = "%s ja ha estat proposat.";
+
+$_t["Proposal Details"]
+  = "Detalls de la proposta";
+
+$_t["Error - No file uploaded"]
+  = "Error - No s'ha pujat cap fitxer";
+
+$_t["You did not select any packages to disown."]
+  = "NO heu seleccionat cap paquet per orfenar.";
+
+$_t["Package URL is missing a protocol (ie. http:// ,ftp://)"]
+  = "Falta el protocol de l'URL del paquet (ex. http:// ,ftp://)";
+
+$_t["Total"]
+  = "Total";
+
+$_t["No more results to display."]
+  = "NO hi ha cap resultats a mostrar.";
+
+$_t["Maintainer"]
+  = "Mantenidor";
+
+$_t["Less"]
+  = "Menys";
+
+$_t["You are not allowed to access this area."]
+  = "No podeu accedir a aquesta àrea.";
+
+$_t["The CCR files are user produced content. Any use of the provided files is at your own risk."]
+  = "Els fitxers del CCR els produeixen els usuaris. Useu-los sota la vostra responsabilitat.";
+
+$_t["Search for results in the main repository"]
+  = "Cerca en el repositori principal";
+
+$_t["Any type"]
+  = "Qualsevol";
+
+$_t["Accounts"]
+  = "Comptes";
+
+$_t["Could not retrieve proposal details."]
+  = "No es poden recuperar els detalls de la proposta.";
+
+$_t["You do not have permission to edit this account."]
+  = "No teniu permís per a modificar aquest compte.";
+
+$_t["Click on the Home link above to login."]
+  = "Clicqueu a l'enllaç Inici de dalt der connectar-vos.";
+
+$_t["The email address is invalid."]
+  = "L'adreça de correu no és vàlida.";
+
+$_t["Index"]
+  = "Inici";
+
+$_t["Search by"]
+  = "Cerca per";
+
+$_t["Could not change directory to %s."]
+  = "No s'ha pogut canviar el directori a %s.";
+
+$_t["None of the selected packages could be deleted."]
+  = "No es pot esborrar cap dels paquets seleccionats.";
+
+$_t["Your votes have been removed from the selected packages."]
+  = "S'han eliminat els vostres vots dels paquets seleccionats.";
+
+$_t["No packages matched your search criteria."]
+  = "Cap paquet coincideix amb la cerca.";
+
+$_t["Confirm"]
+  = "Confirma";
+
+$_t["Welcome to the Chakra Community Repo. Please read the %hCCR User Guidelines%h and %hCCR TU Guidelines%h for more information."]
+  = "Benvingut al repositori de la comunitat de Chakra. Llegiu %hla guia del CCR%h i %hla guia del TU del CCR%h per a més informació.";
+
+$_t["Create"]
+  = "Crea";
+
+$_t["Start and end with a letter or number"]
+  = "Comença i acaba amb una lletra o número";
+
+$_t["orphan"]
+  = "orfe";
+
+$_t["View this user's packages"]
+  = "Mostra els paquets d'aquest usuari";
+
+$_t["Next"]
+  = "Següent";
+
+$_t["Could not re-tar"]
+  = "No s'ha pogut re-empaquetar";
+
+$_t["Upload your source packages here. Create source packages with `makepkg --source`."]
+  = "Pugeu aquí els vostres paquets. S'han de crear amb «makepkg --source».";
+
+$_t["You must be logged in before you can adopt packages."]
+  = "Heu de connectar-vos abans d'aportar paquets.";
+
+$_t["You must create an account before you can upload packages."]
+  = "Heu de crear un compte aband de pujar paquets.";
+
+$_t["Delete comment"]
+  = "Esborra el comentari";
+
+$_t["Account Type"]
+  = "Tipus de compte";
+
+$_t["Type"]
+  = "Tipus";
+
+$_t["More"]
+  = "Més";
+
+$_t["Error retrieving package details."]
+  = "Error en recuperar els detalls del paquet.";
+
+$_t["PKGBUILD"]
+  = "PKGBUILD";
+
+$_t["Could not create incoming directory: %s."]
+  = "No es pot crear el directori d'entrada: %s.";
+
+$_t["Upload package file"]
+  = "Puja el fitxer de paquet";
+
+$_t["Password Reset"]
+  = "Reinicia la contrasenya";
+
+$_t["(defaults to 7 if empty)"]
+  = "(per omissió 7 si és buit)";
+
+$_t["No New Comment Notification"]
+  = "Sense notificació de nous comentaris";
+
+$_t["Couldn't add to notification list."]
+  = "No s'ha pogut afegir a la llista de notificacions.";
+
+$_t["The selected packages have not been deleted, check the confirmation checkbox."]
+  = "No s'ha esborrat cap paquet, marqueu la casella de confirmació.";
+
+$_t["Disown Packages"]
+  = "Orfena";
+
+$_t["Advanced"]
+  = "Avançat";
+
+$_t["Change category"]
+  = "Canvia la categoria";
+
+$_t["Files"]
+  = "Fitxers";
+
+$_t["Vote ID not valid."]
+  = "L'ID del vot no és vàlid.";
+
+$_t["(empty if not applicable)"]
+  = "(buit si no és aplicable)";
+
+$_t["Per page"]
+  = "Per pàgina";
+
+$_t["New proposal submitted."]
+  = "S'ha enviat la nova proposta.";
+
+$_t["Upload"]
+  = "Puja";
+
+$_t["Invalid category ID."]
+  = "L'ID de la categoria no és vàlid.";
+
+$_t["Go"]
+  = "Vés";
+
+$_t["You must be logged in before you can vote for packages."]
+  = "Heu de connectar-vos abans de poder votar.";
+
+$_t["Use this form to search existing accounts."]
+  = "Useu aquest formulari per cercar comptes.";
+
+$_t["The address, %h%s%h, is already in use."]
+  = "L'adreça, %h%s%h, ja s'està usant.";
+
+$_t["Current Votes"]
+  = "Vots actuals";
+
+$_t["Out of Date"]
+  = "Obsolet(s)";
+
+$_t["Select Category"]
+  = "Seleccioneu una categoria";
+
+$_t["You have been removed from the comment notification list for %s."]
+  = "Se us ha eliminat de la llista de notificacions de comentaris de %s.";
+
+$_t["Package screenshot is missing a protocol (ie. http:// ,ftp://)"]
+  = "Falta el protocol de la captura de pantalla (ex. http:// ,ftp://)";
+
+$_t["Delete Packages"]
+  = "Esborra";
+
+$_t["The selected packages have been deleted."]
+  = "S'han esborrat els paquets seleccionats.";
+
+$_t["Back"]
+  = "Torna";
+
+$_t["You did not select any packages to flag."]
+  = "NO heu seleccionat cap paquet.";
+
+$_t["All Votes"]
+  = "Tots els vots";
+
+$_t["The selected packages have been disowned."]
+  = "S'ha orfenat els paquets seleccionats.";
+
+$_t["Suspended"]
+  = "Suspès";
+
+$_t["Home"]
+  = "Inici";
+
+$_t["Yes"]
+  = "Sí";
+
+$_t["UnFlag Out-of-date"]
+  = "Desmarca com obsolet";
+
+$_t["Developer"]
+  = "Desenvolupador";
+
+$_t["Category"]
+  = "Categoria";
+
+$_t["This is a %h%s%h problem!"]
+  = "Hi ha un problema amb %h%s%h!";
+
+$_t["You must be logged in before you can flag packages."]
+  = "Abans de marcar paquets heu de connectar-vos.";
+
+$_t["No results found."]
+  = "No s'ha trobat cap resultat.";
+
+$_t["No"]
+  = "No";
+
+$_t["Discussion"]
+  = "Llista de correu";
+
+$_t["Dependencies"]
+  = "Dependències";
+
+$_t["You must be logged in before you can un-vote for packages."]
+  = "Abans de votas paquets heu de connectar-vos.";
+
+$_t["Add"]
+  = "Afegeix";
+
+$_t["You did not select any packages to adopt."]
+  = "NO heu seleccionat cap paquet per adoptar-lo.";
+
+$_t["Length must be at least 1."]
+  = "La longitud ha de ser almenys 1.";
+
+$_t["Error trying to create account, %h%s%h: %s."]
+  = "Error en crear el compte, %h%s%h: %s.";
+
+$_t["End"]
+  = "Acaba";
+
+$_t["The account, %h%s%h, has been successfully modified."]
+  = "El compte, %h%s%h, s'ha modificat correctament.";
+
+$_t["Confirm your new password:"]
+  = "Confirmeu la nova contrasenya:";
+
+$_t["Account Suspended"]
+  = "Compte suspès";
+
+$_t["Status"]
+  = "Estat";
+
+$_t["My Account"]
+  = "El meu compte";
+
+$_t["You must be logged in before you can get notifications on comments."]
+  = "Heu de connectar-vos abans de rebre notificacions de comentaris.";
+
+$_t["Leave the password fields blank to keep your same password."]
+  = "Deixeu els camps de contrasenya en blanc per a conservar-la.";
+
+$_t["IRC Nick"]
+  = "Sobrenom de l'IRC";
+
+$_t["Enter your e-mail address:"]
+  = "Introduïu la vostra adreça de correu:";
+
+$_t["Normal user"]
+  = "Usuari normal";
+
+$_t["You are not allowed to overwrite the %h%s%h package."]
+  = "No podeu sobreescriure el paquet %h%s%h.";
+
+$_t["Missing comment ID."]
+  = "Falta l'ID del comentari.";
+
+$_t["Error trying to retrieve package details."]
+  = "Error en recuperar els detalls del paquet.";
+
+$_t["Proposal cannot be empty."]
+  = "La proposta no pot ser buida.";
+
+$_t["User"]
+  = "Usuari";
+
+$_t["Package Category"]
+  = "Categoria del paquet";
+
+$_t["You must be logged in before you can edit package information."]
+  = "YHeu de connectar-vos abans d'editar paquets.";
+
+$_t["Packages"]
+  = "Paquets";
+
+$_t["Edit Account"]
+  = "Edita el compte";
+
+$_t["Search"]
+  = "Cerca";
+
+$_t["Trusted user"]
+  = "Usuari de confiança";
+
+$_t["Error - uncompressed file size too large."]
+  = "Error - fitxer descomprimit massa gran.";
+
+$_t["Language"]
+  = "Idioma";
+
+$_t["Orphans"]
+  = "Orfes";
+
+$_t["Could not retrieve information for the specified user."]
+  = "NO podeu recuperar la informació de l'usuari especificat.";
+
+$_t["Unknown file format for uploaded file."]
+  = "Format de fitxer desconegut.";
+
+$_t["Showing results %s - %s of %s"]
+  = "Mostrant els resultats %s - %s de %s";
+
+$_t["Active"]
+  = "Activa";
+
+$_t["You've already voted for this proposal."]
+  = "Ja heu votat aquesta proposta.";
+
+$_t["Required by"]
+  = "Requerit per";
+
+$_t["You must be logged in before you can unflag packages."]
+  = "Heu de connectar-vos abans.";
+
+$_t["Start"]
+  = "Comença";
+
+$_t["You did not select any packages to unflag."]
+  = "NO heu seleccionat cap paquet.";
+
+$_t["You must log in to view user information."]
+  = "Heu de connectar-vos abans.";
+
+$_t["You did not select any packages to delete."]
+  = "NO heu seleccionat cap paquet per esborrar.";
+
+$_t["Could not create directory %s."]
+  = "No s'ha pogut crear el directori %s.";
+
+$_t["UnNotify"]
+  = "No notifiquis";
+
+$_t["Flag Out-of-date"]
+  = "Marca com obsolet";
+
+$_t["The selected packages have been unflagged."]
+  = "S'han desmarcats els paquets seleccionats.";
+
+$_t["Search Criteria"]
+  = "Criteri de cerca";
+
+$_t["Notify"]
+  = "Notificació";
+
+$_t["Vote"]
+  = "Vota";
+
+$_t["Adopt Packages"]
+  = "Adopta";
+
+$_t["Name"]
+  = "Nom";
+
+$_t["Package Listing"]
+  = "Llistat de paquets";
+
+$_t["Any"]
+  = "Qualsevol";
+
+$_t["It must be between %s and %s characters long"]
+  = "Ha de tenir entre %s i %s caràcters";
+
+$_t["Logout"]
+  = "Desconnecta";
+
+$_t["Some packages with no Gtk dependences may be provided as binaries in [apps] or [platform]"]
+  = "Alguns paquets sense dependències Gtk seran proporcionats a [apps] o [platform]";
+
+$_t["The account, %h%s%h, has been successfully created."]
+  = "S'ha creat el compte, %h%s%h.";
+
+$_t["Your password must be at least %s characters."]
+  = "La contrasenya ha de tenir almenys %s caràcters.";
+
+$_t["Submit"]
+  = "Envia";
+
+$_t["Sorry, uploads are not permitted by this server."]
+  = "Aquest servidor no permet les pujades.";
+
+$_t["Actions"]
+  = "Accions";
+
+$_t["Comment has been deleted."]
+  = "S'ha esborrat el comentari.";
+
+$_t["The username, %h%s%h, is already in use."]
+  = "L'usuari, %h%s%h, ja existeix.";
+
+$_t["Proposal"]
+  = "Proposta";
+
+$_t["Re-type password"]
+  = "Torneu a escriure la contrasenya";
+
+$_t["Error trying to unpack upload - PKGBUILD does not exist."]
+  = "Error - no existeix el PKGBUILD.";
+
+$_t["Image link"]
+  = "Enllaç d'imatge";
+
+$_t["The selected packages have been flagged out-of-date."]
+  = "Els paquets seleccionats s'han marcat com a obsolets.";
+
+$_t["Description"]
+  = "Descripció";
+
+$_t["My Packages"]
+  = "Els meus paquets";
+
+$_t["You did not select any packages to vote for."]
+  = "No heu seleccionat cap paquet per votar.";
+
+$_t["Never"]
+  = "Mai";
+
+$_t["You must be logged in before you can disown packages."]
+  = "Heu de connectar-vos abans d'orfenar paquets.";
+
+$_t["Forgot Password"]
+  = "He oblidat la contrasenya";
+
+$_t["You've found a bug if you see this...."]
+  = "Heu trobat un error, informeu....";
+
+$_t["Last Voted"]
+  = "Votat per darrera vegada";
+
+$_t["Password"]
+  = "Contrasenya";
+
+$_t["Real Name"]
+  = "Nom real";
+
+$_t["Package Details"]
+  = "Detalls del paquet";
+
+$_t["UnVote"]
+  = "Treu el vot";
+
+$_t["Password fields do not match."]
+  = "Les contrasenyes no coincidèixen.";
+
+$_t["Length must be a number."]
+  = "La longitud ha de ser un número.";
+
+$_t["%s has %s apples."]
+  = "%s té %s pomes.";
+
+$_t["Sorry, this file it's not a valid PKGBUILD"]
+  = "Aquest no és un PKGBUILD vàlid";
+
+$_t["Login"]
+  = "Connecta";
+
+$_t["Sort by"]
+  = "Ordena per";
+
+$_t["Submit a proposal to vote on."]
+  = "Envia una proposta de votació.";
+
+$_t["Voted"]
+  = "Votat";
+
+$_t["Last vote"]
+  = "Darrer vot";
+
+$_t["Missing User ID"]
+  = "Falta l'ID de l'usuari";
+
+$_t["Registered Users"]
+  = "Usuaris registrats";
+
+$_t["My Statistics"]
+  = "Les meves estadístiques";
+
+$_t["Packages in CCR"]
+  = "Paquets al CCR";
+
+$_t["Packages added or updated in the past 7 days"]
+  = "Paquets actualitzats els darrers 7 dies";
+
+$_t["Statistics"]
+  = "Estadístiques";
+
+$_t["Recent Updates"]
+  = "Actualitzacions recents";
+
+$_t["Trusted Users"]
+  = "Usuaris de confiança";
+
+$_t["Username"]
+  = "Usuari";
+
+$_t["The username is invalid."]
+  = "L'usuari no és correcte.";
+
+$_t["Voting is closed for this proposal."]
+  = "S'ha tancat la votació d'aquesta proposta.";
+
+$_t["Email Address"]
+  = "Adreça de correu";
+
+$_t["Trusted User"]
+  = "Usuari de confiança";
+
+$_t["Invalid pkg for CCR: only lowercase letters are allowed. Splitted PKGBUILDS are not supported."]
+  = "Paquet no vàlid per al CCR, només s'accepta la caixa baixa al nom i paquets individuals.";
+
+$_t["Use this form to create an account."]
+  = "Useu aquest formulari per crear un compte.";
+
+$_t["Use this form to update your account."]
+  = "Useu aquest formulari per actualitzar el vostre compte.";
+
+$_t["Abstain"]
+  = "Abstenir-me";
+
+$_t["Could not chmod directory %s."]
+  = "No es pot fre chmod al directori %s.";
+
+$_t["You are not allowed to delete this comment."]
+  = "No podeu esborrar aquest comentari.";
+
+$_t["required"]
+  = "necessari";
+
+$_t["Language is not currently supported."]
+  = "L'idioma no está implementat actualment.";
+
+$_t["New Comment Notification"]
+  = "Notificació de nou comentari";
+
+$_t["You have been added to the comment notification list for %s."]
+  = "Heu estat afegit a la llista de notificacions de comentaris de %s.";
+
+$_t["Select new category"]
+  = "Seleccioneu una nova categoria";
+
+$_t["A Trusted User cannot assign Developer status."]
+  = "Un usuari de confiança no pot asignar estat de desenvolupador.";
+
+$_t["Comment by: %s on %s"]
+  = "Comentari de: %s el %s";
+
+$_t["Votes for"]
+  = "Vots per";
+
+$_t[" Votes "]
+  = " Vots ";
+
+$_t["Votes"]
+  = "Vots";
+
+$_t["New!"]
+  = "Nou!";
+
+$_t["unknown"]
+  = "desconegut";
+
+$_t[" Name "]
+  = " Nom ";
+
+$_t["License"]
+  = "Llicència";
+
+$_t["Sources"]
+  = "Codi font";
+
+$_t["First Submitted"]
+  = "Enviat per primera vegada";
+
+$_t["Last Updated"]
+  = "Darrera actualització";
+
+$_t["Enter your comment below."]
+  = "Introduïu el comentari a sota.";
+
+$_t["Comment has been added."]
+  = "S'ha afegit el comentari.";
+
+$_t["Name Only"]
+  = "Només nom";
+
+$_t["Ascending"]
+  = "Ascendent";
+
+$_t["Age"]
+  = "Antiguitat";
+
+$_t["Name, Description"]
+  = "Nom, descripció";
+
+$_t["Submitter"]
+  = "Enviador";
+
+$_t["Descending"]
+  = "Descendent";
+
+$_t["Edit"]
+  = "Edita";
+
+$_t["Show all %s comments"]
+  = "Mostra tots %s comentaris";
+
+$_t["Missing category ID."]
+  = "Falta l'ID de la categoria.";
+
+$_t["You are not allowed to change this package category."]
+  = "No podei canviar la categoria d'aquest paquet.";
+

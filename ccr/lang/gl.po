@@ -1,0 +1,504 @@
+<?php
+# INSTRUCTIONS TO TRANSLATORS
+#
+# This file contains the i18n translations for a subset of the
+# Arch Linux User Community Repository (AUR).  This is a PHP
+# script, and as such, you MUST pay great attention to the syntax.
+# If your text contains any double-quotes ("), you MUST escape
+# them with a backslash (\).
+#
+# Galician (Galego) translation
+# Translator: Adrián Chaves Fernández (Gallaecio) <adriyetichaves[at]gmail[dot]com>
+
+global $_t;
+
+$_t["Confirm your e-mail address:"] = "adriyetichaves[at]gmail[dot]com";
+
+$_t["This package has been flagged out of date."] = "Alguén marcou este paquete como obsoleto.";
+
+$_t["Remember to vote for your favourite packages!"] = "Non esquezas votar polos teus paquetes preferidos!";
+
+$_t["Missing a required field."] = "Falta un campo obrigatorio.";
+
+$_t["Logged-in as: %s"] = "Identificado coma %s";
+
+$_t["Error trying to modify account, %h%s%h: %s."] = "Houbo un erro ao intentar modificar a conta, %h%s%h: %s.";
+
+$_t["Username does not exist."] = "O nome de usuario non existe.";
+
+$_t["Tarball"] = "Arquivo";
+
+$_t["Can contain only one period, underscore or hyphen."] = "Só pode conter un punto, un guión ou un guión baixo.";
+
+$_t["Unflag Out-of-date"] = "Desmarcar coma obsoleto";
+
+$_t["Missing package ID."] = "Non se forneceu un identificador de paquete.";
+
+$_t["You cannot vote in an proposal about you."] = "Non pode votarse a si mesmo.";
+
+$_t["No results matched your search criteria."] = "Non se atopou nada.";
+
+$_t["Enter your new password:"] = "Introduza o sue novo contrasinal:";
+
+$_t["Update"] = "Actualizar";
+
+$_t["Sort order"] = "Orde";
+
+$_t["The selected packages have been adopted."] = "Adoptáronse os paquetes seleccionados.";
+
+$_t["You must be logged in before you can edit package information."] = "Ten que identificarse para modificar a información dun paquete.";
+
+$_t["Your votes have been cast for the selected packages."] = "Procesáronse os seus votos para os paquetes seleccionados.";
+
+$_t["Package details could not be found."] = "Non se atoparon os detalles do paquete.";
+
+$_t["change category"] = "Cambiar de categoría";
+
+$_t["Error retrieving package list."] = "Houbo un erro ao intentar obter a lista de paquetes.";
+
+$_t["Reset"] = "Restablecer";
+
+$_t["Submitted: %s by %s"] = "Enviado: %s, por %s";
+
+$_t["string"] = "cadea";
+
+$_t["Remember me"] = "Lembrarme";
+
+$_t["This vote is still running."] = "A votación segue en marcha.";
+
+$_t["Package category updated."] = "Actualizouse a categoría do paquete.";
+
+$_t["%s already has proposal running for them."] = "Xa se propuxo a %s como candidato.";
+
+$_t["Proposal Details"] = "Detalles da proposta";
+
+$_t["Error - No file uploaded"] = "Houbo un erro. Non se subiu ningún ficheiro.";
+
+$_t["You did not select any packages to disown."] = "Non escolleu ningún paquete que abandonar.";
+
+$_t["Package URL is missing a protocol (ie. http:// ,ftp://)"] = "Ao URL do paquete fáltalle un protocolo (coma «http://» ou «ftp://»).";
+
+$_t["Votes"] = "Votos";
+
+$_t["Total"] = "Total";
+
+$_t["No more results to display."] = "Non hai máis resultados que amosar.";
+
+$_t["Maintainer"] = "Mantedor";
+
+$_t["Less"] = "Menos";
+
+$_t["You are not allowed to access this area."] = "Non se lle permite acceder a esta zona.";
+
+$_t["The CCR files are user produced content. Any use of the provided files is at your own risk."] = "Os ficheiros do CCR son obra dos seus usuarios. Usalos supón asumir todo o risco que isto poida supor.";
+
+$_t["Any type"] = "Claquera tipo";
+
+$_t["Accounts"] = "Contas";
+
+$_t["Could not retrieve proposal details."] = "Non se puideron obter os detalles da proposta.";
+
+$_t["You do not have permission to edit this account."] = "Non te permiso para modificar esta conta.";
+
+$_t["New Package Notify"] = "Notificar sobre novos paquetes";
+
+$_t["Click on the Home link above to login."] = "Prema na ligazón «Inicio» que hai máis arriba para identificarse.";
+
+$_t["The email address is invalid."] = "O enderezo de correo electrónico non é correcto.";
+
+$_t["Index"] = "Inicio";
+
+$_t["Search by"] = "Buscar por";
+
+$_t["Could not change directory to %s."] = "Non se puido cambiar o directorio a «%s».";
+
+$_t["None of the selected packages could be deleted."] = "Non se puido borrar ningún dos paquetes seleccionados.";
+
+$_t["Your votes have been removed from the selected packages."] = "Borráronse os seus votos dos paquetes seleccionados.";
+
+$_t["No packages matched your search criteria."] = "Non se atoparon paquetes para a súa busca.";
+
+$_t["Confirm"] = "Confirmar";
+
+$_t["Welcome to the Chakra Community Repo. Please read the %hCCR User Guidelines%h and %hCCR TU Guidelines%h for more information."] = "Benvida ou benvido ao repositorio da comunidade de Chakra (CCR). Para máis información, consulte as %hguía para usuarios%h e para %husuarios de confianza%h.";
+
+$_t["Create"] = "Crear";
+
+$_t["Start and end with a letter or number"] = "Inicia e remata cunha letra ou número";
+
+$_t["orphan"] = "orfo";
+
+$_t["View this user's packages"] = "Ver os paquetes do usuario";
+
+$_t["Next"] = "Seguinte";
+
+$_t["Could not re-tar"] = "Non se puido volver arquivar";
+
+$_t["Upload your source packages here. Create source packages with `makepkg --source`."] = "Suba aquí os seus paquetes de compilación. Pode crealos coa orde «makepkg --source».";
+
+$_t["You must be logged in before you can adopt packages."] = "Ten que identificarse para adoptar paquetes.";
+
+$_t["You must create an account before you can upload packages."] = "Ten que crear unha conta para subir paquetes.";
+
+$_t["Delete comment"] = "Borrar o comentario";
+
+$_t["Account Type"] = "Tipo de conta";
+
+$_t["Type"] = "Tipo";
+
+$_t["More"] = "Máis";
+
+$_t["Error retrieving package details."] = "Houbo un erro ao obter os detalles do paquete.";
+
+$_t["PKGBUILD"] = "Ficheiro PKGBUILD";
+
+$_t["Could not create incoming directory: %s."] = "Non se puido crear o directorio de destino: %s.";
+
+$_t["Upload package file"] = "Subir o ficheiro dun paquete";
+
+$_t["Password Reset"] = "Restablecer o contrasinal";
+
+$_t["(defaults to 7 if empty)"] = "(«7» por omisión)";
+
+$_t["No New Comment Notification"] = "Deixar de notificar sobre novos comentarios";
+
+$_t["Couldn't add to notification list."] = "Non se puido engadir á lista de notificacións.";
+
+$_t["The selected packages have not been deleted, check the confirmation checkbox."] = "Non se borraron os paquetes seleccionados, marque a caixa de confirmación antes.";
+
+$_t["Disown Packages"] = "Abandonar o paquete";
+
+$_t["Advanced"] = "Avanzado";
+
+$_t["Files"] = "Ficheiros";
+
+$_t["Vote ID not valid."] = "A identificación do voto non é correcta.";
+
+$_t["(empty if not applicable)"] = "(baleiro se non corresponde)";
+
+$_t["Per page"] = "Por páxina";
+
+$_t["New proposal submitted."] = "Enviouse a nova proposta.";
+
+$_t["Upload"] = "Subir";
+
+$_t["Invalid category ID."] = "O identificador da categoría é incorrecto.";
+
+$_t["Go"] = "Ir";
+
+$_t["You must be logged in before you can vote for packages."] = "Ten que identificarse para votar por paquetes.";
+
+$_t["Use this form to search existing accounts."] = "Utilice o seguinte formulario para buscar contas.";
+
+$_t["The address, %h%s%h, is already in use."] = "O enderezo, %h%s%h, xa está a ser usado.";
+
+$_t["Current Votes"] = "Votos actuais";
+
+$_t["Select Category"] = "Escolla unha categoría";
+
+$_t["You have been removed from the comment notification list for %s."] = "Xa non recibirá notificacións sobre os comentarios en «%s».";
+
+$_t["Unknown file format for uploaded file."] = "Non se recoñeceu o formato do ficheiro cargado.";
+
+$_t["Delete Packages"] = "Borrar os paquetes";
+
+$_t["The selected packages have been deleted."] = "Borráronse os paquetes seleccionados.";
+
+$_t["Back"] = "Volver";
+
+$_t["You did not select any packages to flag."] = "Non seleccionou ningún paquete para marcar.";
+
+$_t["All Votes"] = "Todos os votos";
+
+$_t["The selected packages have been disowned."] = "Abandonáronse os paquetes seleccionados.";
+
+$_t["Suspended"] = "Suspendido";
+
+$_t["Home"] = "Inicio";
+
+$_t["Yes"] = "Si";
+
+$_t["UnFlag Out-of-date"] = "Desmarcar coma obsoleto";
+
+$_t["Developer"] = "Desenvolvedor";
+
+$_t["Category"] = "Categoría";
+
+$_t["Missing build function in PKGBUILD."] = "O ficheiro PKGBUILD non ten función «build()».";
+
+$_t["You must be logged in before you can flag packages."] = "Ten que identificarse para marcar paquetes.";
+
+$_t["No results found."] = "Non se atopou nada.";
+
+$_t["No"] = "Non";
+
+$_t["Discussion"] = "Discusión";
+
+$_t["Dependencies"] = "Dependencias";
+
+$_t["You must be logged in before you can un-vote for packages."] = "Ten que identificarse para retirar o seu voto aos paquetes.";
+
+$_t["Add"] = "Engadir";
+
+$_t["You did not select any packages to adopt."] = "Non seleccionou ningún paquete a adoptar.";
+
+$_t["Length must be at least 1."] = "Ten que existir.";
+
+$_t["Error trying to create account, %h%s%h: %s."] = "Houbo un erro ao intentar crear a conta, %h%s%h: %s.";
+
+$_t["End"] = "Fin";
+
+$_t["The account, %h%s%h, has been successfully modified."] = "A conta, %h%s%h, modificouse correctamente.";
+
+$_t["Confirm your new password:"] = "Confirme o seu novo contrasinal:";
+
+$_t["Account Suspended"] = "A conta está suspendida";
+
+$_t["Status"] = "Estado";
+
+$_t["My Account"] = "Conta";
+
+$_t["You must be logged in before you can get notifications on comments."] = "Ten que identificarse para solicitar recibir notificacións sobre os comentarios.";
+
+$_t["Leave the password fields blank to keep your same password."] = "Deixe os campos do contasinal baleiros para manter o contrasinal actual.";
+
+$_t["IRC Nick"] = "Alcume do IRC";
+
+$_t["Enter your e-mail address:"] = "Introduza o seu enderezo de correo electrónico:";
+
+$_t["Normal user"] = "Usuario normal";
+
+$_t["This is a %h%s%h problem!"] = "Este é un problema de %h%s%h!";
+
+$_t["You are not allowed to overwrite the %h%s%h package."] = "Non pode substituír o paquete «%h%s%h».";
+
+$_t["Missing comment ID."] = "Falta o identificador do comentario.";
+
+$_t["Error trying to retrieve package details."] = "Houbo un erro ao intentar obter os detalles do paquete.";
+
+$_t["Proposal cannot be empty."] = "A proposta non pode quedar baleira.";
+
+$_t["User"] = "Usuario";
+
+$_t["Package Category"] = "Categoría do paquete";
+
+$_t["Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Linux Packaging Standards%h otherwise they will be deleted!"] = "Os ficheiros PKGBUILD e PKGINFO %hteñen%h que estar adaptados aos %hestándares de empaquetación de Chakra%h, ou borraranse!";
+
+$_t["Packages"] = "Paquetes";
+
+$_t["Edit Account"] = "Modificar a conta";
+
+$_t["Search"] = "Buscar";
+
+$_t["Trusted user"] = "Usuario de confianza";
+
+$_t["Language"] = "Lingua";
+
+$_t["Orphans"] = "Orfos";
+
+$_t["Could not retrieve information for the specified user."] = "Non se puido obter información dese usuario.";
+
+$_t["Showing results %s - %s of %s"] = "Amosando os resultados do %s ao %s dun total de %s.";
+
+$_t["Active"] = "Activo";
+
+$_t["You've already voted for this proposal."] = "Xa votou nesta proposta.";
+
+$_t["Required by"] = "Necesario para";
+
+$_t["You must be logged in before you can unflag packages."] = "Ten que identificarse para desmarcar paquetes.";
+
+$_t["Start"] = "Iniciar";
+
+$_t["You did not select any packages to unflag."] = "Non seleccionou ningún paquete para desmarcar.";
+
+$_t["You must log in to view user information."] = "Ten que identificarse para ver a información do usuario.";
+
+$_t["You did not select any packages to delete."] = "Non seleccionou ningún paquete para borrar.";
+
+$_t["Could not create directory %s."] = "Non se puido crear o directorio %s.";
+
+$_t["UnNotify"] = "Deicar de notificar";
+
+$_t["Flag Out-of-date"] = "Marcar coma obsoleto";
+
+$_t["The selected packages have been unflagged."] = "Desmarcáronse os paquetes seleccionados.";
+
+$_t["Search Criteria"] = "Criterio de busca";
+
+$_t["Notify"] = "Notificar";
+
+$_t["Vote"] = "Votar";
+
+$_t["Adopt Packages"] = "Adoptar os paquetes";
+
+$_t["Name"] = "Nome";
+
+$_t[" Name "] = " Nome ";
+
+$_t["Package Listing"] = "Lista de paquetes";
+
+$_t["Any"] = "Calquera";
+
+$_t["It must be between %s and %s characters long"] = "Ten que ter entre %s e %s caracteres.";
+
+$_t["Logout"] = "Saír";
+
+$_t["Some packages with no Gtk dependences may be provided as binaries in [apps] or [platform]"] = "Algúns dos paquetes que non dependan de Gtk (directa ou indirectamente) poderán acabar nos repositorios oficiais, en forma de paquetes binarios.";
+
+$_t["The account, %h%s%h, has been successfully created."] = "A conta, %h%s%h, creouse correctamente.";
+
+$_t["Your password must be at least %s characters."] = "O seu contrasinal debe ter polo menos %s caracteres.";
+
+$_t["Submit"] = "Enviar";
+
+$_t["Sorry, uploads are not permitted by this server."] = "Este servidor non permite envíos.";
+
+$_t["Actions"] = "Accións";
+
+$_t["Comment has been deleted."] = "Os comentarios están desactivados.";
+
+$_t["The username, %h%s%h, is already in use."] = "O nome de usuario, %h%s%h, xa está a ser usado.";
+
+$_t["Proposal"] = "Proposta";
+
+$_t["Re-type password"] = "Volva escribir o contrasinal";
+
+$_t["Error trying to unpack upload - PKGBUILD does not exist."] = "Houbo un erro ao intentar extraer o arquivo: non contiña ningún ficheiro PKGBUILD.";
+
+$_t["Image link"] = "Ligazóns a unha imaxe";
+
+$_t["The selected packages have been flagged out-of-date."] = "Os paquetes seleccionados marcáronse coma obsoletos.";
+
+$_t["Description"] = "Descrición";
+
+$_t["My Packages"] = "Paquetes";
+
+$_t["You did not select any packages to vote for."] = "Non seleccionou ningún paquete para votar por el.";
+
+$_t["Never"] = "Nunca";
+
+$_t["You must be logged in before you can disown packages."] = "Ten que identificarse para abandonar paquetes.";
+
+$_t["Forgot Password"] = "Esquecín o contrasinal";
+
+$_t["You've found a bug if you see this...."] = "Se podes ler isto é porque atopaches un erro...";
+
+$_t["Last Voted"] = "";
+
+$_t["Password"] = "Contrasinal";
+
+$_t["Real Name"] = "Nome completo";
+
+$_t["Package Details"] = "Detalles do paquete";
+
+$_t["UnVote"] = "Quitar o voto";
+
+$_t["Password fields do not match."] = "Os contrasinais introducidos son distintos.";
+
+$_t["Username"] = "Nome de usuario";
+
+$_t["The username is invalid."] = "O nome de usuario non é válido.";
+
+$_t["Voting is closed for this proposal."] = "Xa non se pode votar nesta proposta.";
+
+$_t["Email Address"] = "Enderezo de correo electrónico";
+
+$_t["Trusted User"] = "Usuario de confianza";
+
+$_t["Invalid name: only lowercase letters are allowed."] = "Nome non válido: só se permiten minúsculas.";
+
+$_t["Length must be a number."] = "Ten que ser un número.";
+
+$_t["%s has %s apples."] = "%s ten %s mazás.";
+
+$_t["Sorry, this file it's not a valid PKGBUILD"] = "Este ficheiro PKGBUILD non é válido.";
+
+$_t["Login"] = "Identificarse";
+
+$_t["Use this form to create an account."] = "Utilice o seguinte formulario para crear unha conta.";
+
+$_t["Use this form to update your account."] = "Utilice o seguinte formulario para actualizar a súa conta.";
+
+$_t["Abstain"] = "Absterse";
+
+$_t["Could not chmod directory %s."] = "Non se puideron cambiar os permisos do directorio «%s».";
+
+$_t["You are not allowed to delete this comment."] = "Non ten os permisis necesarios para borrar este comentario.";
+
+$_t["required"] = "necesario";
+
+$_t["Sort by"] = "Ordernar por";
+
+$_t["Submit a proposal to vote on."] = "Enviar unha proposta para sometela a votación.";
+
+$_t["Voted"] = "Votada";
+
+$_t["Language is not currently supported."] = "Actualmente non temos soporte para esa lingua.";
+
+$_t["Last vote"] = "Último voto";
+
+$_t["New Comment Notification"] = "Notificacións de novos comentarios";
+
+$_t["Missing User ID"] = "Falta o identificador do usuario";
+
+$_t["You have been added to the comment notification list for %s."] = "Agora recibirá notificacións sobre os comentarios engadidos a «%s».";
+
+$_t["Select new category"] = "Escolla unha nova categoría";
+
+$_t["A Trusted User cannot assign Developer status."] = "Os usuarios de confianza non poden dar a outros o status de desenvolvedor.";
+
+$_t["Registered Users"]
+  = "Registered Users";
+
+$_t["Votes for"]
+  = "Votes for";
+
+$_t[" Votes "]
+  = " Votos ";
+
+$_t["New!"]
+  = "New!";
+
+$_t["My Statistics"]
+  = "My Statistics";
+
+$_t["Search for results in the main repository"]
+  = "Search for results in the main repository";
+
+$_t["Comment by: %s on %s"]
+  = "Comment by: %s on %s";
+
+$_t["Change category"]
+  = "Change category";
+
+$_t["Out of Date"]
+  = "Out of Date";
+
+$_t["Package screenshot is missing a protocol (ie. http:// ,ftp://)"]
+  = "Package screenshot is missing a protocol (ie. http:// ,ftp://)";
+
+$_t["unknown"]
+  = "unknown";
+
+$_t["Packages in CCR"]
+  = "Packages in CCR";
+
+$_t["Packages added or updated in the past 7 days"]
+  = "Packages added or updated in the past 7 days";
+
+$_t["Statistics"]
+  = "Statistics";
+
+$_t["Error - uncompressed file size too large."]
+  = "Error - uncompressed file size too large.";
+
+$_t["Recent Updates"]
+  = "Recent Updates";
+
+$_t["Trusted Users"]
+  = "Trusted Users";
+
+$_t["Invalid pkg for CCR: only lowercase letters are allowed. Splitted PKGBUILDS are not supported."]
+  = "Invalid pkg for CCR: only lowercase letters are allowed. Splitted PKGBUILDS are not supported.";
+

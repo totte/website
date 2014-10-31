@@ -1,0 +1,711 @@
+<?php
+# INSTRUCTIONS TO TRANSLATORS
+#
+# This file contains the i18n translations for a subset of the
+# Arch Linux User Community Repository (AUR).  This is a PHP
+# script, and as such, you MUST pay great attention to the syntax.
+# If your text contains any double-quotes ("), you MUST escape
+# them with a backslash (\).
+#
+
+global $_t;
+
+$_t["Confirm your e-mail address:"]
+  = "Confirm your e-mail address:";
+
+$_t["This package has been flagged out of date."]
+  = "This package has been flagged out of date.";
+
+$_t["Remember to vote for your favourite packages!"]
+  = "Remember to vote for your favourite packages!";
+
+$_t["Missing a required field."]
+  = "Missing a required field.";
+
+$_t["Logged-in as: %s"]
+  = "Logged-in as: %s";
+
+$_t["Error trying to modify account, %h%s%h: %s."]
+  = "Error trying to modify account, %h%s%h: %s.";
+
+$_t["Username does not exist."]
+  = "Username does not exist.";
+
+$_t["Tarball"]
+  = "Tarball";
+
+$_t["Can contain only one period, underscore or hyphen."]
+  = "Can contain only one period, underscore or hyphen.";
+
+$_t["Unflag Out-of-date"]
+  = "Unflag Out-of-date";
+
+$_t["Missing package ID."]
+  = "Missing package ID.";
+
+$_t["You cannot vote in an proposal about you."]
+  = "You cannot vote in an proposal about you.";
+
+$_t["No results matched your search criteria."]
+  = "No results matched your search criteria.";
+
+$_t["Enter your new password:"]
+  = "Enter your new password:";
+
+$_t["Update"]
+  = "Update";
+
+$_t["Sort order"]
+  = "Sort order";
+
+$_t["The selected packages have been adopted."]
+  = "The selected packages have been adopted.";
+
+$_t["Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Linux Packaging Standards%h otherwise they will be deleted!"]
+  = "Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Linux Packaging Standards%h otherwise they will be deleted!";
+
+$_t["Registered Users"]
+  = "Registered Users";
+
+$_t["Votes for"]
+  = "Votes for";
+
+$_t["Your votes have been cast for the selected packages."]
+  = "Your votes have been cast for the selected packages.";
+
+$_t["Package details could not be found."]
+  = "Package details could not be found.";
+
+$_t["change category"]
+  = "change category";
+
+$_t["Error retrieving package list."]
+  = "Error retrieving package list.";
+
+$_t["Reset"]
+  = "Reset";
+
+$_t["Submitted: %s by %s"]
+  = "Submitted: %s by %s";
+
+$_t["string"]
+  = "string";
+
+$_t["Remember me"]
+  = "Remember me";
+
+$_t["This vote is still running."]
+  = "This vote is still running.";
+
+$_t["Package category updated."]
+  = "Package category updated.";
+
+$_t[" Votes "]
+  = " Votes ";
+
+$_t["%s already has proposal running for them."]
+  = "%s already has proposal running for them.";
+
+$_t["Proposal Details"]
+  = "Proposal Details";
+
+$_t["Error - No file uploaded"]
+  = "Error - No file uploaded";
+
+$_t["You did not select any packages to disown."]
+  = "You did not select any packages to disown.";
+
+$_t["Package URL is missing a protocol (ie. http:// ,ftp://)"]
+  = "Package URL is missing a protocol (ie. http:// ,ftp://)";
+
+$_t["Votes"]
+  = "Votes";
+
+$_t["Total"]
+  = "Total";
+
+$_t["No more results to display."]
+  = "No more results to display.";
+
+$_t["Maintainer"]
+  = "Maintainer";
+
+$_t["Less"]
+  = "Less";
+
+$_t["You are not allowed to access this area."]
+  = "You are not allowed to access this area.";
+
+$_t["New!"]
+  = "New!";
+
+$_t["The CCR files are user produced content. Any use of the provided files is at your own risk."]
+  = "The CCR files are user produced content. Any use of the provided files is at your own risk.";
+
+$_t["My Statistics"]
+  = "My Statistics";
+
+$_t["Search for results in the main repository"]
+  = "Search for results in the main repository";
+
+$_t["Any type"]
+  = "Any type";
+
+$_t["Accounts"]
+  = "Accounts";
+
+$_t["Could not retrieve proposal details."]
+  = "Could not retrieve proposal details.";
+
+$_t["Comment by: %s on %s"]
+  = "Comment by: %s on %s";
+
+$_t["You do not have permission to edit this account."]
+  = "You do not have permission to edit this account.";
+
+$_t["Click on the Home link above to login."]
+  = "Click on the Home link above to login.";
+
+$_t["The email address is invalid."]
+  = "The email address is invalid.";
+
+$_t["Index"]
+  = "Index";
+
+$_t["Search by"]
+  = "Search by";
+
+$_t["Could not change directory to %s."]
+  = "Could not change directory to %s.";
+
+$_t["None of the selected packages could be deleted."]
+  = "None of the selected packages could be deleted.";
+
+$_t["Your votes have been removed from the selected packages."]
+  = "Your votes have been removed from the selected packages.";
+
+$_t["No packages matched your search criteria."]
+  = "No packages matched your search criteria.";
+
+$_t["Confirm"]
+  = "Confirm";
+
+$_t["Welcome to the Chakra Community Repo. Please read the %hCCR User Guidelines%h and %hCCR TU Guidelines%h for more information."]
+  = "Welcome to the Chakra Community Repo. Please read the %hCCR User Guidelines%h and %hCCR TU Guidelines%h for more information.";
+
+$_t["Create"]
+  = "Create";
+
+$_t["Start and end with a letter or number"]
+  = "Start and end with a letter or number";
+
+$_t["orphan"]
+  = "orphan";
+
+$_t["View this user's packages"]
+  = "View this user's packages";
+
+$_t["Next"]
+  = "Next";
+
+$_t["Could not re-tar"]
+  = "Could not re-tar";
+
+$_t["Upload your source packages here. Create source packages with `makepkg --source`."]
+  = "Upload your source packages here. Create source packages with `makepkg --source`.";
+
+$_t["You must be logged in before you can adopt packages."]
+  = "You must be logged in before you can adopt packages.";
+
+$_t["You must create an account before you can upload packages."]
+  = "You must create an account before you can upload packages.";
+
+$_t["Delete comment"]
+  = "Delete comment";
+
+$_t["Account Type"]
+  = "Account Type";
+
+$_t["Type"]
+  = "Type";
+
+$_t["More"]
+  = "More";
+
+$_t["Error retrieving package details."]
+  = "Error retrieving package details.";
+
+$_t["PKGBUILD"]
+  = "PKGBUILD";
+
+$_t[" Name "]
+  = " Name ";
+
+$_t["Could not create incoming directory: %s."]
+  = "Could not create incoming directory: %s.";
+
+$_t["Upload package file"]
+  = "Upload package file";
+
+$_t["Password Reset"]
+  = "Password Reset";
+
+$_t["(defaults to 7 if empty)"]
+  = "(defaults to 7 if empty)";
+
+$_t["No New Comment Notification"]
+  = "No New Comment Notification";
+
+$_t["Couldn't add to notification list."]
+  = "Couldn't add to notification list.";
+
+$_t["The selected packages have not been deleted, check the confirmation checkbox."]
+  = "The selected packages have not been deleted, check the confirmation checkbox.";
+
+$_t["Disown Packages"]
+  = "Disown Packages";
+
+$_t["Advanced"]
+  = "Advanced";
+
+$_t["Change category"]
+  = "Change category";
+
+$_t["Files"]
+  = "Files";
+
+$_t["Vote ID not valid."]
+  = "Vote ID not valid.";
+
+$_t["(empty if not applicable)"]
+  = "(empty if not applicable)";
+
+$_t["Per page"]
+  = "Per page";
+
+$_t["New proposal submitted."]
+  = "New proposal submitted.";
+
+$_t["Upload"]
+  = "Upload";
+
+$_t["Invalid category ID."]
+  = "Invalid category ID.";
+
+$_t["Go"]
+  = "Go";
+
+$_t["You must be logged in before you can vote for packages."]
+  = "You must be logged in before you can vote for packages.";
+
+$_t["Use this form to search existing accounts."]
+  = "Use this form to search existing accounts.";
+
+$_t["The address, %h%s%h, is already in use."]
+  = "The address, %h%s%h, is already in use.";
+
+$_t["Current Votes"]
+  = "Current Votes";
+
+$_t["Select Category"]
+  = "Select Category";
+
+$_t["You have been removed from the comment notification list for %s."]
+  = "You have been removed from the comment notification list for %s.";
+
+$_t["Package screenshot is missing a protocol (ie. http:// ,ftp://)"]
+  = "Package screenshot is missing a protocol (ie. http:// ,ftp://)";
+
+$_t["Delete Packages"]
+  = "Delete Packages";
+
+$_t["The selected packages have been deleted."]
+  = "The selected packages have been deleted.";
+
+$_t["Back"]
+  = "Back";
+
+$_t["You did not select any packages to flag."]
+  = "You did not select any packages to flag.";
+
+$_t["All Votes"]
+  = "All Votes";
+
+$_t["The selected packages have been disowned."]
+  = "The selected packages have been disowned.";
+
+$_t["Suspended"]
+  = "Suspended";
+
+$_t["unknown"]
+  = "unknown";
+
+$_t["Home"]
+  = "Home";
+
+$_t["Yes"]
+  = "Yes";
+
+$_t["Packages in CCR"]
+  = "Packages in CCR";
+
+$_t["UnFlag Out-of-date"]
+  = "UnFlag Out-of-date";
+
+$_t["Developer"]
+  = "Developer";
+
+$_t["Category"]
+  = "Category";
+
+$_t["Packages added or updated in the past 7 days"]
+  = "Packages added or updated in the past 7 days";
+
+$_t["This is a %h%s%h problem!"]
+  = "This is a %h%s%h problem!";
+
+$_t["You must be logged in before you can flag packages."]
+  = "You must be logged in before you can flag packages.";
+
+$_t["No results found."]
+  = "No results found.";
+
+$_t["No"]
+  = "No";
+
+$_t["Discussion"]
+  = "Discussion";
+
+$_t["Dependencies"]
+  = "Dependencies";
+
+$_t["You must be logged in before you can un-vote for packages."]
+  = "You must be logged in before you can un-vote for packages.";
+
+$_t["Add"]
+  = "Add";
+
+$_t["Statistics"]
+  = "Statistics";
+
+$_t["You did not select any packages to adopt."]
+  = "You did not select any packages to adopt.";
+
+$_t["Length must be at least 1."]
+  = "Length must be at least 1.";
+
+$_t["Error trying to create account, %h%s%h: %s."]
+  = "Error trying to create account, %h%s%h: %s.";
+
+$_t["End"]
+  = "End";
+
+$_t["The account, %h%s%h, has been successfully modified."]
+  = "The account, %h%s%h, has been successfully modified.";
+
+$_t["Confirm your new password:"]
+  = "Confirm your new password:";
+
+$_t["Account Suspended"]
+  = "Account Suspended";
+
+$_t["Status"]
+  = "Status";
+
+$_t["My Account"]
+  = "My Account";
+
+$_t["You must be logged in before you can get notifications on comments."]
+  = "You must be logged in before you can get notifications on comments.";
+
+$_t["Leave the password fields blank to keep your same password."]
+  = "Leave the password fields blank to keep your same password.";
+
+$_t["IRC Nick"]
+  = "IRC Nick";
+
+$_t["Enter your e-mail address:"]
+  = "Enter your e-mail address:";
+
+$_t["Normal user"]
+  = "Normal user";
+
+$_t["You are not allowed to overwrite the %h%s%h package."]
+  = "You are not allowed to overwrite the %h%s%h package.";
+
+$_t["Missing comment ID."]
+  = "Missing comment ID.";
+
+$_t["Error trying to retrieve package details."]
+  = "Error trying to retrieve package details.";
+
+$_t["Proposal cannot be empty."]
+  = "Proposal cannot be empty.";
+
+$_t["User"]
+  = "User";
+
+$_t["Package Category"]
+  = "Package Category";
+
+$_t["You must be logged in before you can edit package information."]
+  = "You must be logged in before you can edit package information.";
+
+$_t["Packages"]
+  = "Packages";
+
+$_t["Edit Account"]
+  = "Edit Account";
+
+$_t["Search"]
+  = "Search";
+
+$_t["Trusted user"]
+  = "Trusted user";
+
+$_t["Error - uncompressed file size too large."]
+  = "Error - uncompressed file size too large.";
+
+$_t["Language"]
+  = "Language";
+
+$_t["Orphans"]
+  = "Orphans";
+
+$_t["Could not retrieve information for the specified user."]
+  = "Could not retrieve information for the specified user.";
+
+$_t["Unknown file format for uploaded file."]
+  = "Unknown file format for uploaded file.";
+
+$_t["Showing results %s - %s of %s"]
+  = "Showing results %s - %s of %s";
+
+$_t["Active"]
+  = "Active";
+
+$_t["You've already voted for this proposal."]
+  = "You've already voted for this proposal.";
+
+$_t["Required by"]
+  = "Required by";
+
+$_t["You must be logged in before you can unflag packages."]
+  = "You must be logged in before you can unflag packages.";
+
+$_t["Start"]
+  = "Start";
+
+$_t["You did not select any packages to unflag."]
+  = "You did not select any packages to unflag.";
+
+$_t["You must log in to view user information."]
+  = "You must log in to view user information.";
+
+$_t["You did not select any packages to delete."]
+  = "You did not select any packages to delete.";
+
+$_t["Could not create directory %s."]
+  = "Could not create directory %s.";
+
+$_t["UnNotify"]
+  = "UnNotify";
+
+$_t["Flag Out-of-date"]
+  = "Flag Out-of-date";
+
+$_t["The selected packages have been unflagged."]
+  = "The selected packages have been unflagged.";
+
+$_t["Recent Updates"]
+  = "Recent Updates";
+
+$_t["Search Criteria"]
+  = "Search Criteria";
+
+$_t["Notify"]
+  = "Notify";
+
+$_t["Name"]
+  = "Name";
+
+$_t["Vote"]
+  = "Vote";
+
+$_t["Adopt Packages"]
+  = "Adopt Packages";
+
+$_t["Out of Date"]
+  = "Out of Date";
+
+$_t["Package Listing"]
+  = "Package Listing";
+
+$_t["Any"]
+  = "Any";
+
+$_t["It must be between %s and %s characters long"]
+  = "It must be between %s and %s characters long";
+
+$_t["Logout"]
+  = "Logout";
+
+$_t["Some packages with no Gtk dependences may be provided as binaries in [apps] or [platform]"]
+  = "Some packages with no Gtk dependences may be provided as binaries in [apps] or [platform]";
+
+$_t["The account, %h%s%h, has been successfully created."]
+  = "The account, %h%s%h, has been successfully created.";
+
+$_t["Your password must be at least %s characters."]
+  = "Your password must be at least %s characters.";
+
+$_t["Submit"]
+  = "Submit";
+
+$_t["Sorry, uploads are not permitted by this server."]
+  = "Sorry, uploads are not permitted by this server.";
+
+$_t["Actions"]
+  = "Actions";
+
+$_t["Comment has been deleted."]
+  = "Comment has been deleted.";
+
+$_t["The username, %h%s%h, is already in use."]
+  = "The username, %h%s%h, is already in use.";
+
+$_t["Proposal"]
+  = "Proposal";
+
+$_t["Re-type password"]
+  = "Re-type password";
+
+$_t["Trusted Users"]
+  = "Trusted Users";
+
+$_t["Error trying to unpack upload - PKGBUILD does not exist."]
+  = "Error trying to unpack upload - PKGBUILD does not exist.";
+
+$_t["Image link"]
+  = "Image link";
+
+$_t["The selected packages have been flagged out-of-date."]
+  = "The selected packages have been flagged out-of-date.";
+
+$_t["Description"]
+  = "Description";
+
+$_t["My Packages"]
+  = "My Packages";
+
+$_t["You did not select any packages to vote for."]
+  = "You did not select any packages to vote for.";
+
+$_t["Never"]
+  = "Never";
+
+$_t["You must be logged in before you can disown packages."]
+  = "You must be logged in before you can disown packages.";
+
+$_t["Forgot Password"]
+  = "Forgot Password";
+
+$_t["You've found a bug if you see this...."]
+  = "You've found a bug if you see this....";
+
+$_t["Last Voted"]
+  = "Last Voted";
+
+$_t["Password"]
+  = "Password";
+
+$_t["Real Name"]
+  = "Real Name";
+
+$_t["Package Details"]
+  = "Package Details";
+
+$_t["UnVote"]
+  = "UnVote";
+
+$_t["Password fields do not match."]
+  = "Password fields do not match.";
+
+$_t["Username"]
+  = "Username";
+
+$_t["The username is invalid."]
+  = "The username is invalid.";
+
+$_t["Voting is closed for this proposal."]
+  = "Voting is closed for this proposal.";
+
+$_t["Email Address"]
+  = "Email Address";
+
+$_t["Trusted User"]
+  = "Trusted User";
+
+$_t["Invalid pkg for CCR: only lowercase letters are allowed. Splitted PKGBUILDS are not supported."]
+  = "Invalid pkg for CCR: only lowercase letters are allowed. Splitted PKGBUILDS are not supported.";
+
+$_t["Length must be a number."]
+  = "Length must be a number.";
+
+$_t["%s has %s apples."]
+  = "%s has %s apples.";
+
+$_t["Sorry, this file it's not a valid PKGBUILD"]
+  = "Sorry, this file it's not a valid PKGBUILD";
+
+$_t["Login"]
+  = "Login";
+
+$_t["Use this form to create an account."]
+  = "Use this form to create an account.";
+
+$_t["Use this form to update your account."]
+  = "Use this form to update your account.";
+
+$_t["Abstain"]
+  = "Abstain";
+
+$_t["Could not chmod directory %s."]
+  = "Could not chmod directory %s.";
+
+$_t["You are not allowed to delete this comment."]
+  = "You are not allowed to delete this comment.";
+
+$_t["required"]
+  = "required";
+
+$_t["Sort by"]
+  = "Sort by";
+
+$_t["Submit a proposal to vote on."]
+  = "Submit a proposal to vote on.";
+
+$_t["Voted"]
+  = "Voted";
+
+$_t["Language is not currently supported."]
+  = "Language is not currently supported.";
+
+$_t["Last vote"]
+  = "Last vote";
+
+$_t["New Comment Notification"]
+  = "New Comment Notification";
+
+$_t["Missing User ID"]
+  = "Missing User ID";
+
+$_t["You have been added to the comment notification list for %s."]
+  = "You have been added to the comment notification list for %s.";
+
+$_t["Select new category"]
+  = "Select new category";
+
+$_t["A Trusted User cannot assign Developer status."]
+  = "A Trusted User cannot assign Developer status.";
+
