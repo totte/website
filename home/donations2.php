@@ -13,7 +13,7 @@
     <p>Shop for Chakra branded mugs etc, with 12% of the revenue shared with Chakra</p>
     <a class="serendipity_image_link" title="Chakra shop" href='http://www.zazzle.com/thechakraproject'><!-- s9ymdb:5 --><img class="serendipity_image_center" width="160" height="20"  src="/news/uploads/zazzleLogo_468x60.jpg" title="Chakra shop" alt="" /></a>
     <h2>Header explaining this part, 2014</h2>
-    <p>Lorem ipsum dolor sit amet.</p>
+    <p>Lorem ipsum dolor sit amet ad nauseum.</p>
     <h3>January</h3>
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
