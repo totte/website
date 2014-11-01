@@ -6,6 +6,13 @@
         <li><a href="#squirtle">squirtle</a></li>
         <li><a href="#pidgey">pidgey</a></li>
         <li><a href="#rattata">rattata</a></li>
+        <li><a href="#news">News (app)</a></li>
+        <li><a href="#forum">Forum (app)</a></li>
+        <li><a href="#wiki">Wiki (app)</a></li>
+        <li><a href="#ccr">CCR (app)</a></li>
+        <li><a href="#bugtracker">Bugtracker (app)</a></li>
+        <li><a href="#reviewboard">Review Board (app)</a></li>
+        <li><a href="#gitolite">gitolite (ACL for git)</a></li>
     </ul>
     <p>All servers run Debian with openssh-server, munin, vnstat, apticron, logwatch, sudo, zsh, python3, python3-pip, vim, exim4, rsync, git, python, python-pip, ufw, libpam-cracklib, iftop, iotop, htop, unzip, iptraf, whowatch, nethogs ...</p>
     <p>Root login via SSH is disabled on all servers, one may only log in with an authorized key.</p>
@@ -85,9 +92,18 @@ GRUB_CMDLINE_XEN_DEFAULT="dom0_max_vcpus=4 dom0_vcpus_pin dom0_mem=1024M"
         <tr>
             <td></td>
             <td>totte</td>
-            <td></td>
+            <td>sudo</td>
             <td>Yes</td>
             <td>Administrator</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>inkane</td>
+            <td>sudo</td>
+            <td>Yes</td>
+            <td>Administrator (backup)</td>
             <td></td>
             <td></td>
         </tr>
@@ -175,9 +191,18 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>totte</td>
-            <td></td>
+            <td>sudo</td>
             <td>Yes</td>
             <td>Administrator</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>inkane</td>
+            <td>sudo</td>
+            <td>Yes</td>
+            <td>Administrator (backup)</td>
             <td></td>
             <td></td>
         </tr>
@@ -252,7 +277,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>totte</td>
-            <td></td>
+            <td>sudo</td>
             <td>Yes</td>
             <td>Administrator</td>
             <td></td>
@@ -328,7 +353,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>totte</td>
-            <td></td>
+            <td>sudo</td>
             <td>Yes</td>
             <td>Administrator</td>
             <td></td>
@@ -448,7 +473,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>boom1992</td>
-            <td></td>
+            <td>developers-akabei</td>
             <td>No</td>
             <td>Developer</td>
             <td></td>
@@ -466,7 +491,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>inkane</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-tribe</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -475,7 +500,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>almack</td>
-            <td>staff, packagers-core, packagers-mantle, packagers-crust</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-kinky, developers-tribe, artists</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -493,7 +518,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>george2</td>
-            <td></td>
+            <td>packagers-crust, developers-web, developers-kapudan</td>
             <td>Yes</td>
             <td>Developer</td>
             <td></td>
@@ -505,15 +530,6 @@ on_crash    = 'restart'</pre>
             <td>packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>dezponia</td>
-            <td></td>
-            <td>No</td>
-            <td></td>
             <td></td>
             <td></td>
         </tr>
@@ -538,7 +554,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>franzmari</td>
-            <td>packagers-crust</td>
+            <td>packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -547,7 +563,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>ram-z</td>
-            <td>staff, packagers-core, packagers-mantle, packagers-crust</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-tribe, developers-ccr-tools</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -564,10 +580,28 @@ on_crash    = 'restart'</pre>
         </tr>
         <tr>
             <td></td>
-            <td>malcer</td>
-            <td>designers</td>
+            <td>utg</td>
+            <td>packagers-crust</td>
             <td>No</td>
-            <td>Designer</td>
+            <td>Packager</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>s8321414</td>
+            <td>packagers-crust</td>
+            <td>No</td>
+            <td>Packager</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>djustice</td>
+            <td>packagers-crust</td>
+            <td>No</td>
+            <td>Packager</td>
             <td></td>
             <td></td>
         </tr>
@@ -638,6 +672,362 @@ on_crash    = 'restart'</pre>
         </tr>
         <tr>
             <td>unstable</td>
+            <td>packagers-crust</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="news"><h2>News <small>web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>chakraos.org/news</dd>
+        <dt>Type</dt><dd>Blog</dd>
+        <dt>Software</dt><dd>Serendipity</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>tetris4</td>
+            <td>Editor</td>
+        </tr>
+        <tr>
+            <td>inkane</td>
+            <td>Editor</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="forum"><h2>Forum <small>web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>chakraos.org/forum</dd>
+        <dt>Type</dt><dd>Forum</dd>
+        <dt>Software</dt><dd>FluxBB</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+            <th>Role</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>Administrator</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>tetris4</td>
+            <td>Administrator</td>
+            <td>Communicator</td>
+        </tr>
+        <tr>
+            <td>inkane</td>
+            <td>Administrator</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>almack</td>
+            <td>Administrator</td>
+            <td>Packager</td>
+        </tr>
+        <tr>
+            <td>brli</td>
+            <td>Administrator</td>
+            <td>Packager</td>
+        </tr>
+        <tr>
+            <td>boom1992</td>
+            <td>Administrator</td>
+            <td>Developer</td>
+        </tr>
+        <tr>
+            <td>ram-z</td>
+            <td>Administrator</td>
+            <td>"Chakra Pony"</td>
+        </tr>
+        <tr>
+            <td>gallaecio</td>
+            <td>Moderator</td>
+            <td>Packager</td>
+        </tr>
+        <tr>
+            <td>gcala</td>
+            <td>Moderator</td>
+            <td>Packager</td>
+        </tr>
+        <tr>
+            <td>pyrdracon</td>
+            <td>Moderator</td>
+            <td>Packager</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="wiki"><h2>Wiki <small>web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>chakraos.org/wiki</dd>
+        <dt>Type</dt><dd>Wiki</dd>
+        <dt>Software</dt><dd>MediaWiki</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>almack</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>boom1992</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>gallaecio</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>csslayer</td>
+            <td>Bureaucrat</td>
+        </tr>
+        <tr>
+            <td>ram-z</td>
+            <td>Bureaucrat</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="ccr"><h2>CCR <small>web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>chakraos.org/ccr</dd>
+        <dt>Type</dt><dd>User package repository</dd>
+        <dt>Software</dt><dd>CCR (AUR fork)</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>ram-z</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>inkane</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>george</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>gallaecio</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>almack</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>danyf90</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>enoop</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>franzmari</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>gcala</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>pyrdracon</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>tetris4</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>utg</td>
+            <td>Moderator</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="bugtracker"><h2>Bugtracker <small>web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>chakraos.org/bugtracker</dd>
+        <dt>Type</dt><dd>Bug tracking</dd>
+        <dt>Software</dt><dd>Flyspray</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users (all projects)</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>inkane</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>tetris4</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>almack</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>ram-z</td>
+            <td>Moderator</td>
+        </tr>
+        <tr>
+            <td>boom1992</td>
+            <td>Contributor</td>
+        </tr>
+        <tr>
+            <td>brli</td>
+            <td>Contributor</td>
+        </tr>
+        <tr>
+            <td>franzmari</td>
+            <td>Contributor</td>
+        </tr>
+        <tr>
+            <td>george</td>
+            <td>Contributor</td>
+        </tr>
+        <tr>
+            <td>pyrdracon</td>
+            <td>Contributor</td>
+        </tr>
+        <tr>
+            <td>s8321414</td>
+            <td>Contributor</td>
+        </tr>
+        <tr>
+            <td>utg</td>
+            <td>Contributor</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="reviewboard"><h2>Review Board <small>web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>chakraos.org/reviewboard</dd>
+        <dt>Type</dt><dd>Code review</dd>
+        <dt>Software</dt><dd>Review Board</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>inkane</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>almack</td>
+            <td>Administrator</td>
+        </tr>
+        <tr>
+            <td>boom1992</td>
+            <td>Administrator</td>
+        </tr>
+    </table>
+    <hr />
+    <a name="git"><h2>Git, Gitolite & GitWeb <small>VCS, ACL and web application</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>URL</dt><dd>git.chakraos.org</dd>
+        <dt>Type</dt><dd>Version control, access control layer, web application</dd>
+        <dt>Software</dt><dd>Git, Gitolite & GitWeb</dd>
+    </dl>
+    <p>Lorem ipsum dolor sit amet.</p>
+    <h3>Users</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>User</th>
+            <th>Groups</th>
+        </tr>
+        <tr>
+            <td>totte</td>
+            <td>administrators, developers, packagers-core, packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>inkane</td>
+            <td>developers, packagers-core, packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>boom1992</td>
+            <td>developers</td>
+        </tr>
+        <tr>
+            <td>almack</td>
+            <td>developers, packagers-core, packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>ram-z</td>
+            <td>developers, packagers-core, packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>george2</td>
+            <td>developers, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>tetris4</td>
+            <td>packagers-core, packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>csslayer</td>
+            <td>packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>gcala</td>
+            <td>packagers-mantle, packagers-crust</td>
+        </tr>
+        <tr>
+            <td>brli</td>
+            <td>packagers-crust</td>
+        </tr>
+        <tr>
+            <td>franzmari</td>
+            <td>packagers-crust</td>
+        </tr>
+        <tr>
+            <td>utg</td>
             <td>packagers-crust</td>
         </tr>
     </table>
