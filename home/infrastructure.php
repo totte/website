@@ -12,7 +12,7 @@
         <li><a href="#ccr">CCR (app)</a></li>
         <li><a href="#bugtracker">Bugtracker (app)</a></li>
         <li><a href="#reviewboard">Review Board (app)</a></li>
-        <li><a href="#gitolite">gitolite (ACL for git)</a></li>
+        <li><a href="#git">git</a></li>
     </ul>
     <p>All servers run Debian with openssh-server, munin, vnstat, apticron, logwatch, sudo, zsh, python3, python3-pip, vim, exim4, rsync, git, python, python-pip, ufw, libpam-cracklib, iftop, iotop, htop, unzip, iptraf, whowatch, nethogs ...</p>
     <p>Root login via SSH is disabled on all servers, one may only log in with an authorized key.</p>
