@@ -2,32 +2,32 @@
     <h2>Download</h2>
 </div>
 <div class="col-md-8">
-    <h3>Chakra 2014.09 "Euler"</h3>
+    <h3>Chakra 2014.11 "Euler"</h3>
     <br />
-    <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2014.09/chakra-2014.09-euler-x86_64.iso/download">
-        Direct download
+    <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2014.11/chakra-2014.11-euler-x86_64.iso/download">
+        HTTP download
     </a>
     <!-- <a class="btn btn-primary btn-lg" href="http://linuxtracker.org/download.php?id=6185cc7e4f35802de060f83e7e622ea3f42848d5&f=chakra-2014.09-euler-x86_64.iso.torrent&key=0"> -->
-    <a class="btn btn-primary btn-lg" href="http://chakraos.org/home/chakra-2014.09-euler-x86_64.iso.torrent">
+    <a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/torrents/chakra-2014.11-euler-x86_64.iso.torrent">
         BitTorrent download
     </a>
     <br />
     <br />
     <table class="table table-hover">
         <tr>
-            <td>Date</td><td>2014-09-30</td>
+            <td>Date</td><td>2014-11-11</td>
         </tr>
         <tr>
-            <td>Size</td><td>1.7 GiB</td>
+            <td>Size</td><td>1.8 GiB</td>
         </tr>
         <tr>
             <td>Architecture</td><td>x86-64</td>
         </tr>
         <tr>
-            <td>MD5 checksum</td><td>50f19a62a5d0e5e68e204a0b3779e802</td>
+            <td>MD5 checksum</td><td>e1efe3b9c8320192639041b4e8f5bc9a</td>
         </tr>
         <tr>
-            <td>SHA1 checksum</td><td>1e84389632799b1dfaec3279a70d549c2b88d670</td>
+            <td>SHA1 checksum</td><td>5ec31a2646afe719108a7e52d4aaf947e327f8b7</td>
         </tr>
     </table>
 </div>
