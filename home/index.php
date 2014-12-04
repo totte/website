@@ -102,8 +102,8 @@
                                 elseif(isset($_GET['donations'])) {
                                     require_once('donations.php');
                                 }
-                                elseif(isset($_GET['areyoufuckingkiddingmedidyoujustdothisinaproductionenvironment'])) {
-                                    require_once('donations2.php');
+                                elseif(isset($_GET['campaign'])) {
+                                    require_once('campaign.php');
                                 }
                                 elseif(isset($_GET['infrastructure'])) {
                                     require_once('infrastructure.php');
