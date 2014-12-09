@@ -10,7 +10,7 @@
 <div class="col-md-4">
     <h3>January</h3>
     <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="44" aria-valuemin="0" aria-valuemax="100" style="width: 44%;">
+        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
             100 %
         </div>
     </div>
