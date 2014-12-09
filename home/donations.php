@@ -1,5 +1,6 @@
 <div class="col-md-12">
     <h1>Ways to contribute financially to Chakra</h1>
+    <p>Please support our Fundraising Campaign for 2015! <a href="?campaign">Click here for more information!</a></p>
     <p>Chakra is a completely community based distribution and all our contributors and developers are working in their free time to provide it.</p>
     <p>The only expenses we have at the moment are for maintaining the main server, through which we provide you Chakra and all the surrounding services. Due to the generous sponsorship by HOST1PLUS, we get a significant discount for the server, with the final cost being around 80 EUR (100 USD) per month, which sums up to 960 EUR (1200 USD) per year.</p>
     <p>This page is for all of you that wish in one way or another to donate money and help Chakra to be self-sustainable by its users. We can only state how deeply amazed we are by your commitment and greatly appreciate your support and love for this distribution! This is one more reason to work harder to reach our goals.</p>
