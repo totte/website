@@ -10,7 +10,10 @@
                 <div id="wrapper">
                     <div id="navigation">
                         <ul>
-                            <li><a href="../bugtracker/">Bugs</a></li>
+                            <li><a href="../home/?donations">Donate</a></li>
+                            <li><a href="http://git.chakraos.org">Git</a></li>
+                            <li><a href="../reviewboard/">Review Board</a></li>
+                            <li><a href="../bugtracker/">Bugtracker</a></li>
                             <li><a href="../ccr/">CCR</a></li>
                             <!-- <li><a href="../packages/">Packages</a></li> -->
                             <li><a href="http://rsync.chakraos.org">Packages</a></li>
