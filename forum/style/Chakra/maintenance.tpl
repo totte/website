@@ -41,7 +41,7 @@
                     </div>
                     <!-- End of FluxBB -->
                     <div id="footer">
-                        <p>Copyright © 2006-2014 The Chakra Project</p>
+                        <p>Copyright © 2006-2015 The Chakra Project</p>
                     </div>
                 </div>
             </div>
