@@ -6,6 +6,9 @@
         <li><a href="#squirtle">squirtle</a></li>
         <li><a href="#pidgey">pidgey</a></li>
         <li><a href="#rattata">rattata</a></li>
+        <li><a href="#snorlax">snorlax</a></li>
+        <li><a href="#abra">abra</a></li>
+        <li><a href="#chakra-buildvm">chakra-buildvm</a></li>
         <li><a href="#news">News (app)</a></li>
         <li><a href="#forum">Forum (app)</a></li>
         <li><a href="#wiki">Wiki (app)</a></li>
@@ -675,6 +678,33 @@ on_crash    = 'restart'</pre>
             <td>packagers-crust</td>
         </tr>
     </table>
+    <hr />
+    <a name="snorlax"><h2>snorlax <small>backup server</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>FQDN</dt><dd>snorlax.chakraos.org</dd>
+        <dt>DNS aliases</dt><dd>N/A</dd>
+        <dt>rDNS set</dt><dd>Unknown</dd>
+        <dt>IP</dt><dd>Unknown</dd>
+    </dl>
+    <p>Placeholder text.</p>
+    <hr />
+    <a name="abra"><h2>abra <small>log server</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>FQDN</dt><dd>abra.chakraos.org</dd>
+        <dt>DNS aliases</dt><dd>N/A</dd>
+        <dt>rDNS set</dt><dd>Unknown</dd>
+        <dt>IP</dt><dd>168.235.151.91</dd>
+    </dl>
+    <p>Placeholder text.</p>
+    <hr />
+    <a name="chakra-buildvm"><h2>chakra-buildvm <small>build server</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>FQDN</dt><dd>Unknown</dd>
+        <dt>DNS aliases</dt><dd>N/A</dd>
+        <dt>rDNS set</dt><dd>Unknown</dd>
+        <dt>IP</dt><dd>Unknown</dd>
+    </dl>
+    <p>Placeholder text.</p>
     <hr />
     <a name="news"><h2>News <small>web application</small></h2></a>
     <dl class="dl-horizontal">
