@@ -682,7 +682,7 @@ on_crash    = 'restart'</pre>
     <hr />
     <a name="snorlax"><h2>snorlax <small>backup server</small></h2></a>
     <dl class="dl-horizontal">
-        <dt>FQDN</dt><dd>snorlax.chakraos.org</dd>
+        <dt>FQDN</dt><dd>Unknown</dd>
         <dt>DNS aliases</dt><dd>N/A</dd>
         <dt>rDNS set</dt><dd>Unknown</dd>
         <dt>IP</dt><dd>Unknown</dd>
@@ -692,7 +692,7 @@ on_crash    = 'restart'</pre>
     <a name="abra"><h2>abra <small>log server</small></h2></a>
     <dl class="dl-horizontal">
         <dt>FQDN</dt><dd>abra.chakraos.org</dd>
-        <dt>DNS aliases</dt><dd>N/A</dd>
+        <dt>DNS aliases</dt><dd>stats.chakraos.org</dd>
         <dt>rDNS set</dt><dd>Unknown</dd>
         <dt>IP</dt><dd>168.235.151.91</dd>
     </dl>
