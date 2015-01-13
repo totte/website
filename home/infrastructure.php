@@ -9,6 +9,7 @@
         <li><a href="#snorlax">snorlax</a></li>
         <li><a href="#abra">abra</a></li>
         <li><a href="#chakra-buildvm">chakra-buildvm</a></li>
+        <li><a href="#sandshrew">sandshrew</a></li>
         <li><a href="#news">News (app)</a></li>
         <li><a href="#forum">Forum (app)</a></li>
         <li><a href="#wiki">Wiki (app)</a></li>
@@ -703,6 +704,15 @@ on_crash    = 'restart'</pre>
         <dt>DNS aliases</dt><dd>N/A</dd>
         <dt>rDNS set</dt><dd>Unknown</dd>
         <dt>IP</dt><dd>Unknown</dd>
+    </dl>
+    <p>Placeholder text.</p>
+    <hr />
+    <a name="sandshrew"><h2>sandshrew <small>community server</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>FQDN</dt><dd>sandshrew.chakraos.org</dd>
+        <dt>DNS aliases</dt><dd>N/A</dd>
+        <dt>rDNS set</dt><dd>Unknown</dd>
+        <dt>IP</dt><dd>5.175.234.180</dd>
     </dl>
     <p>Placeholder text.</p>
     <hr />
