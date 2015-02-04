@@ -35,7 +35,7 @@ echo __("Welcome to the Chakra Community Repo. Please read the %hCCR User Guidel
 <br />
 
 <?php
-echo __("Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Linux Packaging Standards%h otherwise they will be deleted!",
+echo __("Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Packaging Standards%h otherwise they will be deleted!",
 	"<b>", "</b>",
 	"<a href=\"http://www.chakraos.org/wiki/index.php?title=Packaging_Standards\">",
 	"</a>"
