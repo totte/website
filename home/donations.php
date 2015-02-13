@@ -1,10 +1,11 @@
 <div class="col-md-12">
     <h1>Ways to contribute financially to Chakra</h1>
     <p>Chakra is a completely community based distribution and all our contributors and developers are working in their free time to provide it.</p>
-    <p>The only expenses we have at the moment are for maintaining the main server, through which we provide you Chakra and all the surrounding services. Due to the generous sponsorship by HOST1PLUS, we get a significant discount for the server, with the final cost being around 80 EUR (100 USD) per month, which sums up to 960 EUR (1200 USD) per year.</p>
+    <p>The only expenses we have at the moment are for maintaining the main server, through which we provide you Chakra and all the surrounding services. Due to the generous sponsorship by Host1Plus, we get a significant discount for the server, with the final cost being around 80 EUR (100 USD) per month, which sums up to 960 EUR (1200 USD) per year.</p>
     <p>This page is for all of you that wish in one way or another to donate money and help Chakra to be self-sustainable by its users. We can only state how deeply amazed we are by your commitment and greatly appreciate your support and love for this distribution! This is one more reason to work harder to reach our goals.</p>
     <h2>Click&Pledge</h2>
     <p>Donate via Click&Pledge to Chakra</p>
+    <p>Funds donated are held in trust for Chakra by SPI. 5 % of the donated amount is given to SPI, another 4 % plus $0.35 are subtracted as a processing fee by the payment provider (Click & Pledge).</p>
     <a href="https://co.clickandpledge.com/advanced/default.aspx?wid=92751"><img src="img/click_and_pledge.png" alt="Donate via Click&Pledge to Chakra" /></a>
     <h2>Paypal</h2>
     <p>Direct donations through credit cards or bank accounts</p>
