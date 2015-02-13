@@ -7,9 +7,6 @@
     <p>Donate via Click&Pledge to Chakra</p>
     <p>Funds donated are held in trust for Chakra by SPI. 5 % of the donated amount is given to SPI, another 4 % plus $0.35 are subtracted as a processing fee by the payment provider (Click & Pledge).</p>
     <a href="https://co.clickandpledge.com/advanced/default.aspx?wid=92751"><img src="img/click_and_pledge.png" alt="Donate via Click&Pledge to Chakra" /></a>
-    <h2>Paypal</h2>
-    <p>Direct donations through credit cards or bank accounts</p>
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="9D8D3YXKD93U8"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1"></form>
     <h2>Flattr</h2>
     <p>Micro-donations on scheduled intervals</p>
     <a href="http://flattr.com/thing/78621/The-Chakra-Project" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr Chakra" border="0" /></a><br />
