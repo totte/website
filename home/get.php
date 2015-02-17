@@ -6,7 +6,6 @@
     <div class="alert alert-info" role="alert">
         <strong>Heads up!</strong> Netinstall is not working and offline installation may fail if the machine is connected to the Internet.
     </div>
-    <br />
     <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2014.11/chakra-2014.11-euler-x86_64.iso/download">
         HTTP download
     </a>
