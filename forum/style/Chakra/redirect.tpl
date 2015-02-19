@@ -10,7 +10,10 @@
                 <div id="wrapper">
                     <div id="navigation">
                         <ul>
-                            <li><a href="../bugtracker/">Bugs</a></li>
+                            <li><a href="../home/?donations">Donate</a></li>
+                            <li><a href="http://git.chakraos.org">Git</a></li>
+                            <li><a href="../reviewboard/">Review Board</a></li>
+                            <li><a href="../bugtracker/">Bugtracker</a></li>
                             <li><a href="../ccr/">CCR</a></li>
                             <!-- <li><a href="../packages/">Packages</a></li> -->
                             <li><a href="http://rsync.chakraos.org">Packages</a></li>
@@ -42,7 +45,7 @@
                     </div>
                     <!-- End of FluxBB -->
                     <div id="footer">
-                        <p>Copyright © 2006-2014 The Chakra Project</p>
+                        <p>Copyright © 2006-2015 The Chakra Project</p>
                     </div>
                 </div>
             </div>
