@@ -53,7 +53,7 @@
                 "gallaecio",
                 "",
                 "",
-                "Packager (Games)",
+                "Packager (Crust)",
                 "",
                 "",
                 "");
@@ -71,7 +71,7 @@
                 "gcala",
                 "",
                 "",
-                "Packager (Applications)",
+                "Packager (Mantle)",
                 "",
                 "Italy",
                 "1973");
@@ -85,20 +85,20 @@
                 "",
                 "");
             echo PrintContributor("placeholder.png",
-                "",
+                "Xuetian Weng",
                 "csslayer",
                 "",
-                "",
-                "",
-                "",
-                "",
-                "");
+                "csslayer.info",
+                "Packager (Core)",
+                "Chinese, English",
+                "China",
+                "1990");
             echo PrintContributor("placeholder.png",
                 "",
                 "brli",
                 "",
                 "",
-                "Packager (Applications)",
+                "Packager (Mantle)",
                 "",
                 "",
                 "");
@@ -107,7 +107,7 @@
                 "franzmari",
                 "franzmari@chakra-project.it",
                 "franzmari.wordpress.com",
-                "Packager (Applications)",
+                "Packager (Mantle)",
                 "English, Italian",
                 "Italy",
                 "1986");
@@ -125,7 +125,7 @@
                 "s8321414",
                 "s8321414@gmail.com",
                 "osiris-s8321414.blogspot.com",
-                "Packager (Applications)",
+                "Packager (Mantle)",
                 "Traditional Chinese, English",
                 "Taiwan",
                 "1994");
@@ -134,7 +134,7 @@
                 "pyrdracon",
                 "",
                 "",
-                "Packager (Applications)",
+                "Packager (Crust)",
                 "",
                 "",
                 "");
