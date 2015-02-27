@@ -17,8 +17,8 @@
                             <li><a href="../wiki/">Wiki</a></li>
                             <li class="selected"><a href="../forum/">Forum</a></li>
                             <li><a href="../news/">News</a></li>
-                            <li><a href="../home/?get">Download</a></li>
-                            <li><a href="../home/">Home</a></li>
+                            <li><a href="../?get">Download</a></li>
+                            <li><a href="../">Home</a></li>
                         </ul>
                     </div><!-- /#navigation -->
                     <!-- Start of FluxBB -->

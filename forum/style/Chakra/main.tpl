@@ -10,7 +10,7 @@
                 <div id="wrapper">
                     <div id="navigation">
                         <ul>
-                            <li><a href="../home/?donations">Donate</a></li>
+                            <li><a href="../?donations">Donate</a></li>
                             <li><a href="http://git.chakraos.org">Git</a></li>
                             <li><a href="../reviewboard/">Review Board</a></li>
                             <li><a href="../bugtracker/">Bugtracker</a></li>
@@ -20,8 +20,8 @@
                             <li><a href="../wiki/">Wiki</a></li>
                             <li class="selected"><a href="../forum/">Forum</a></li>
                             <li><a href="../news/">News</a></li>
-                            <li><a href="../home/?get">Download</a></li>
-                            <li><a href="../home/">Home</a></li>
+                            <li><a href="../?get">Download</a></li>
+                            <li><a href="../">Home</a></li>
                         </ul>
                     </div><!-- /#navigation -->
                     <!-- Start of FluxBB -->
