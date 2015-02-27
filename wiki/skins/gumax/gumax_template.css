@@ -28,7 +28,7 @@ body
 {
 	font: 0.7em  Helvetica, Lucida Grande, Arial, sans-serif;
 	color: #343434;
-	/* background: #ffffff url('../../../home/img/background.png'); */
+	/* background: #ffffff url('../../../img/background.png'); */
         background: none repeat fixed center bottom #F0F0F0;
 	background-repeat:repeat;
 	background-attachment:fixed;
@@ -50,7 +50,7 @@ pre { font-family: Monospace, Courier, Arial; }
 {
 	width: 944px;
 	margin: 30px auto;
-	background: white url("../../../home/img/header.png") no-repeat;
+	background: white url("../../../img/header.png") no-repeat;
 	padding: 65px 0px 0px 0px;
 	/*border: 12px solid #2e2e2e;*/
 	position:relative;
@@ -380,7 +380,7 @@ div#searchTarget a {
 	font-size: 90%;
 	border: 1px solid #AAAAAA;
 	/* background-color: #F5F5F5; */
-	background: url('../../../home/img/box-1-bg.png');
+	background: url('../../../img/box-1-bg.png');
 	padding: .5em;
 	margin-bottom: 1.2em;
 }
@@ -526,7 +526,7 @@ pre {
 #catlinks {
 	border: 1px solid #aaa;
 	/* background-color: #f9f9f9; */
-	background: url('../../../home/img/box-1-bg.png');
+	background: url('../../../img/box-1-bg.png');
 	padding: .3em;
 	margin-top: 1em;
 	clear: both;
@@ -738,12 +738,12 @@ form#userlogin2 {
 
 .gumax-rbcontentwrap {
     width: 944px;
-    background: transparent url('../../../home/img/shadow_l.png') repeat-y;
+    background: transparent url('../../../img/shadow_l.png') repeat-y;
     margin: 0px auto; 
 }
 .gumax-rbcontent { 
     width: 960px;
-     background: transparent url('../../../home/img/shadow_r.png') repeat-y right; 
+     background: transparent url('../../../img/shadow_r.png') repeat-y right; 
 
 }
 .gumax-rbcontent       { padding: 0px 0px; }
@@ -803,7 +803,7 @@ form#userlogin2 {
 
 #main_nav a:hover {
 	border: none;
-	background: url("../../../home/img/nav_bar_r.jpg") repeat-x bottom center;
+	background: url("../../../img/nav_bar_r.jpg") repeat-x bottom center;
 	-moz-border-radius: 4px; border-radius: 4px;
 }
 
@@ -812,7 +812,7 @@ form#userlogin2 {
 /* FOOTER */
 #foot {
 	padding: 15px;
-	background: transparent url("../../../home/img/footer.png") no-repeat;
+	background: transparent url("../../../img/footer.png") no-repeat;
         /* background: #32adf1; */
 	color: #f2f2f2;
 	text-align: center;
