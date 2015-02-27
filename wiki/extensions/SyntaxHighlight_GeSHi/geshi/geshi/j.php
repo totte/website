@@ -4,13 +4,19 @@
  * --------
  * Author: Ric Sherlock (tikkanz@gmail.com)
  * Copyright: (c) 2009 Ric Sherlock
- * Release Version: 1.0.8.7
+ * Release Version: 1.0.8.11
  * Date Started: 2009/11/10
  *
  * J language file for GeSHi.
  *
  * CHANGES
  * -------
+ *  2010/07/18 (1.0.8.10)
+ *   - Infinity and negative infinity recognized as numbers
+ *  2010/03/01 (1.0.8.8)
+ *   - Add support for label_xyz. and goto_xyz.
+ *   - Fix highlighting of for_i.
+ *   - Use alternative method for highlighting for_xyz. construct
  *  2010/02/14 (1.0.8.7)
  *   - Add support for primitives
  *  2010/01/12 (1.0.2)
@@ -24,7 +30,6 @@
  *   -  Regex for NUMBERS, SYMBOLS for () and turn off BRACKETS
  *  2009/11/12 (1.0.0)
  *   -  First Release
- *
  *
  * TODO (updated 2010/01/27)
  * -------------------------
@@ -49,13 +54,13 @@
  *
  ************************************************************************************/
 
-$language_data = array (
+$language_data = array(
     'LANG_NAME' => 'J',
     'COMMENT_SINGLE' => array(),
     'COMMENT_MULTI' => array(),
     'COMMENT_REGEXP' => array(
         1 => '/(?<!\w)NB\..*?$/m',                //singleline comments NB.
-        2 => '/(?<=\bNote\b).*?\n\s*\)\s*\n/s',   //multiline comments in Note
+        2 => '/(?<=\bNote\b).*?$\s+\)(?:(?!\n)\s)*$/sm',   //multiline comments in Note
         3 => "/'[^']*?$/m"                        //incomplete strings/open quotes
         ),
     'CASE_KEYWORDS' => GESHI_CAPS_NO_CHANGE,
@@ -65,70 +70,19 @@ $language_data = array (
     'HARDESCAPE' => array("'"),
     'HARDCHAR' => "'",
     'NUMBERS' => array(
-        //Some instances of infinity are not correctly handled by GeSHi NUMBERS currently
-        //There are three solutions labelled "infinity Method A", "infinity Method B", "infinity Method C"
-        //infinity Method C - requires following adjustment to line 3349 of geshi.php
-        //   preg_match('#\d#'  becomes  preg_match('#[\d_]#'
-        0 => '\b(?:_?\d+(?:\.\d+)?(?:x|[bejprx]_?[\da-z]+(?:\.[\da-z]+)?)?)(?![\w\.\:])',       //infinity Methods A & B
-        //0 => '\b(?:_?\d+(?:\.\d+)?(?:x|[bejprx]_?[\da-z]+(?:\.[\da-z]+)?)?|__?)(?![\w\.\:])', //infinity Method C
+        0 => '\b(?:_?\d+(?:\.\d+)?(?:x|[bejprx]_?[\da-z]+(?:\.[\da-z]+)?)?|__?)(?![\w\.\:])',
         ),
     'KEYWORDS' => array(
-        //There are two potential methods for handling for_myname. and control words in general
-        //They are labelled "for_myname. Method A" and "for_myname. Method B" throughout the file.
-        /* //Control words : for_myname. Method A
+        //Control words
         1 => array(
             'assert.', 'break.', 'case.', 'catch.', 'catcht.', 'continue.', 'do.',
             'else.', 'elseif.', 'end.', 'fcase.', 'for.', 'goto.', 'if.', 'label.',
             'return.', 'select.', 'throw.', 'trap.', 'try.', 'while.', 'whilst.'
-            ), */
-        //Control words : for_myname. Method B
-        1 => array(
-            'assert', 'break', 'case', 'catch', 'catcht', 'continue', 'do',
-            'else', 'elseif', 'end', 'fcase', 'for', 'goto', 'if', 'label',
-            'return', 'select', 'throw', 'trap', 'try', 'while', 'whilst'
             ),
         //Arguments
         2 => array(
             'm', 'n', 'u', 'v', 'x', 'y'
             ),
-        /* //Infinity : infinity Method B
-        3 => array(
-            '_', '__'
-            ) */
-/*
-Commented out for now due to conflicts with Lang Check
-        //primitives beginning with a symbol (except . or :)
-        6 => array(
-            '=', '&lt;', '&lt;.', '&lt;:',                  //verbs
-            '_:','&gt;', '&gt;.', '&gt;:',
-            '+', '+.', '+:', '*', '*.', '*:', '-', '-.', '-:', '%', '%.', '%:',
-            '^', '^.', '$', '$.', '$:', '~.', '~:', '\|', '|.', '|:',
-            ',', ',.', ',:', ';', ';:', '#', '#.', '#:', '!', '/:', '\:',
-            '[', '[:', ']', '{', '{.', '{:', '{::', '}.', '}:',
-            '&quot;.', '&quot;:', '?', '?.',
-            '~', '\/;', '\\', '/.', '\\.', '}',             //adverbs
-            '^:', ';.', '!.', '!:',                         //conj
-            '&quot;', '`', '`:', '@', '@.', '@:',
-            '&amp;', '&amp;.', '&amp;:', '&amp;.:',
-            '_.',                                           //nouns
-            '=.', '=:',                                     //other
-            ),
-        //primitives beginning with a letter or digit
-        7 => array(
-            'A.', 'c.', 'C.', 'e.', 'E.',                   //verbs
-            'i.', 'i:', 'I.', 'j.', 'L.', 'o.',
-            'p.', 'p..', 'p:', 'q:', 'r.', 's:', 'u:', 'x:',
-            '_9:', '_8:', '_7:', '_6:', '_5:', '_4:', '_3:', '_2:', '_1:',
-            '0:', '1:', '2:', '3:', '4:', '5:', '6:', '7:', '8:', '9:',
-            'b.', 'f.', 'M.', 't.', 't:',                   //adverbs
-            'd.', 'D.', 'D:', 'H.', 'L:', 'S:', 'T.',       //conj
-            'a.', 'a:',                                     //nouns
-            ),
-        //primitives beginning with symbol . or :
-        8 => array(
-            '..', '.:', '.', ':.', '::', ':',               //conj
-            ),
-*/
         ),
     'SYMBOLS' => array(
         //Punctuation
@@ -140,19 +94,17 @@ Commented out for now due to conflicts with Lang Check
         GESHI_COMMENTS => false,
         1 => true,
         2 => true,
-        //3 => true    //infinity : Method B
-//        6 => true,
-//        7 => true,
-//        8 => true,
+        //6 => true,
+        //7 => true,
+        //8 => true,
         ),
     'STYLES' => array(
         'KEYWORDS' => array(
             1 => 'color: #0000ff; font-weight: bold;',
             2 => 'color: #0000cc; font-weight: bold;',
-            //3 => 'color: #3333cc; font-weight: bold;'   //infinity Method B
-//            6 => 'color: #000000; font-weight: bold;',
-//            7 => 'color: #000000; font-weight: bold;',
-//            8 => 'color: #000000; font-weight: bold;',
+            //6 => 'color: #000000; font-weight: bold;',
+            //7 => 'color: #000000; font-weight: bold;',
+            //8 => 'color: #000000; font-weight: bold;',
             ),
         'COMMENTS' => array(
             1 => 'color: #666666; font-style: italic;',
@@ -180,8 +132,7 @@ Commented out for now due to conflicts with Lang Check
             0 => 'color: #009900; font-weight: bold;'
             ),
         'REGEXPS' => array(
-            //0 => 'color: #0000ff; font-weight: bold;',   //for_myname. Method A
-            1 => 'color: #009999; font-weight: bold;'      //infinity Method A
+            0 => 'color: #0000ff; font-weight: bold;',   //for_xyz. - same as kw1
             ),
         'SCRIPT' => array(
             )
@@ -189,17 +140,15 @@ Commented out for now due to conflicts with Lang Check
     'URLS' => array(
         1 => '', //'http://www.jsoftware.com/help/dictionary/ctrl.htm',
         2 => '',
-        //3 => '',                      //infinity Method B
-//        6 => '', //'http://www.jsoftware.com/jwiki/Vocabulary',
-//        7 => '', //'http://www.jsoftware.com/jwiki/Vocabulary',
-//        8 => '', //'http://www.jsoftware.com/jwiki/Vocabulary',
+        //6 => '', //'http://www.jsoftware.com/jwiki/Vocabulary',
+        //7 => '', //'http://www.jsoftware.com/jwiki/Vocabulary',
+        //8 => '', //'http://www.jsoftware.com/jwiki/Vocabulary',
         ),
     'OOLANG' => false,
     'OBJECT_SPLITTERS' => array(
         ),
     'REGEXPS' => array(
-        //0 => '\bfor_[a-zA-Z]\w+\.',   //for_myname. Method A - should be kw1
-        1 => '\b__?(?![\w\.\:])'        //infinity Method A - should be nu0
+        0 => '\b(for|goto|label)_[a-zA-Z]\w*\.',   //for_xyz. - should be kw1
         ),
     'STRICT_MODE_APPLIES' => GESHI_NEVER,
     'SCRIPT_DELIMITERS' => array(
@@ -210,31 +159,26 @@ Commented out for now due to conflicts with Lang Check
         'ENABLE_FLAGS' => array(
             'BRACKETS' => GESHI_NEVER,
             ),
+        'NUMBERS' => array(
+            'PRECHECK_RX' => '#[\d_]#',            // underscore is valid number
+            ),
         'KEYWORDS' => array(
-            //for_myname. Method B
-            1 => array(
-                'DISALLOWED_AFTER' => '(?=(?:(?<=\bfor)_[a-zA-Z]\w+)?\.)',
-                ),
+            //Control words
             2 => array(
                 'DISALLOWED_BEFORE' => '(?<!\w)',
                 'DISALLOWED_AFTER' => '(?![\w\.\:])',
                 ),
-            /* //infinity Method B
-            3 => array(
-                'DISALLOWED_BEFORE' => '(?<!\w)',
-                'DISALLOWED_AFTER' => '(?![\w\.\:])',
-                ), */
-            //primtives starting with a symbol (except . or :)
+            //Primtives starting with a symbol (except . or :)
             6 => array(
                 'DISALLOWED_BEFORE' => '(?!K)',    // effect should be to allow anything
                 'DISALLOWED_AFTER' => '(?=.*)',
                 ),
-            //primtives starting with a letter
+            //Primtives starting with a letter
             7 => array(
                 'DISALLOWED_BEFORE' => '(?<!\w)',
                 'DISALLOWED_AFTER' => '(?=.*)',
                 ),
-            //primtives starting with symbol . or :
+            //Primtives starting with symbol . or :
             8 => array(
                 'DISALLOWED_BEFORE' => '(?<=\s)',
                 'DISALLOWED_AFTER' => '(?=.*)',

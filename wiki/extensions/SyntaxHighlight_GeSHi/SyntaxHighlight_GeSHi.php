@@ -1,6 +1,6 @@
 <?php
 /**
- * Syntax highlighting extension for MediaWiki 1.5 using GeSHi
+ * Syntax highlighting extension for MediaWiki using GeSHi
  * Copyright (C) 2005 Brion Vibber <brion@pobox.com>
  * http://www.mediawiki.org/
  *
@@ -16,56 +16,72 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  */
 
 /**
- * @addtogroup Extensions
+ * @file
+ * @ingroup Extensions
  * @author Brion Vibber
  *
  * This extension wraps the GeSHi highlighter: http://qbnz.com/highlighter/
  *
- * Unlike the older GeSHi MediaWiki extension floating around, this makes
- * use of the new extension parameter support in MediaWiki 1.5 so it only
- * has to register one tag, <source>.
- *
  * A language is specified like: <source lang="c">void main() {}</source>
  * If you forget, or give an unsupported value, the extension spits out
  * some help text and a list of all supported languages.
- *
- * The extension has been tested with GeSHi 1.0.7 and MediaWiki 1.5 CVS
- * as of 2005-06-22.
  */
 
-if( !defined( 'MEDIAWIKI' ) )
+if( !defined( 'MEDIAWIKI' ) ) {
 	die();
+}
 
 $wgExtensionCredits['parserhook']['SyntaxHighlight_GeSHi'] = array(
+	'path'           => __FILE__,
 	'name'           => 'SyntaxHighlight',
-	'svn-date' => '$LastChangedDate: 2008-07-10 12:45:20 +0000 (Thu, 10 Jul 2008) $',
-	'svn-revision' => '$LastChangedRevision: 37495 $',
 	'author'         => array( 'Brion Vibber', 'Tim Starling', 'Rob Church', 'Niklas Laxström' ),
-	'description'    => 'Provides syntax highlighting using [http://qbnz.com/highlighter/ GeSHi Highlighter]',
 	'descriptionmsg' => 'syntaxhighlight-desc',
-	'url'            => 'http://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi',
+	'url'            => 'https://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi',
 );
 
-$dir = dirname(__FILE__) . '/';
+// Change these in LocalSettings.php
+$wgSyntaxHighlightDefaultLang = null;
+$wgSyntaxHighlightKeywordLinks = false;
+
+$dir = __DIR__ . '/';
+$wgMessagesDirs['SyntaxHighlight_GeSHi'] = __DIR__ . '/i18n';
 $wgExtensionMessagesFiles['SyntaxHighlight_GeSHi'] = $dir . 'SyntaxHighlight_GeSHi.i18n.php';
+
 $wgAutoloadClasses['SyntaxHighlight_GeSHi'] = $dir . 'SyntaxHighlight_GeSHi.class.php';
-$wgHooks['ShowRawCssJs'][] = 'SyntaxHighlight_GeSHi::viewHook';
-if ( defined( 'MW_SUPPORTS_PARSERFIRSTCALLINIT' ) ) {
-	$wgHooks['ParserFirstCallInit'][] = 'efSyntaxHighlight_GeSHiSetup';
-} else {
-	$wgExtensionFunctions[] = 'efSyntaxHighlight_GeSHiSetup';
-}
+$wgAutoloadClasses['ResourceLoaderGeSHiModule'] = $dir . 'ResourceLoaderGeSHiModule.php';
+$wgAutoloadClasses['ResourceLoaderGeSHiLocalModule'] = $dir . 'ResourceLoaderGeSHiLocalModule.php';
+
+$wgHooks['ExtensionTypes'][] = 'SyntaxHighlight_GeSHi::extensionTypes';
+$wgHooks['ResourceLoaderRegisterModules'][] = 'SyntaxHighlight_GeSHi::resourceLoaderRegisterModules';
+$wgHooks['ContentGetParserOutput'][] = 'SyntaxHighlight_GeSHi::renderHook';
+
+// Module to load MediaWiki:Geshi.css.
+$wgResourceModules['ext.geshi.local'] = array( 'class' => 'ResourceLoaderGeSHiLocalModule' );
+// More modules are defined by SyntaxHighlight_GeSHi::resourceLoaderRegisterModules,
+// one for each supported language. The general name template is 'ext.geshi.language.<lang>'.
+
+/**
+ * Map content models to the corresponding language names to be used with the highlighter.
+ * Pages with one of the given content models will automatically be highlighted.
+ */
+$wgSyntaxHighlightModels = array(
+	CONTENT_MODEL_CSS => 'css',
+	CONTENT_MODEL_JAVASCRIPT => 'javascript',
+);
 
 /**
  * Register parser hook
+ *
+ * @param $parser Parser
+ * @return bool
  */
-function efSyntaxHighlight_GeSHiSetup() {
-	global $wgParser;
-	$wgParser->setHook( 'source', array( 'SyntaxHighlight_GeSHi', 'parserHook' ) );
+$wgHooks['ParserFirstCallInit'][] = function ( &$parser ) {
+	$parser->setHook( 'source', array( 'SyntaxHighlight_GeSHi', 'parserHook' ) );
+	$parser->setHook( 'syntaxhighlight', array( 'SyntaxHighlight_GeSHi', 'parserHook' ) );
 	return true;
-}
+};

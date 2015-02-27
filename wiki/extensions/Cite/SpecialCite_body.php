@@ -1,21 +1,12 @@
 <?php
-if (!defined('MEDIAWIKI')) die();
-
-global $wgContLang, $wgContLanguageCode, $wgCiteDefaultText;
-
-$dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
-$code = $wgContLang->lc( $wgContLanguageCode );
-$file = file_exists( "${dir}cite_text-$code" ) ? "${dir}cite_text-$code" : "${dir}cite_text";
-$wgCiteDefaultText = file_get_contents( $file );
 
 class SpecialCite extends SpecialPage {
-	function SpecialCite() {
-		SpecialPage::SpecialPage( 'Cite' );
+	function __construct() {
+		parent::__construct( 'Cite' );
 	}
 
 	function execute( $par ) {
-		global $wgOut, $wgRequest, $wgUseTidy;
-		wfLoadExtensionMessages( 'SpecialCite' );
+		global $wgUseTidy;
 
 		// Having tidy on causes whitespace and <pre> tags to
 		// be generated around the output of the CiteOutput
@@ -25,47 +16,43 @@ class SpecialCite extends SpecialPage {
 		$this->setHeaders();
 		$this->outputHeader();
 
-		$page = isset( $par ) ? $par : $wgRequest->getText( 'page' );
-		$id = $wgRequest->getInt( 'id' );
-
+		$page = $par !== null ? $par : $this->getRequest()->getText( 'page' );
 		$title = Title::newFromText( $page );
-		if ( $title ) {
-			$article = new Article( $title );
-		}
+
 		$cform = new CiteForm( $title );
+		$cform->execute();
 
-		if ( !$title || ! $article->exists() )
-			$cform->execute();
-		else {
-			$cform->execute();
-
-			$cout = new CiteOutput( $title, $article, $id );
+		if ( $title && $title->exists() ) {
+			$id = $this->getRequest()->getInt( 'id' );
+			$cout = new CiteOutput( $title, $id );
 			$cout->execute();
 		}
 	}
 }
 
 class CiteForm {
-	var $mTitle;
+	/**
+	 * @var Title
+	 */
+	public $mTitle;
 
-	function CiteForm( &$title ) {
+	function __construct( &$title ) {
 		$this->mTitle =& $title;
 	}
 
 	function execute() {
-		global $wgOut, $wgTitle;
+		global $wgOut, $wgScript;
 
 		$wgOut->addHTML(
-			Xml::element( 'form',
+			Xml::openElement( 'form',
 				array(
 					'id' => 'specialcite',
 					'method' => 'get',
-					'action' => $wgTitle->escapeLocalUrl()
-				),
-				null
-			) .
+					'action' => $wgScript
+				) ) .
+				Html::hidden( 'title', SpecialPage::getTitleFor( 'Cite' )->getPrefixedDBkey() ) .
 				Xml::openElement( 'label' ) .
-					wfMsgHtml( 'cite_page' ) . ' ' .
+					wfMessage( 'cite_page' )->escaped() . ' ' .
 					Xml::element( 'input',
 						array(
 							'type' => 'text',
@@ -79,7 +66,7 @@ class CiteForm {
 					Xml::element( 'input',
 						array(
 							'type' => 'submit',
-							'value' => wfMsgHtml( 'cite_submit' )
+							'value' => wfMessage( 'cite_submit' )->escaped()
 						),
 						''
 					) .
@@ -87,18 +74,38 @@ class CiteForm {
 			Xml::closeElement( 'form' )
 		);
 	}
-
 }
 
 class CiteOutput {
-	var $mTitle, $mArticle, $mId;
-	var $mParser, $mParserOptions;
+	/**
+	 * @var Title
+	 */
+	public $mTitle;
 
-	function CiteOutput( &$title, &$article, $id ) {
+	/**
+	 * @var Article
+	 */
+	public $mArticle;
+
+	public $mId;
+
+	/**
+	 * @var Parser
+	 */
+	public $mParser;
+
+	/**
+	 * @var ParserOptions
+	 */
+	public $mParserOptions;
+
+	public $mSpTitle;
+
+	function __construct( $title, $id ) {
 		global $wgHooks, $wgParser;
 
-		$this->mTitle =& $title;
-		$this->mArticle =& $article;
+		$this->mTitle = $title;
+		$this->mArticle = new Article( $title );
 		$this->mId = $id;
 
 		$wgHooks['ParserGetVariableValueVarCache'][] = array( $this, 'varCache' );
@@ -110,17 +117,33 @@ class CiteOutput {
 	}
 
 	function execute() {
-		global $wgOut, $wgUser, $wgParser, $wgHooks, $wgCiteDefaultText;
+		global $wgOut, $wgParser, $wgHooks;
 
 		$wgHooks['ParserGetVariableValueTs'][] = array( $this, 'timestamp' );
 
-		$msg = wfMsgForContentNoTrans( 'cite_text' );
-		if( $msg == '' ) {
-			$msg = $wgCiteDefaultText;
+		$msg = wfMessage( 'cite_text' )->inContentLanguage()->plain();
+		if ( $msg == '' ) {
+			# With MediaWiki 1.20 the plain text files were deleted and the text moved into SpecialCite.i18n.php
+			# This code is kept for b/c in case an installation has its own file "cite_text-xx"
+			# for a previously not supported language.
+			global $wgContLang, $wgContLanguageCode;
+			$dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
+			$code = $wgContLang->lc( $wgContLanguageCode );
+			if ( file_exists( "${dir}cite_text-$code" ) ) {
+				$msg = file_get_contents( "${dir}cite_text-$code" );
+			} elseif( file_exists( "${dir}cite_text" ) ){
+				$msg = file_get_contents( "${dir}cite_text" );
+			}
 		}
-		$this->mArticle->fetchContent( $this->mId, false );
-		$ret = $wgParser->parse( $msg, $this->mTitle, $this->mParserOptions, false, true, $this->mArticle->getRevIdFetched() );
-		$wgOut->addHTML( $ret->getText() );
+		$ret = $wgParser->parse( $msg, $this->mTitle, $this->mParserOptions, false, true, $this->getRevId() );
+		$wgOut->addModules( 'ext.specialcite' );
+
+		# Introduced in 1.24
+		if( method_exists( $wgOut, 'addParserOutputContent' ) ) {
+			$wgOut->addParserOutputContent( $ret );
+		} else {
+			$wgOut->addHTML( $ret->getText() );
+		}
 	}
 
 	function genParserOptions() {
@@ -132,22 +155,32 @@ class CiteOutput {
 
 	function genParser() {
 		$this->mParser = new Parser;
+		$this->mSpTitle = SpecialPage::getTitleFor( 'Cite' );
 	}
 
 	function CiteParse( $in, $argv ) {
-		global $wgTitle;
-
-		$ret = $this->mParser->parse( $in, $wgTitle, $this->mParserOptions, false );
+		$ret = $this->mParser->parse( $in, $this->mSpTitle, $this->mParserOptions, false );
 
 		return $ret->getText();
 	}
 
-	function varCache() { return false; }
+	function varCache() {
+		return false;
+	}
 
 	function timestamp( &$parser, &$ts ) {
-		if ( isset( $parser->mTagHooks['citation'] ) )
+		if ( isset( $parser->mTagHooks['citation'] ) ) {
 			$ts = wfTimestamp( TS_UNIX, $this->mArticle->getTimestamp() );
+		}
 
 		return true;
+	}
+
+	function getRevId() {
+		if ( $this->mId ) {
+			return $this->mId;
+		} else {
+			return $this->mTitle->getLatestRevID();
+		}
 	}
 }
