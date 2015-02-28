@@ -5,6 +5,7 @@ forum/register.php
 news/serendipity_config_local.inc.php
 packages/include/config.php
 wiki/LocalSettings.php
+vnstat_*.png
 .DS_Store
 .htaccess
 .cvsignore
