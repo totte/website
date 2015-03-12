@@ -6,9 +6,6 @@
     <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2015.03/chakra-2015.03-euler-x86_64.iso/download">
         HTTP download (SourceForge)
     </a>
-    <a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/releases/chakra-2015.03-euler-x86_64.iso">
-        HTTP download (chakraos.org)
-    </a>
     <a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/torrents/chakra-2015.03-euler-x86_64.iso.torrent">
         BitTorrent download
     </a>
