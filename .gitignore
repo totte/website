@@ -6,6 +6,6 @@ news/serendipity_config_local.inc.php
 packages/include/config.php
 wiki/LocalSettings.php
 .DS_Store
-.htaccess
+#.htaccess
 .cvsignore
 *~
