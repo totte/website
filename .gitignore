@@ -7,6 +7,6 @@ packages/include/config.php
 wiki/LocalSettings.php
 vnstat_*.png
 .DS_Store
-.htaccess
+#.htaccess
 .cvsignore
 *~
