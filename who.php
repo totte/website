@@ -502,10 +502,9 @@
         <li><a href="http://webchat.freenode.net/?channels=chakra">#chakra</a></li>
         <li><a href="http://webchat.freenode.net/?channels=chakra-devel">#chakra-devel</a></li>
     </ul>
-    <p><strong>Source code</strong></p>
+    <p><strong>Unofficial Communities</strong></p>
     <ul>
-        <li><a href="http://gitorious.org/chakra">Tools</a></li>
-        <li><a href="http://gitorious.org/chakra-website">Website</a></li>
-        <li><a href="http://gitorious.org/chakra-packages">Packages</a></li>
+        <li><a href="http://chakraos.es">Spain</a></li>
+        <li><a href="http://chakra-project.it">Italy</a></li>
     </ul>
 </div>
