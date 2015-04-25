@@ -4,7 +4,7 @@
         return "<a name='$alias'></a>"
                . "<tr>"
                . "<td>"
-               . "<img style='margin:auto;' width='120' height='148' class='img-rounded' src='img/contributors/" . $image . "' alt='" . $image . "' />"
+               . "<img style='margin:auto;' width='120' height='148' class='img-rounded' src='static/img/contributors/" . $image . "' alt='" . $image . "' />"
                . "</td>"
                . "<td>"
                . "<h3 style='margin-top:0px;'>$alias</h3>"
