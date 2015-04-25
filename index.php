@@ -6,14 +6,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" href="css/chakra.css" />
-        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="static/css/chakra.css" />
+        <link rel="icon" href="static/img/favicon.ico" type="image/x-icon" />
         <link rel="search" href="opensearch_ssl.xml" type="application/opensearchdescription+xml" title="DuckDuckGo (Chakra)" />
-        <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui.js"></script>
-        <script type="text/javascript" src="js/jquery.animated.innerfade.js"></script>
+        <script type="text/javascript" src="static/js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="static/js/jquery-ui.js"></script>
+        <script type="text/javascript" src="static/js/jquery.animated.innerfade.js"></script>
         <script>
             $(function() {
                 $( "#tabs" ).tabs();
