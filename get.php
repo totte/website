@@ -30,7 +30,7 @@
     </table>
 </div>
 <div class="col-md-4">
-    <img src="img/laptop.png" alt="wtflol"></img>
+    <img src="static/img/laptop.png" alt="wtflol"></img>
     <h3>Get started</h3>
     <ul>
         <li><a href="http://www.chakraos.org/wiki/index.php?title=Beginner%E2%80%99s_Guide">Beginner's Guide</a></li>
