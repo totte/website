@@ -3,6 +3,9 @@
 </div>
 <div class="col-md-8">
     <h3>Chakra 2015.03 "Euler"</h3>
+    <div class="alert alert-info" role="alert">
+        <strong>Heads up!</strong> Netinstall is currently not working - please use the offline installation mode.
+    </div>
     <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2015.03/chakra-2015.03-euler-x86_64.iso/download">
         HTTP download (SourceForge)
     </a>
