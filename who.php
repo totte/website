@@ -504,7 +504,7 @@
     </ul>
     <p><strong>Unofficial Communities</strong></p>
     <ul>
-        <li><a href="http://chakraos.es">Spain</a></li>
-        <li><a href="http://chakra-project.it">Italy</a></li>
+        <li><a href="http://chakraos.es">Spanish</a></li>
+        <li><a href="http://chakra-project.it">Italian</a></li>
     </ul>
 </div>
