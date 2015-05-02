@@ -29,16 +29,16 @@
                             </div>
                         </div>
                         <div class="punwrap">
-                            <div id="chakra_nav">
-                                <ul>
-                                    <li><a href="https://twitter.com/ChakraProject" target="_blank"><img src="../../../static/img/twitter32.png" border="0" alt="" width="22" height="22" style="margin-top: -3px;" /></a></li>
-                                    <li><a href="https://www.facebook.com/theChakraProject" target="_blank"><img src="../../../static/img/facebook32.png" border="0" alt="" width="22" height="22" style="margin-top: -3px;" /></a></li>
-                                    <li><a href="https://plus.google.com/106166715102787349220" target="_blank"><img src="../../../static/img/googleplus32.png" border="0" alt="" width="22" height="22" style="margin-top: -3px;" /></a></li>
-                                    <li><a href="https://www.reddit.com/r/chakra" target="_blank"><img src="../../../static/img/logotype_reddit_32x32.png" border="0" alt="" width="22" height="22" style="margin-top: -3px;" /></a></li>
-                                    <li><a href="https://www.identi.ca/thechakraproject" target="_blank"><img src="../../../static/img/logotype_identica_32x32.png" border="0" alt="" width="22" height="22" style="margin-top: -3px;" /></a></li>
-                                    <li><a href="https://joindiaspora.com/people/bbe1261d580884b3" target="_blank"><img src="../../../static/img/logotype_diaspora_32x32.png" border="0" alt="" width="22" height="22" style="margin-top: -3px;" /></a></li>
-                                </ul>
-                            </div>
+                            <!-- <div id="chakra_nav"> -->
+                            <!--     <ul> -->
+                            <!--         <li><a href="https://twitter.com/ChakraProject" target="_blank"><img src="../../../static/img/twitter32.png" border="0" alt="" width="22" height="22" style="margin&#45;top: &#45;3px;" /></a></li> -->
+                            <!--         <li><a href="https://www.facebook.com/theChakraProject" target="_blank"><img src="../../../static/img/facebook32.png" border="0" alt="" width="22" height="22" style="margin&#45;top: &#45;3px;" /></a></li> -->
+                            <!--         <li><a href="https://plus.google.com/106166715102787349220" target="_blank"><img src="../../../static/img/googleplus32.png" border="0" alt="" width="22" height="22" style="margin&#45;top: &#45;3px;" /></a></li> -->
+                            <!--         <li><a href="https://www.reddit.com/r/chakra" target="_blank"><img src="../../../static/img/logotype_reddit_32x32.png" border="0" alt="" width="22" height="22" style="margin&#45;top: &#45;3px;" /></a></li> -->
+                            <!--         <li><a href="https://www.identi.ca/thechakraproject" target="_blank"><img src="../../../static/img/logotype_identica_32x32.png" border="0" alt="" width="22" height="22" style="margin&#45;top: &#45;3px;" /></a></li> -->
+                            <!--         <li><a href="https://joindiaspora.com/people/bbe1261d580884b3" target="_blank"><img src="../../../static/img/logotype_diaspora_32x32.png" border="0" alt="" width="22" height="22" style="margin&#45;top: &#45;3px;" /></a></li> -->
+                            <!--     </ul> -->
+                            <!-- </div> -->
                             <div id="brdmain">
                                 <pun_main>
                             </div>
