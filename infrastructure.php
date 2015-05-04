@@ -452,7 +452,6 @@ on_crash    = 'restart'</pre>
         <dt>packagers-core</dt><dd>write access to core package repositories</dd>
         <dt>packagers-mantle</dt><dd>write access to mantle package repositories</dd>
         <dt>packagers-crust</dt><dd>write access to crust package repositories</dd>
-        <dt>developers</dt><dd>write access to developer git repositories</dd>
         <dt>artists</dt><dd>write access to artwork directory</dd>
     </dl>
     <h3>Users</h3>
