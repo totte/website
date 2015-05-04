@@ -468,7 +468,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>totte</td>
-            <td>sudo, packagers-mantle, packagers-crust</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, artists</td>
             <td>Yes</td>
             <td>Administrator</td>
             <td></td>
@@ -477,7 +477,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>boom1992</td>
-            <td>developers-akabei</td>
+            <td></td>
             <td>No</td>
             <td>Developer</td>
             <td></td>
@@ -486,7 +486,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>tetris4</td>
-            <td>staff, packagers-core, packagers-mantle, packagers-crust</td>
+            <td>staff, packagers-core, packagers-mantle, packagers-crust, artists</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -495,7 +495,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>inkane</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-tribe</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -504,7 +504,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>almack</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-kinky, developers-tribe, artists</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, artists</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -522,7 +522,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>george2</td>
-            <td>packagers-crust, developers-web, developers-kapudan</td>
+            <td>packagers-crust</td>
             <td>Yes</td>
             <td>Developer</td>
             <td></td>
@@ -540,7 +540,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>csslayer</td>
-            <td>packagers-mantle, packagers-crust</td>
+            <td>packagers-core, packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -549,7 +549,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>brli</td>
-            <td>packagers-crust</td>
+            <td>packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -567,7 +567,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>ram-z</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-tribe, developers-ccr-tools</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -594,7 +594,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>s8321414</td>
-            <td>packagers-crust</td>
+            <td>packagers-mantle, packagers-crust</td>
             <td>No</td>
             <td>Packager</td>
             <td></td>
@@ -603,6 +603,15 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>djustice</td>
+            <td>packagers-crust</td>
+            <td>No</td>
+            <td>Packager</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>gnastyle</td>
             <td>packagers-crust</td>
             <td>No</td>
             <td>Packager</td>
