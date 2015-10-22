@@ -10,6 +10,7 @@
         <li><a href="#abra">abra</a></li>
         <li><a href="#eevee">eevee</a></li>
         <li><a href="#sandshrew">sandshrew</a></li>
+        <li><a href="#oddish">oddish</a></li>
         <li><a href="#news">News (app)</a></li>
         <li><a href="#forum">Forum (app)</a></li>
         <li><a href="#wiki">Wiki (app)</a></li>
@@ -451,7 +452,6 @@ on_crash    = 'restart'</pre>
         <dt>packagers-core</dt><dd>write access to core package repositories</dd>
         <dt>packagers-mantle</dt><dd>write access to mantle package repositories</dd>
         <dt>packagers-crust</dt><dd>write access to crust package repositories</dd>
-        <dt>developers</dt><dd>write access to developer git repositories</dd>
         <dt>artists</dt><dd>write access to artwork directory</dd>
     </dl>
     <h3>Users</h3>
@@ -468,7 +468,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>totte</td>
-            <td>sudo, packagers-mantle, packagers-crust</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, artists</td>
             <td>Yes</td>
             <td>Administrator</td>
             <td></td>
@@ -477,7 +477,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>boom1992</td>
-            <td>developers-akabei</td>
+            <td></td>
             <td>No</td>
             <td>Developer</td>
             <td></td>
@@ -486,7 +486,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>tetris4</td>
-            <td>staff, packagers-core, packagers-mantle, packagers-crust</td>
+            <td>staff, packagers-core, packagers-mantle, packagers-crust, artists</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -495,7 +495,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>inkane</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-tribe</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -504,7 +504,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>almack</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-kinky, developers-tribe, artists</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, artists</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -522,7 +522,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>george2</td>
-            <td>packagers-crust, developers-web, developers-kapudan</td>
+            <td>packagers-crust</td>
             <td>Yes</td>
             <td>Developer</td>
             <td></td>
@@ -540,7 +540,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>csslayer</td>
-            <td>packagers-mantle, packagers-crust</td>
+            <td>packagers-core, packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -549,7 +549,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>brli</td>
-            <td>packagers-crust</td>
+            <td>packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -567,7 +567,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>ram-z</td>
-            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust, developers-web, developers-tribe, developers-ccr-tools</td>
+            <td>sudo, staff, packagers-core, packagers-mantle, packagers-crust</td>
             <td>Yes</td>
             <td>Packager</td>
             <td></td>
@@ -594,7 +594,7 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>s8321414</td>
-            <td>packagers-crust</td>
+            <td>packagers-mantle, packagers-crust</td>
             <td>No</td>
             <td>Packager</td>
             <td></td>
@@ -603,6 +603,15 @@ on_crash    = 'restart'</pre>
         <tr>
             <td></td>
             <td>djustice</td>
+            <td>packagers-crust</td>
+            <td>No</td>
+            <td>Packager</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>gnastyle</td>
             <td>packagers-crust</td>
             <td>No</td>
             <td>Packager</td>
@@ -707,12 +716,21 @@ on_crash    = 'restart'</pre>
     </dl>
     <p>Placeholder text.</p>
     <hr />
-    <a name="sandshrew"><h2>sandshrew <small>community server</small></h2></a>
+    <a name="sandshrew"><h2>sandshrew <small>community server (Italian)</small></h2></a>
     <dl class="dl-horizontal">
         <dt>FQDN</dt><dd>sandshrew.chakraos.org</dd>
         <dt>DNS aliases</dt><dd>N/A</dd>
-        <dt>rDNS set</dt><dd>Unknown</dd>
+        <dt>rDNS set</dt><dd>Yes</dd>
         <dt>IP</dt><dd>5.175.234.180</dd>
+    </dl>
+    <p>Placeholder text.</p>
+    <hr />
+    <a name="oddish"><h2>oddish <small>community server (Spanish)</small></h2></a>
+    <dl class="dl-horizontal">
+        <dt>FQDN</dt><dd>oddish.chakraos.org</dd>
+        <dt>DNS aliases</dt><dd>N/A</dd>
+        <dt>rDNS set</dt><dd>Yes</dd>
+        <dt>IP</dt><dd>5.175.233.138</dd>
     </dl>
     <p>Placeholder text.</p>
     <hr />
