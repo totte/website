@@ -5,7 +5,7 @@
         <p><a class="btn btn-primary btn-lg" href="?get" role="button">Download &raquo;</a></p>
     </div>
     <div class="col-md-5">
-        <img class="featurette-image img-responsive img-rounded" src="static/img/5.jpg" alt="" title="Screenshot" />
+        <img class="featurette-image img-responsive img-rounded" src="static/img/1.jpg" alt="" title="Screenshot" />
     </div>
 </div>
 
@@ -13,7 +13,7 @@
 
 <div class="row featurette">
     <div class="col-md-5">
-        <img class="featurette-image img-responsive img-rounded" src="static/img/6.jpg" alt="" title="Screenshot" />
+        <img class="featurette-image img-responsive img-rounded" src="static/img/5.jpg" alt="" title="Screenshot" />
     </div>
     <div class="col-md-7">
         <h2 class="featurette-heading">Stable core, bleeding edge applications.</h2>
@@ -31,6 +31,6 @@
         <p><a class="btn btn-primary btn-lg" href="?who" role="button">Meet us &raquo;</a></p>
     </div>
     <div class="col-md-5">
-        <img class="featurette-image img-responsive img-rounded" src="static/img/8.jpg" alt="" title="Screenshot" />
+        <img class="featurette-image img-responsive img-rounded" src="static/img/6.jpg" alt="" title="Screenshot" />
     </div>
 </div>
