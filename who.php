@@ -40,13 +40,13 @@
                 "Sweden",
                 "1986");
             echo PrintContributor("placeholder.png",
-                "",
+                "Luca Giambonini",
                 "almack",
                 "",
-                "",
+                "almack.ch",
                 "Packager (Core)",
-                "",
-                "",
+                "Italian, English, French",
+                "Switzerland",
                 "");
             echo PrintContributor("placeholder.png",
                 "",
