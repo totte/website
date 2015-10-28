@@ -1,348 +1,344 @@
 <div class="col-md-12">
     <h1>Who are we?</h1>
     <h2>Current contributors</h2>
-    <table class="table table-striped">
-        <?php
-            echo PrintContributor("boom1992.png", 
-                "Lukas Appelhans",
-                "boom1992",
-                "lukas.appelhans@chakraos.org",
-                "boom1992.com",
-                "Developer (Akabei)",
-                "German, English",
-                "Germany",
-                "1992");
-            echo PrintContributor("tetris4.jpg",
-                "Neophytos Kolokotronis",
-                "tetris4",
-                "tetris4@gmail.com",
-                "N/A",
-                "Communicator",
-                "English, Greek",
-                "",
-                "");
-            echo PrintContributor("placeholder.png",
-                "Fabian Kosmale",
-                "Inkane",
-                "",
-                "",
-                "Packager (Core)",
-                "",
-                "",
-                "");
-            echo PrintContributor("totte.jpg",
-                "H W Tovetjärn",
-                "totte",
-                "totte@tott.es",
-                "tott.es",
-                "Administrator",
-                "English",
-                "Sweden",
-                "1986");
-            echo PrintContributor("placeholder.png",
-                "Luca Giambonini",
-                "almack",
-                "",
-                "almack.ch",
-                "Packager (Core)",
-                "Italian, English, French",
-                "Switzerland",
-                "");
-            echo PrintContributor("placeholder.png",
-                "",
-                "gallaecio",
-                "",
-                "",
-                "Packager (Crust)",
-                "",
-                "",
-                "");
-            echo PrintContributor("placeholder.png",
-                "Ryan Shipp",
-                "george2",
-                "chakra@rshipp.com",
-                "rshipp.com",
-                "Developer (Kapudan)",
-                "English",
-                "USA",
-                "");
-            echo PrintContributor("gcala.png",
-                "Giuseppe Calà",
-                "gcala",
-                "",
-                "",
-                "Packager (Mantle)",
-                "",
-                "Italy",
-                "1973");
-            echo PrintContributor("placeholder.png",
-                "",
-                "dezponia",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
-            echo PrintContributor("placeholder.png",
-                "Xuetian Weng",
-                "csslayer",
-                "",
-                "csslayer.info",
-                "Packager (Core)",
-                "Chinese, English",
-                "China",
-                "1990");
-            echo PrintContributor("placeholder.png",
-                "",
-                "brli",
-                "",
-                "",
-                "Packager (Mantle)",
-                "",
-                "",
-                "");
-            echo PrintContributor("franzmari.png",
-                "Francesco Marinucci",
-                "franzmari",
-                "franzmari@chakra-project.it",
-                "franzmari.wordpress.com",
-                "Packager (Mantle)",
-                "English, Italian",
-                "Italy",
-                "1986");
-            echo PrintContributor("placeholder.png",
-                "Samir Benmendil",
-                "ram-z",
-                "ram-z@chakraos.org",
-                "",
-                "Packager (Core), Developer (Tribe)",
-                "English, French, German",
-                "",
-                "");
-            echo PrintContributor("placeholder.png",
-                "Jeff Huang",
-                "s8321414",
-                "s8321414@gmail.com",
-                "osiris-s8321414.blogspot.com",
-                "Packager (Mantle)",
-                "Traditional Chinese, English",
-                "Taiwan",
-                "1994");
-            echo PrintContributor("placeholder.png",
-                "",
-                "pyrdracon",
-                "",
-                "",
-                "Packager (Crust)",
-                "",
-                "",
-                "");
-            echo PrintContributor("placeholder.png",
-                "",
-                "malcer",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
-        ?>
-    </table>
+    <?php
+        echo PrintContributor("boom1992.png",
+            "Lukas Appelhans",
+            "boom1992",
+            "lukas.appelhans@chakraos.org",
+            "boom1992.com",
+            "Developer (Akabei)",
+            "German, English",
+            "Germany",
+            "1992");
+        echo PrintContributor("tetris4.jpg",
+            "Neophytos Kolokotronis",
+            "tetris4",
+            "tetris4@chakraos.org",
+            "N/A",
+            "Communicator",
+            "English, Greek",
+            "",
+            "");
+        echo PrintContributor("placeholder.png",
+            "Fabian Kosmale",
+            "Inkane",
+            "",
+            "",
+            "Sr. Packager",
+            "",
+            "",
+            "");
+        echo PrintContributor("totte.jpg",
+            "H W Tovetjärn",
+            "totte",
+            "totte@chakraos.org",
+            "tott.es",
+            "Administrator",
+            "English",
+            "Sweden",
+            "1986");
+        echo PrintContributor("placeholder.png",
+            "Luca Giambonini",
+            "almack",
+            "almack@chakraos.org",
+            "almack.ch",
+            "Sr. Packager",
+            "Italian, English, French",
+            "Switzerland",
+            "");
+        echo PrintContributor("placeholder.png",
+            "",
+            "gallaecio",
+            "",
+            "",
+            "Sr. Packager",
+            "",
+            "",
+            "");
+        echo PrintContributor("placeholder.png",
+            "Ryan Shipp",
+            "george2",
+            "chakra@rshipp.com",
+            "rshipp.com",
+            "Developer (Kapudan)",
+            "English",
+            "USA",
+            "");
+        echo PrintContributor("gcala.png",
+            "Giuseppe Calà",
+            "gcala",
+            "",
+            "",
+            "Sr. Packager",
+            "",
+            "Italy",
+            "1973");
+        echo PrintContributor("placeholder.png",
+            "",
+            "dezponia",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "");
+        echo PrintContributor("placeholder.png",
+            "Xuetian Weng",
+            "csslayer",
+            "",
+            "csslayer.info",
+            "Sr. Packager",
+            "Chinese, English",
+            "China",
+            "1990");
+        echo PrintContributor("placeholder.png",
+            "",
+            "brli",
+            "",
+            "",
+            "Sr. Packager",
+            "",
+            "",
+            "");
+        echo PrintContributor("franzmari.png",
+            "Francesco Marinucci",
+            "franzmari",
+            "franzmari@chakra-project.it",
+            "franzmari.wordpress.com",
+            "Sr. Packager",
+            "English, Italian",
+            "Italy",
+            "1986");
+        echo PrintContributor("placeholder.png",
+            "Samir Benmendil",
+            "ram-z",
+            "ram-z@chakraos.org",
+            "",
+            "Sr. Packager, Developer (Tribe)",
+            "English, French, German",
+            "",
+            "");
+        echo PrintContributor("placeholder.png",
+            "Jeff Huang",
+            "s8321414",
+            "s8321414@chakraos.org",
+            "osiris-s8321414.blogspot.com",
+            "Sr. Packager",
+            "Traditional Chinese, English",
+            "Taiwan",
+            "1994");
+    ?>
     <h2>Former contributors</h2>
-    <table class="table table-striped">
-        <?php
-            echo PrintContributor("placeholder.png",
-                "",
-                "admiral0",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
-            echo PrintContributor("placeholder.png",
-                "",
-                "qote",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "");
-            echo PrintContributor("manutortosa.png",
-                "Manuel Tortosa",
-                "manutortosa",
-                "manuel.tortosa@chakraos.org",
-                "N/A",
-                "N/A",
-                "Spanish, English",
-                "Spain",
-                "1976");
-            echo PrintContributor("djustice.png",
-                "Drake Justice",
-                "djustice",
-                "drake.justice@chakraos.org",
-                "N/A",
-                "N/A",
-                "English",
-                "USA",
-                "N/A");
-            echo PrintContributor("abveritas.png",
-                "Anke Boersma",
-                "abveritas",
-                "anke.boersma@chakraos.org",
-                "N/A",
-                "N/A",
-                "English",
-                "USA",
-                "1962");
-            echo PrintContributor("antonio.png",
-                "José Antonio Sánchez Reynaga",
-                "antonioJASR",
-                "",
-                "",
-                "",
-                "",
-                "Mexico",
-                "1989");
-            echo PrintContributor("jmc.png",
-                "Daniele Cocca",
-                "jmc",
-                "",
-                "",
-                "",
-                "",
-                "Italy",
-                "1988");
-            echo PrintContributor("lisa.png",
-                "Lisa Vitolo",
-                "shainer",
-                "",
-                "",
-                "",
-                "",
-                "Italy",
-                "1990");
-            echo PrintContributor("codertux.png",
-                "Andrei Nistor",
-                "codertux",
-                "",
-                "",
-                "",
-                "",
-                "Romania",
-                "1989");
-            echo PrintContributor("surfed.png",
-                "Sascha Thier",
-                "surfed",
-                "",
-                "",
-                "",
-                "",
-                "Canada",
-                "1971");
-            echo PrintContributor("florent.png",
-                "Florent Nouvellon",
-                "florent",
-                "",
-                "",
-                "",
-                "",
-                "France",
-                "1983");
-            echo PrintContributor("dunkelstern.png",
-                "Johannes Schriewer",
-                "dunkelstern",
-                "",
-                "",
-                "",
-                "",
-                "Germany",
-                "");
-            echo PrintContributor("drf.png",
-                "Dario Freddi",
-                "drf",
-                "",
-                "",
-                "",
-                "",
-                "Italy",
-                "1988");
-            echo PrintContributor("jofko.png",
-                "Jozef Korencik",
-                "jofko",
-                "",
-                "",
-                "",
-                "",
-                "Czech Republic",
-                "1983");
-            echo PrintContributor("sandsmark.png",
-                "Martin Sandsmark",
-                "sandsmark",
-                "",
-                "",
-                "",
-                "",
-                "Norway",
-                "1988");
-            echo PrintContributor("heller_barde.png",
-                "Philip Stark",
-                "heller_barde",
-                "",
-                "",
-                "",
-                "",
-                "Switzerland",
-                "1987");
-            echo PrintContributor("mistvieh.png",
-                "Dennis Brendel",
-                "mistvieh",
-                "",
-                "",
-                "",
-                "",
-                "Germany",
-                "1987");
-            echo PrintContributor("nachtwandler.png",
-                "Dominik Pieper",
-                "nachtwandler",
-                "",
-                "",
-                "",
-                "",
-                "Germany",
-                "1988");
-            echo PrintContributor("philm.png",
-                "Phil Müller",
-                "philm",
-                "",
-                "",
-                "",
-                "",
-                "Germany",
-                "1982");
-            echo PrintContributor("roozbeh.jpg",
-                "Roozbeh Shafiee",
-                "rosha",
-                "",
-                "",
-                "",
-                "",
-                "Iran",
-                "1987");
-            echo PrintContributor("funkyou.png",
-                "Jan Mette",
-                "funkyou",
-                "",
-                "",
-                "",
-                "",
-                "Germany",
-                "1978");
-        ?>
-    </table>
+    <?php
+        echo PrintContributor("placeholder.png",
+            "",
+            "admiral0",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "");
+        echo PrintContributor("placeholder.png",
+            "",
+            "qote",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "");
+        echo PrintContributor("manutortosa.png",
+            "Manuel Tortosa",
+            "manutortosa",
+            "manuel.tortosa@chakraos.org",
+            "N/A",
+            "N/A",
+            "Spanish, English",
+            "Spain",
+            "1976");
+        echo PrintContributor("djustice.png",
+            "Drake Justice",
+            "djustice",
+            "drake.justice@chakraos.org",
+            "N/A",
+            "N/A",
+            "English",
+            "USA",
+            "N/A");
+        echo PrintContributor("abveritas.png",
+            "Anke Boersma",
+            "abveritas",
+            "anke.boersma@chakraos.org",
+            "N/A",
+            "N/A",
+            "English",
+            "USA",
+            "1962");
+        echo PrintContributor("antonio.png",
+            "José Antonio Sánchez Reynaga",
+            "antonioJASR",
+            "",
+            "",
+            "",
+            "",
+            "Mexico",
+            "1989");
+        echo PrintContributor("jmc.png",
+            "Daniele Cocca",
+            "jmc",
+            "",
+            "",
+            "",
+            "",
+            "Italy",
+            "1988");
+        echo PrintContributor("lisa.png",
+            "Lisa Vitolo",
+            "shainer",
+            "",
+            "",
+            "",
+            "",
+            "Italy",
+            "1990");
+        echo PrintContributor("codertux.png",
+            "Andrei Nistor",
+            "codertux",
+            "",
+            "",
+            "",
+            "",
+            "Romania",
+            "1989");
+        echo PrintContributor("surfed.png",
+            "Sascha Thier",
+            "surfed",
+            "",
+            "",
+            "",
+            "",
+            "Canada",
+            "1971");
+        echo PrintContributor("florent.png",
+            "Florent Nouvellon",
+            "florent",
+            "",
+            "",
+            "",
+            "",
+            "France",
+            "1983");
+        echo PrintContributor("dunkelstern.png",
+            "Johannes Schriewer",
+            "dunkelstern",
+            "",
+            "",
+            "",
+            "",
+            "Germany",
+            "");
+        echo PrintContributor("drf.png",
+            "Dario Freddi",
+            "drf",
+            "",
+            "",
+            "",
+            "",
+            "Italy",
+            "1988");
+        echo PrintContributor("jofko.png",
+            "Jozef Korencik",
+            "jofko",
+            "",
+            "",
+            "",
+            "",
+            "Czech Republic",
+            "1983");
+        echo PrintContributor("sandsmark.png",
+            "Martin Sandsmark",
+            "sandsmark",
+            "",
+            "",
+            "",
+            "",
+            "Norway",
+            "1988");
+        echo PrintContributor("heller_barde.png",
+            "Philip Stark",
+            "heller_barde",
+            "",
+            "",
+            "",
+            "",
+            "Switzerland",
+            "1987");
+        echo PrintContributor("mistvieh.png",
+            "Dennis Brendel",
+            "mistvieh",
+            "",
+            "",
+            "",
+            "",
+            "Germany",
+            "1987");
+        echo PrintContributor("nachtwandler.png",
+            "Dominik Pieper",
+            "nachtwandler",
+            "",
+            "",
+            "",
+            "",
+            "Germany",
+            "1988");
+        echo PrintContributor("philm.png",
+            "Phil Müller",
+            "philm",
+            "",
+            "",
+            "",
+            "",
+            "Germany",
+            "1982");
+        echo PrintContributor("roozbeh.jpg",
+            "Roozbeh Shafiee",
+            "rosha",
+            "",
+            "",
+            "",
+            "",
+            "Iran",
+            "1987");
+        echo PrintContributor("funkyou.png",
+            "Jan Mette",
+            "funkyou",
+            "",
+            "",
+            "",
+            "",
+            "Germany",
+            "1978");
+        echo PrintContributor("placeholder.png",
+            "",
+            "pyrdracon",
+            "",
+            "",
+            "Packager (Crust)",
+            "",
+            "",
+            "");
+        echo PrintContributor("placeholder.png",
+            "",
+            "malcer",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "");
+    ?>
     <h2>Sponsors</h2>
     <a href="http://www.host1plus.com"><img src="static/img/h1p_logo.png" /></a>
     <p>We'd like to thank <a href="http://www.host1plus.com">Host1Plus</a> who provides us with our main server at a great discount.</p>
@@ -357,7 +353,7 @@
         </li>
         <li>
                 <a href="http://www.c3sl.ufpr.br/">
-                C3SL - Centro de Computacao Cienti­fica e Software Livre 
+                C3SL - Centro de Computacao Cienti­fica e Software Livre
                 </a>
         </li>
         <li>
@@ -377,7 +373,7 @@
         </li>
         <li>
                 <a href="http://www.tsinghua.edu.cn">
-                Tsinghua University 
+                Tsinghua University
                 </a>
         </li>
         <li>
@@ -387,7 +383,7 @@
         </li>
         <li>
                 <a href="http://www.lip6.fr/">
-                Laboratoire d'Informatique de l'université Paris 6 
+                Laboratoire d'Informatique de l'université Paris 6
                 </a>
         </li>
         <li>
@@ -407,7 +403,7 @@
         </li>
         <li>
                 <a href="http://www.cc.uoc.gr/">
-                Υπολογιστικό Κέντρο - Σχολή Θετικών & Τεχνολογικών Επιστημών 
+                Υπολογιστικό Κέντρο - Σχολή Θετικών & Τεχνολογικών Επιστημών
                 </a>
         </li>
         <li>
@@ -427,7 +423,7 @@
         </li>
         <li>
                 <a href="http://free.nchc.org.tw/pmwiki/index.php?n=Main.HomePage">
-                The Free Software Lab at the NCHC 
+                The Free Software Lab at the NCHC
                 </a>
         </li>
         <li>
@@ -442,7 +438,7 @@
         </li>
         <li>
                 <a href="https://billing.dacentec.com/hostbill/">
-                Dacentec’s SSAE 16 SOC2 Certified Green Cloud Datacenter 
+                Dacentec’s SSAE 16 SOC2 Certified Green Cloud Datacenter
                 </a>
         </li>
         <li>
@@ -451,7 +447,6 @@
                 </a>
         </li>
     </ul>
-    </p>
     <h2>Acknowledgements</h2>
     <p>We would like to thank everyone who has enabled us to create Chakra, and/or contributed to it. These are in detail:</p>
     <ul>
