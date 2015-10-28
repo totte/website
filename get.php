@@ -4,7 +4,7 @@
 <div class="col-md-8">
     <h3>Chakra 2015.03 "Euler"</h3>
     <div class="alert alert-info" role="alert">
-        <strong>Heads up!</strong> <a href="http://chakraos.org/news/index.php?/archives/153-Restructure-of-repositories-system-will-require-manual-intervention.html">Important changes are happening in Chakra at the moment.</a> If you are downloading this ISO to install Chakra, we advise you to wait until our Plasma 5 release is out!
+        <strong>Heads up!</strong> <a href="https://chakraos.org/news/index.php?/archives/153-Restructure-of-repositories-system-will-require-manual-intervention.html">Important changes are happening in Chakra at the moment.</a> If you are downloading this ISO to install Chakra, we advise you to wait until our Plasma 5 release is out!
     </div>
     <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2015.03/chakra-2015.03-euler-x86_64.iso/download">
         HTTP download (SourceForge)
@@ -33,12 +33,14 @@
     </table>
 </div>
 <div class="col-md-4">
-    <img src="static/img/laptop.png" alt="wtflol"></img>
+    <img src="static/img/laptop.png" alt="wtflol" />
     <h3>Get started</h3>
     <ul>
-        <li><a href="http://www.chakraos.org/wiki/index.php?title=Beginner%E2%80%99s_Guide">Beginner's Guide</a></li>
-        <li><a href="http://www.chakraos.org/wiki/index.php?title=Bootable_Medium_Creation">Creating a bootable USB or DVD</a></li>
-        <li><a href="http://www.chakraos.org/wiki/index.php?title=Installation">Installing Chakra</a></li>
-        <li><a href="http://www.chakraos.org/wiki/index.php?title=Frequently_Asked_Questions">Frequently Asked Questions</a></li>
+        <li><a href="https://chakraos.org/wiki/index
+        .php?title=Beginner%E2%80%99s_Guide">Beginner's Guide</a></li>
+        <li><a href="https://chakraos.org/wiki/index.php?title=Bootable_Medium_Creation">Creating a bootable USB or DVD</a></li>
+        <li><a href="https://chakraos.org/wiki/index
+        .php?title=Installation">Installing Chakra</a></li>
+        <li><a href="https://chakraos.org/wiki/index.php?title=Frequently_Asked_Questions">Frequently Asked Questions</a></li>
     </ul>
 </div>
