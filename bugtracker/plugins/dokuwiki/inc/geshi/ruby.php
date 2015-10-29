@@ -14,8 +14,8 @@
  * CHANGES
  * -------
  * 2006/01/05 (1.0.1)
- *   -  Add =begin multiline comments (Juan J. Martínez)
- *   -  Add ` string (Juan J. Martínez)
+ *   -  Add =begin multiline comments (Juan J. Martï¿½nez)
+ *   -  Add ` string (Juan J. Martï¿½nez)
  * 2005/09/05 (1.0.0)
  *   -  First Release
  *

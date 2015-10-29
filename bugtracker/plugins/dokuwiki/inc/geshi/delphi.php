@@ -2,8 +2,8 @@
 /*************************************************************************************
  * delphi.php
  * ----------
- * Author: Járja Norbert (jnorbi@vipmail.hu)
- * Copyright: (c) 2004 Járja Norbert, Nigel McNie (http://qbnz.com/highlighter)
+ * Author: Jï¿½rja Norbert (jnorbi@vipmail.hu)
+ * Copyright: (c) 2004 Jï¿½rja Norbert, Nigel McNie (http://qbnz.com/highlighter)
  * Release Version: 1.0.7.15
  * CVS Revision Version: $Revision: 1.17.2.4 $
  * Date Started: 2004/07/26

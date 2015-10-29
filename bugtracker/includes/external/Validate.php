@@ -46,12 +46,12 @@ define('VALIDATE_SPACE',        '\s');
 define('VALIDATE_ALPHA_LOWER',  'a-z');
 define('VALIDATE_ALPHA_UPPER',  'A-Z');
 define('VALIDATE_ALPHA',        VALIDATE_ALPHA_LOWER . VALIDATE_ALPHA_UPPER);
-define('VALIDATE_EALPHA_LOWER', VALIDATE_ALPHA_LOWER . 'бйнуъэаимтщдлпцьявкофыгсхЁежзЅршю');
-define('VALIDATE_EALPHA_UPPER', VALIDATE_ALPHA_UPPER . 'БЙНУЪЭАИМТЩДЛПЦЬѕВКОФЫГСХ¦ЕЖЗјРШЮ');
+define('VALIDATE_EALPHA_LOWER', VALIDATE_ALPHA_LOWER . 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ');
+define('VALIDATE_EALPHA_UPPER', VALIDATE_ALPHA_UPPER . 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅЬѕпїЅпїЅпїЅпїЅпїЅпїЅпїЅХ¦пїЅпїЅЗјпїЅпїЅпїЅ');
 define('VALIDATE_EALPHA',       VALIDATE_EALPHA_LOWER . VALIDATE_EALPHA_UPPER);
 define('VALIDATE_PUNCTUATION',  VALIDATE_SPACE . '\.,;\:&"\'\?\!\(\)');
 define('VALIDATE_NAME',         VALIDATE_EALPHA . VALIDATE_SPACE . "'" . "-");
-define('VALIDATE_STREET',       VALIDATE_NUM . VALIDATE_NAME . "/\\єЄ\.");
+define('VALIDATE_STREET',       VALIDATE_NUM . VALIDATE_NAME . "/\\пїЅпїЅ\.");
 
 define('VALIDATE_ITLD_EMAILS',  1);
 define('VALIDATE_GTLD_EMAILS',  2);

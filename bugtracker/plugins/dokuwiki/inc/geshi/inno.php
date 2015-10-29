@@ -2,8 +2,8 @@
 /*************************************************************************************
  * Inno.php
  * ----------
- * Author: Thomas Klingler (hotline@theratech.de) based on delphi.php from Járja Norbert (jnorbi@vipmail.hu)
- * Copyright: (c) 2004 Járja Norbert, Nigel McNie (http://qbnz.com/highlighter)
+ * Author: Thomas Klingler (hotline@theratech.de) based on delphi.php from Jï¿½rja Norbert (jnorbi@vipmail.hu)
+ * Copyright: (c) 2004 Jï¿½rja Norbert, Nigel McNie (http://qbnz.com/highlighter)
  * Release Version: 1.0.7.15
  * CVS Revision Version: $Revision: 1.12.2.4 $
  * Date Started: 2005/07/29

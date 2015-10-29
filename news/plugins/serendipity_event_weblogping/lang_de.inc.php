@@ -6,13 +6,13 @@
  *  @translated 2009/06/03
  */
 
-@define('PLUGIN_EVENT_WEBLOGPING_PING', 'Einträge ankündigen (via XML-RPC ping) bei:');
+@define('PLUGIN_EVENT_WEBLOGPING_PING', 'Eintrï¿½ge ankï¿½ndigen (via XML-RPC ping) bei:');
 @define('PLUGIN_EVENT_WEBLOGPING_SENDINGPING', 'Sende XML-RPC ping zu %s');
-@define('PLUGIN_EVENT_WEBLOGPING_TITLE', 'Einträge ankündigen');
+@define('PLUGIN_EVENT_WEBLOGPING_TITLE', 'Eintrï¿½ge ankï¿½ndigen');
 @define('PLUGIN_EVENT_WEBLOGPING_DESC', 'Benachrichtigt diverse Internetseiten, das ein neuer Eintrag erstellt wurde.');
 @define('PLUGIN_EVENT_WEBLOGPING_SUPERSEDES', '(ersetzt %s)');
 @define('PLUGIN_EVENT_WEBLOGPING_CUSTOM', 'Selbstdefinierte Ping-Services');
-@define('PLUGIN_EVENT_WEBLOGPING_CUSTOM_BLAHBLA', 'Mehrere durch "," getrennte Ping-Services im Format: "host.domain/pfad". Falls am Anfang eines Hosts ein "*" eingefügt wird, werden an den Host die erweiterten XML-RPC Optionen gesendet; der Host muss diese Optionen unterstützen.');
+@define('PLUGIN_EVENT_WEBLOGPING_CUSTOM_BLAHBLA', 'Mehrere durch "," getrennte Ping-Services im Format: "host.domain/pfad". Falls am Anfang eines Hosts ein "*" eingefï¿½gt wird, werden an den Host die erweiterten XML-RPC Optionen gesendet; der Host muss diese Optionen unterstï¿½tzen.');
 
 // Next lines were translated on 2009/06/03
 @define('PLUGIN_EVENT_WEBLOGPING_SEND_FAILURE', 'Fehlgeschlagen (Grund: %s)');
