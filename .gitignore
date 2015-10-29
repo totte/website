@@ -10,3 +10,4 @@ vnstat_*.png
 #.htaccess
 .cvsignore
 *~
+.idea/
