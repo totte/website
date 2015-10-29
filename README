@@ -1,5 +1,5 @@
 # MAINTAINER
-H W Tovetjärn (totte) <totte@tott.es>
+H W Tovetjärn (totte) <totte@chakraos.org>
 
 # CONTRIBUTORS
 
@@ -10,7 +10,7 @@ original, the blog is Serendipity, the Packages is original, the
 wiki is MediaWiki.
 
 # DEPENDENCIES
-To run on a Debian "Wheezy" system:
+To run on a Debian "Jessie" system:
 
 imagemagick
 imagemagick-common
@@ -34,3 +34,6 @@ php5-mcrypt
 php5-memcache
 php5-memcached
 php5-mysql
+
+# CODE STYLE
+Stick to tabs, not spaces, for PHP.
