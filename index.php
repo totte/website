@@ -18,7 +18,7 @@ require_once 'functions.php';
 	<script type="text/javascript" src="static/js/jquery-ui.js"></script>
 	<script type="text/javascript"
 			src="static/js/jquery.animated.innerfade.js"></script>
-	<script>
+	<script type="text/javascript">
 		$(function () {
 			$("#tabs").tabs();
 		});
@@ -54,10 +54,8 @@ require_once 'functions.php';
 	<title>Chakra | Home</title>
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
-	<script
-		src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	<script
-		src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+	<script type="text/javascript" src="static/js/html5shiv.js"></script>
+	<script type="text/javascript" src="static/js/respond.min.js"></script>
 	<![endif]-->
 </head>
 <body>
@@ -148,8 +146,7 @@ require_once 'functions.php';
 					var now = new Date();
 					document.write("Copyright &copy; 2006-" + now.getFullYear());
 				</script>
-				<a href="mailto:chakra-devel@googlegroups.com">The Chakra
-					Developers</a>
+				<a href="mailto:administrator@chakraos.org">Chakra</a>
 				&nbsp;
 				&middot;
 				&nbsp;
