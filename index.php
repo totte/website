@@ -89,7 +89,7 @@ require_once 'functions.php';
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
 							<li>
-								<a href="https://www.facebook.com/theChakraProject"
+								<a href="https://www.facebook.com/chakraos"
 								   target="_blank"><img
 										src="static/img/facebook32.png"
 										border="0" alt="" width="22" height="22"
