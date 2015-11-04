@@ -83,7 +83,7 @@ require_once 'functions.php';
 				<div class="row">
 					<div id="chakra_nav">
 						<ul>
-							<li><a href="https://twitter.com/ChakraProject"
+							<li><a href="https://twitter.com/chakraos"
 								   target="_blank"><img
 										src="static/img/twitter32.png"
 										border="0" alt="" width="22" height="22"
