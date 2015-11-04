@@ -419,7 +419,6 @@
 		<li><a href="mailto:chakra-linux@googlegroups.com">Users</a></li>
 		<li><a href="mailto:chakra-devel@googlegroups.com">Developers</a></li>
 		<li><a href="mailto:chakra-packagers@googlegroups.com">Packagers</a></li>
-		<li><a href="mailto:chakra-cabal@googlegroups.com">Administrators</a></li>
 	</ul>
 	<p><strong>Social networks</strong></p>
 	<ul>
