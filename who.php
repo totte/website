@@ -424,7 +424,7 @@
 	<ul>
 		<li><a href="#">Diaspora</a></li>
 		<li><a href="#">Facebook</a></li>
-		<li><a href="https://plus.google.com/106166715102787349220">Google+</a></li>
+		<li><a href="https://plus.google.com/+chakraosorg">Google+</a></li>
 		<li><a href="https://twitter.com/chakraos">Twitter</a></li>
 	</ul>
 	<p><strong>IRC channels</strong></p>
