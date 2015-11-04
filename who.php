@@ -423,7 +423,7 @@
 	<p><strong>Social networks</strong></p>
 	<ul>
 		<li><a href="#">Diaspora</a></li>
-		<li><a href="#">Facebook</a></li>
+		<li><a href="https://www.facebook.com/ChakraOS/">Facebook</a></li>
 		<li><a href="https://plus.google.com/+chakraosorg">Google+</a></li>
 		<li><a href="https://twitter.com/chakraos">Twitter</a></li>
 	</ul>
