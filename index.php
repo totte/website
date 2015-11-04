@@ -95,7 +95,7 @@ require_once 'functions.php';
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
 							<li>
-								<a href="https://plus.google.com/106166715102787349220"
+								<a href="https://plus.google.com/+chakraos"
 								   target="_blank"><img
 										src="static/img/googleplus32.png"
 										border="0" alt="" width="22" height="22"
