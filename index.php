@@ -133,8 +133,8 @@ require_once 'functions.php';
 						require_once('campaign.php');
                     } elseif (isset($_GET['mirrors'])) {
                         require_once('mirrors.php');
-                    } elseif (isset($_GET['coc'])) {
-                        require_once('coc.php');
+                    } elseif (isset($_GET['codeofconduct'])) {
+                        require_once('codeofconduct.php');
 					} elseif (isset($_GET['legal'])) {
 						require_once('legal.php');
 					} elseif (isset($_GET['infrastructure'])) {
@@ -153,6 +153,14 @@ require_once 'functions.php';
 					document.write("Copyright &copy; 2006-" + now.getFullYear());
 				</script>
 				<a href="mailto:administrator@chakraos.org">Chakra</a>
+				&nbsp;
+				&middot;
+				&nbsp;
+				<a href="?legal">Legal information</a>
+				&nbsp;
+				&middot;
+				&nbsp;
+				<a href="?codeofconduct">Code of Conduct</a>
 				&nbsp;
 				&middot;
 				&nbsp;
