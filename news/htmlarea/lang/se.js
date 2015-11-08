@@ -1,7 +1,7 @@
 // Norwegian version for htmlArea v3.0 - pre1
 // - translated by ses<ses@online.no>
-// Additional translations by Håvard Wigtil <havardw@extend.no>
-// term´s and licenses are equal to htmlarea!
+// Additional translations by Hï¿½vard Wigtil <havardw@extend.no>
+// termï¿½s and licenses are equal to htmlarea!
 
 HTMLArea.I18N = {
 
@@ -14,34 +14,34 @@ HTMLArea.I18N = {
 		italic:               "Kursiv",
 		underline:            "Understruket",
 		strikethrough:        "Gjennomstruket",
-		subscript:            "Nedsäknt",
-		superscript:          "upphöjt",
-		justifyleft:          "Vänsterställt",
-		justifycenter:        "Mittställt",
-		justifyright:         "Högerställt",
+		subscript:            "Nedsï¿½knt",
+		superscript:          "upphï¿½jt",
+		justifyleft:          "Vï¿½nsterstï¿½llt",
+		justifycenter:        "Mittstï¿½llt",
+		justifyright:         "Hï¿½gerstï¿½llt",
 		justifyfull:          "Marginaler",
 		orderedlist:    "Numrerad lista",
 		unorderedlist:  "Punktlista",
 		outdent:              "Reducera indrag",
-		indent:               "Öka indrag",
-		forecolor:            "Textfärg",
-		hilitecolor:          "Bakgrundsfärg",
-		inserthorizontalrule: "Vågrätt linje",
-		createlink:           "Skapa länk",
+		indent:               "ï¿½ka indrag",
+		forecolor:            "Textfï¿½rg",
+		hilitecolor:          "Bakgrundsfï¿½rg",
+		inserthorizontalrule: "Vï¿½grï¿½tt linje",
+		createlink:           "Skapa lï¿½nk",
 		insertimage:          "Infoga bilda",
 		inserttable:          "Infoga tabell",
-		htmlmode:             "Visa källkod",
-		popupeditor:          "Visa i eget fönster",
+		htmlmode:             "Visa kï¿½llkod",
+		popupeditor:          "Visa i eget fï¿½nster",
 		about:                "Om denna editor",
-		showhelp:             "Hjälp",
+		showhelp:             "Hjï¿½lp",
 		textindicator:        "Nuvarande stil",
-                undo:                 "Ångra sista redigering",
-		redo:                 "Gjör om sista ångring",
+                undo:                 "ï¿½ngra sista redigering",
+		redo:                 "Gjï¿½r om sista ï¿½ngring",
 		cut:                  "Klipp ut",
 		copy:                 "Kopiera",
 		paste:                "Klistra in",
-		lefttoright:          "Från vänster till höger",
-		righttoleft:          "Från höger till vänster"
+		lefttoright:          "Frï¿½n vï¿½nster till hï¿½ger",
+		righttoleft:          "Frï¿½n hï¿½ger till vï¿½nster"
 	},
     
 	buttons: {
@@ -51,29 +51,29 @@ HTMLArea.I18N = {
 
 	msg: {
 		"Path":         "Tekstvelger",
-		"TEXT_MODE":    "Du är i textläge Klicka på [<>] för att gå tilbaka till WYSIWIG.",
+		"TEXT_MODE":    "Du ï¿½r i textlï¿½ge Klicka pï¿½ [<>] fï¿½r att gï¿½ tilbaka till WYSIWIG.",
                 "IE-sucks-full-screen" :
 		// translate here
                 "Visning i eget vindu har kjente problemer med Internet Explorer, " + 
-                "på grunn av problemer med denne nettleseren. Mulige problemer er et uryddig " + 
+                "pï¿½ grunn av problemer med denne nettleseren. Mulige problemer er et uryddig " + 
                 "skjermbilde, manglende editorfunksjoner og/eller at nettleseren crasher. Hvis du bruker Windows 95 eller Windows 98 " +
-                "er det også muligheter for at Windows will crashe.\n\n" +
-                "Trykk 'OK' hvis du vil bruke visning i eget vindu på tross av denne advarselen."
+                "er det ogsï¿½ muligheter for at Windows will crashe.\n\n" +
+                "Trykk 'OK' hvis du vil bruke visning i eget vindu pï¿½ tross av denne advarselen."
 	},
 
 	dialogs: {
 		"Cancel"                                            : "Avbryt",
 		"Insert/Modify Link"                                : "Redigera lenk",
-		"New window (_blank)"                               : "Eget fönster (_blank)",
-		"None (use implicit)"                               : "Ingen (använd standardinnställning)",
+		"New window (_blank)"                               : "Eget fï¿½nster (_blank)",
+		"None (use implicit)"                               : "Ingen (anvï¿½nd standardinnstï¿½llning)",
 		"OK"                                                : "OK",
 		"Other"                                             : "Annan",
 		"Same frame (_self)"                                : "Samma ram (_self)",
-		"Target:"                                           : "Mål:",
+		"Target:"                                           : "Mï¿½l:",
 		"Title (tooltip):"                                  : "Titel (tooltip):",
 		"Top frame (_top)"                                  : "Toppramm (_top)",
 		"URL:"                                              : "Adress:",
-		"You must enter the URL where this link points to"  : "Du måste skriva in en adress som denna länken skall peka på"
+		"You must enter the URL where this link points to"  : "Du mï¿½ste skriva in en adress som denna lï¿½nken skall peka pï¿½"
 	}
 };
 

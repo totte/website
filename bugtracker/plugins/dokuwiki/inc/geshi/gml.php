@@ -2,8 +2,8 @@
 /*************************************************************************************
  * gml.php
  * --------
- * Author: José Jorge Enríquez (jenriquez@users.sourceforge.net)
- * Copyright: (c) 2005 José Jorge Enríquez Rodríguez (http://www.zonamakers.com)
+ * Author: Josï¿½ Jorge Enrï¿½quez (jenriquez@users.sourceforge.net)
+ * Copyright: (c) 2005 Josï¿½ Jorge Enrï¿½quez Rodrï¿½guez (http://www.zonamakers.com)
  * Release Version: 1.0.7.15
  * CVS Revision Version: $Revision: 1.15.2.5 $
  * Date Started: 2005/06/21

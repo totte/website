@@ -1,72 +1,46 @@
 <?php
-    function PrintContributor($image, $name, $alias, $email, $website, $roles, $languages, $country, $born)
-    {
-        return "<a name='$alias'></a>"
-               . "<tr>"
-               . "<td>"
-               . "<img style='margin:auto;' width='120' height='148' class='img-rounded' src='static/img/contributors/" . $image . "' alt='" . $image . "' />"
-               . "</td>"
-               . "<td>"
-               . "<h3 style='margin-top:0px;'>$alias</h3>"
-               . "<table>"
-               . "<tr>"
-               . "<th>"
-               . "Name:"
-               . "</th>"
-               . "<td>"
-               . "$name"
-               . "</td>"
-               . "</tr>"
-               . "<tr>"
-               . "<th>"
-               . "Email:"
-               . "</th>"
-               . "<td>"
-               . "$email"
-               . "</td>"
-               . "</tr>"
-               . "<tr>"
-               . "<th>"
-               . "Roles:"
-               . "</th>"
-               . "<td>"
-               . $roles
-               . "</td>"
-               . "</tr>"
-               . "<tr>"
-               . "<th>"
-               . "Website:"
-               . "</th>"
-               . "<td>"
-               . "$website"
-               . "</td>"
-               . "</tr>"
-               . "<tr>"
-               . "<th>"
-               . "Born:"
-               . "</th>"
-               . "<td>"
-               . "$born"
-               . "</td>"
-               . "</tr>"
-               . "<tr>"
-               . "<th>"
-               . "Country:"
-               . "</th>"
-               . "<td>"
-               . "$country"
-               . "</td>"
-               . "</tr>"
-               . "<tr>"
-               . "<th>"
-               . "Languages:"
-               . "</th>"
-               . "<td>"
-               . $languages
-               . "</td>"
-               . "</tr>"
-               . "</table>"
-               . "</td>"
-               . "</tr>";
-    }
+function PrintContributor($image, $name, $alias, $email, $key,
+						  $keylink, $website, $roles, $languages,
+						  $country, $born)
+{
+	return "<div id='$alias'>"
+	. "<img style='margin:auto;' width='120' height='148' class='img-rounded' src='static/img/contributors/" . $image . "' alt='" . $image . "' />"
+	. "<h3 style='margin-top:0;'>$alias</h3>"
+	. "<dl class='dl-horizontal'>"
+	. "<dt>Name</dt>"
+	. "<dl>$name</dl>"
+	. "<dt>E-mail</dt>"
+	. "<dl>$email</dl>"
+	. "<dt>PGP key</dt>"
+	. "<dl><a href='$keylink'>$key</a></dl>"
+	. "<dt>Roles</dt>"
+	. "<dl>$roles</dl>"
+	. "<dt>Website</dt>"
+	. "<dl>$website</dl>"
+	. "<dt>Born</dt>"
+	. "<dl>$born</dl>"
+	. "<dt>Country</dt>"
+	. "<dl>$country</dl>"
+	. "<dt>Languages</dt>"
+	. "<dl>$languages</dl>"
+	. "</dl>"
+	. "</div>";
+}
+
+function PrintFormerContributor($image, $name, $alias, $email, $website)
+{
+	return "<div id='$alias'>"
+	. "<img style='margin:auto;' width='120'
+height='148' class='img-rounded'
+src='static/img/contributors/" . $image . "' alt='" . $image . "' />"
+	. "<h3 style='margin-top:0;'>$alias</h3>"
+	. "Name:"
+	. "$name"
+	. "Email:"
+	. "$email"
+	. "Website:"
+	. "$website"
+	. "</div>";
+}
+
 ?>

@@ -2,142 +2,142 @@
 
 /**
  *  @version
- *  @author Martin Matu¹ka <martin@matuska.org>
+ *  @author Martin Matuï¿½ka <martin@matuska.org>
  *  EN-Revision: Revision of lang_en.inc.php
  */
 
 @define('PLUGIN_EVENT_SPAMBLOCK_TITLE', 'Spam Protector');
-@define('PLUGIN_EVENT_SPAMBLOCK_DESC', 'Rôzné metódy na ochranu proti spamu.');
-@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_BODY', 'Ochrana proti spamu: Neplatná správa.');
-@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_IP', 'Ochrana proti spamu: Nie je povolené odosla» komentár krátko po odoslaní iného komentára.');
+@define('PLUGIN_EVENT_SPAMBLOCK_DESC', 'Rï¿½znï¿½ metï¿½dy na ochranu proti spamu.');
+@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_BODY', 'Ochrana proti spamu: Neplatnï¿½ sprï¿½va.');
+@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_IP', 'Ochrana proti spamu: Nie je povolenï¿½ odoslaï¿½ komentï¿½r krï¿½tko po odoslanï¿½ inï¿½ho komentï¿½ra.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_KILLSWITCH', 'Tento weblog je nastavený v móde "Núdzové blokovanie v¹etkých komentárov", skúste neskôr.');
-@define('PLUGIN_EVENT_SPAMBLOCK_BODYCLONE', 'Zakáza» opakujúce sa komentáre');
-@define('PLUGIN_EVENT_SPAMBLOCK_BODYCLONE_DESC', 'Zakáza» u¾ívateµom odosla» komentár, ktorý má rovnaký obsah ako iný, u¾ odoslaný komentár.');
-@define('PLUGIN_EVENT_SPAMBLOCK_KILLSWITCH', 'Núdzové vypnutie komentárov');
-@define('PLUGIN_EVENT_SPAMBLOCK_KILLSWITCH_DESC', 'Doèasne vypne komentáre ku v¹etkým èlánkom. U¾itoèné v prípade útoku spammerov na Vá¹ weblog.');
+@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_KILLSWITCH', 'Tento weblog je nastavenï¿½ v mï¿½de "Nï¿½dzovï¿½ blokovanie vï¿½etkï¿½ch komentï¿½rov", skï¿½ste neskï¿½r.');
+@define('PLUGIN_EVENT_SPAMBLOCK_BODYCLONE', 'Zakï¿½zaï¿½ opakujï¿½ce sa komentï¿½re');
+@define('PLUGIN_EVENT_SPAMBLOCK_BODYCLONE_DESC', 'Zakï¿½zaï¿½ uï¿½ï¿½vateï¿½om odoslaï¿½ komentï¿½r, ktorï¿½ mï¿½ rovnakï¿½ obsah ako inï¿½, uï¿½ odoslanï¿½ komentï¿½r.');
+@define('PLUGIN_EVENT_SPAMBLOCK_KILLSWITCH', 'Nï¿½dzovï¿½ vypnutie komentï¿½rov');
+@define('PLUGIN_EVENT_SPAMBLOCK_KILLSWITCH_DESC', 'Doï¿½asne vypne komentï¿½re ku vï¿½etkï¿½m ï¿½lï¿½nkom. Uï¿½itoï¿½nï¿½ v prï¿½pade ï¿½toku spammerov na Vï¿½ weblog.');
 @define('PLUGIN_EVENT_SPAMBLOCK_IPFLOOD', 'Blokovanie IP adres');
-@define('PLUGIN_EVENT_SPAMBLOCK_IPFLOOD_DESC', 'Z jednej IP adresy povoli» odoslanie jedného komentára za n minút. U¾itoèné pre zabránenie komentárového floodu.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS', 'Zapnú» kryptogramy (captcha)');
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_DESC', 'Prispievateµ musí zada» èísla z náhodne vytvoreného deformovaného obrázku. Toto zabráni automatickému pridávaniu komentárov, napr. hackerskými poèítaèmi. Nezabúdajte, ¾e µudia so zhor¹ným videním mô¾u ma» problémy s èítaním týchto obrázkov.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_USERDESC', 'V rámci boja proti komentárovému spamu zadajte prosím znaky, ktoré sú zobrazené ni¾¹ie. Vá¹ komentár bude prijatý iba ak tieto znaky budú súhlasi». Vá¹ prehliadaè musí podporova» a prijímaè cookies, inak nemô¾u by» Va¹e komentáre správne overené.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_USERDESC2', 'Do ni¾¹ie uvedeného poµa zadajte znaky, ktoré sú zobrazené nad týmto textom.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_USERDESC3', 'Zadajte znaky z antispamového obrázku: ');
-@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_CAPTCHAS', 'Zadali ste nesprávne znaky z antispamového obrázku. Prezrite si ho prosím znova a zadajte znaky opätovne.');
-@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_NOTTF', 'Kryptogramy sú vypnuté. K prevádzke sú potrebné PHP kni¾nice GDLib a freetype, a tie¾ je potrebné ma» fontové soubory (.TTF) v prieèinkoch doplnku "spamblock".');
+@define('PLUGIN_EVENT_SPAMBLOCK_IPFLOOD_DESC', 'Z jednej IP adresy povoliï¿½ odoslanie jednï¿½ho komentï¿½ra za n minï¿½t. Uï¿½itoï¿½nï¿½ pre zabrï¿½nenie komentï¿½rovï¿½ho floodu.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS', 'Zapnï¿½ kryptogramy (captcha)');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_DESC', 'Prispievateï¿½ musï¿½ zadaï¿½ ï¿½ï¿½sla z nï¿½hodne vytvorenï¿½ho deformovanï¿½ho obrï¿½zku. Toto zabrï¿½ni automatickï¿½mu pridï¿½vaniu komentï¿½rov, napr. hackerskï¿½mi poï¿½ï¿½taï¿½mi. Nezabï¿½dajte, ï¿½e ï¿½udia so zhorï¿½nï¿½m videnï¿½m mï¿½ï¿½u maï¿½ problï¿½my s ï¿½ï¿½tanï¿½m tï¿½chto obrï¿½zkov.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_USERDESC', 'V rï¿½mci boja proti komentï¿½rovï¿½mu spamu zadajte prosï¿½m znaky, ktorï¿½ sï¿½ zobrazenï¿½ niï¿½ï¿½ie. Vï¿½ komentï¿½r bude prijatï¿½ iba ak tieto znaky budï¿½ sï¿½hlasiï¿½. Vï¿½ prehliadaï¿½ musï¿½ podporovaï¿½ a prijï¿½maï¿½ cookies, inak nemï¿½ï¿½u byï¿½ Vaï¿½e komentï¿½re sprï¿½vne overenï¿½.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_USERDESC2', 'Do niï¿½ï¿½ie uvedenï¿½ho poï¿½a zadajte znaky, ktorï¿½ sï¿½ zobrazenï¿½ nad tï¿½mto textom.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_USERDESC3', 'Zadajte znaky z antispamovï¿½ho obrï¿½zku: ');
+@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_CAPTCHAS', 'Zadali ste nesprï¿½vne znaky z antispamovï¿½ho obrï¿½zku. Prezrite si ho prosï¿½m znova a zadajte znaky opï¿½tovne.');
+@define('PLUGIN_EVENT_SPAMBLOCK_ERROR_NOTTF', 'Kryptogramy sï¿½ vypnutï¿½. K prevï¿½dzke sï¿½ potrebnï¿½ PHP kniï¿½nice GDLib a freetype, a tieï¿½ je potrebnï¿½ maï¿½ fontovï¿½ soubory (.TTF) v prieï¿½inkoch doplnku "spamblock".');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_TTL', 'Vy¾adova» kryptogramy po tomto poète dní');
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_TTL_DESC', 'Kryptogramy (captcha) mô¾u by» zapnuté v závislosti od veku èlánku. Zadajte poèet dní, po ktorých sa bude vy¾adova» na vlo¾enie komentára správny text z kryptogramu. Hodnota 0 znamená, ¾e kryptogramy budú vy¾adované hneï po publikovaní.');
-@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATION', 'Vy¾adova» moderovanie (schvaµovanie) komentárov po tomto poète dní');
-@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATION_DESC', 'V¹etky komentáre sa dajú automaticky nastavi» ako moderované. Po uplynutí tu uvedenej doby od publikovania èlánku sa bude vy¾adova» moderovanie (schvaµovanie) komentárov. Hodnota 0 znamená bez moderovania.');
-@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_MODERATE', 'Poèet odkazov v komentári na automatické moderovanie');
-@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_MODERATE_DESC', 'Ak sa v komentári nachádza viac ako zadaný poèet odkazov &lt;a href="..."&gt;, bude automaticky moderovaný. Hodnota 0 znamená, ¾e poèet odkazov nebude kontrolovaný.');
-@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_REJECT', 'Poèet odkazov v komentári na automatické zamietnutie');
-@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_REJECT_DESC', 'Ak sa v komentári nachádza viac ako zadaný poèet odkazov &lt;a href="..."&gt;, bude automaticky zamietnutý. Hodnota 0 znamená, ¾e poèet odkazov nebude kontrolovaný.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_TTL', 'Vyï¿½adovaï¿½ kryptogramy po tomto poï¿½te dnï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_TTL_DESC', 'Kryptogramy (captcha) mï¿½ï¿½u byï¿½ zapnutï¿½ v zï¿½vislosti od veku ï¿½lï¿½nku. Zadajte poï¿½et dnï¿½, po ktorï¿½ch sa bude vyï¿½adovaï¿½ na vloï¿½enie komentï¿½ra sprï¿½vny text z kryptogramu. Hodnota 0 znamenï¿½, ï¿½e kryptogramy budï¿½ vyï¿½adovanï¿½ hneï¿½ po publikovanï¿½.');
+@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATION', 'Vyï¿½adovaï¿½ moderovanie (schvaï¿½ovanie) komentï¿½rov po tomto poï¿½te dnï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATION_DESC', 'Vï¿½etky komentï¿½re sa dajï¿½ automaticky nastaviï¿½ ako moderovanï¿½. Po uplynutï¿½ tu uvedenej doby od publikovania ï¿½lï¿½nku sa bude vyï¿½adovaï¿½ moderovanie (schvaï¿½ovanie) komentï¿½rov. Hodnota 0 znamenï¿½ bez moderovania.');
+@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_MODERATE', 'Poï¿½et odkazov v komentï¿½ri na automatickï¿½ moderovanie');
+@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_MODERATE_DESC', 'Ak sa v komentï¿½ri nachï¿½dza viac ako zadanï¿½ poï¿½et odkazov &lt;a href="..."&gt;, bude automaticky moderovanï¿½. Hodnota 0 znamenï¿½, ï¿½e poï¿½et odkazov nebude kontrolovanï¿½.');
+@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_REJECT', 'Poï¿½et odkazov v komentï¿½ri na automatickï¿½ zamietnutie');
+@define('PLUGIN_EVENT_SPAMBLOCK_LINKS_REJECT_DESC', 'Ak sa v komentï¿½ri nachï¿½dza viac ako zadanï¿½ poï¿½et odkazov &lt;a href="..."&gt;, bude automaticky zamietnutï¿½. Hodnota 0 znamenï¿½, ï¿½e poï¿½et odkazov nebude kontrolovanï¿½.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_NOTICE_MODERATION', 'Vá¹ komentár vy¾aduje schválenie prevádzkovateµom weblogu. Prosím, neposielajte ho znovu, poèkajte na jeho schválenie.');
+@define('PLUGIN_EVENT_SPAMBLOCK_NOTICE_MODERATION', 'Vï¿½ komentï¿½r vyï¿½aduje schvï¿½lenie prevï¿½dzkovateï¿½om weblogu. Prosï¿½m, neposielajte ho znovu, poï¿½kajte na jeho schvï¿½lenie.');
 @define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHA_COLOR', 'Pozadie kryptogramov (captcha)');
 @define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHA_COLOR_DESC', 'Zadajte RGB hodnotu: 0,255,255');
 
 @define('PLUGIN_EVENT_SPAMBLOCK_LOGFILE', 'Umiestnenie logovania');
-@define('PLUGIN_EVENT_SPAMBLOCK_LOGFILE_DESC', 'Informácie o zamietnutých/moderovaných príspevkoch mô¾u by» zapisované. Prázdna hodnota znamená vypnuté logovanie.');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOGFILE_DESC', 'Informï¿½cie o zamietnutï¿½ch/moderovanï¿½ch prï¿½spevkoch mï¿½ï¿½u byï¿½ zapisovanï¿½. Prï¿½zdna hodnota znamenï¿½ vypnutï¿½ logovanie.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_KILLSWITCH', 'Núdzové blokovanie komentárov');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_BODYCLONE', 'Duplicitný komentár');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_KILLSWITCH', 'Nï¿½dzovï¿½ blokovanie komentï¿½rov');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_BODYCLONE', 'Duplicitnï¿½ komentï¿½r');
 @define('PLUGIN_EVENT_SPAMBLOCK_REASON_IPFLOOD', 'IP-blok');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_CAPTCHAS', 'Nesprávny kryptogram (Zadané: %s, Správne malo by»: %s)');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_FORCEMODERATION', 'Automatické moderovanie (schvaµovanie) po X dòoch');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_LINKS_REJECT', 'Pøíli¹ veµa odkazov (odoziev)');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_LINKS_MODERATE', 'Pøíli¹ veµa odkazov (odoziev)');
-@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_EMAIL', 'Skry» e-mailovú adresu prispievateµov komentárov');
-@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_EMAIL_DESC', 'Nezobrazí e-mailovú adresu prispievateµov v ich komentároch');
-@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_EMAIL_NOTICE', 'E-mailové adresy nebudú zobrazené, budú pou¾ité iba na oznámenia elektronickou po¹tou.');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_CAPTCHAS', 'Nesprï¿½vny kryptogram (Zadanï¿½: %s, Sprï¿½vne malo byï¿½: %s)');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_FORCEMODERATION', 'Automatickï¿½ moderovanie (schvaï¿½ovanie) po X dï¿½och');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_LINKS_REJECT', 'Pï¿½ï¿½liï¿½ veï¿½a odkazov (odoziev)');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_LINKS_MODERATE', 'Pï¿½ï¿½liï¿½ veï¿½a odkazov (odoziev)');
+@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_EMAIL', 'Skryï¿½ e-mailovï¿½ adresu prispievateï¿½ov komentï¿½rov');
+@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_EMAIL_DESC', 'Nezobrazï¿½ e-mailovï¿½ adresu prispievateï¿½ov v ich komentï¿½roch');
+@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_EMAIL_NOTICE', 'E-mailovï¿½ adresy nebudï¿½ zobrazenï¿½, budï¿½ pouï¿½itï¿½ iba na oznï¿½menia elektronickou poï¿½tou.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE', 'Vyberte metódu logovania');
-@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_DESC', 'Logovanie zamietnutých komentárov mô¾e by» vykonané buï do databázy alebo do textového súboru');
-@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_FILE', 'Súbor (pozri voµba "logfile" ni¾¹ie)');
-@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_DB', 'Databáza');
-@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_NONE', 'Nelogova»');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE', 'Vyberte metï¿½du logovania');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_DESC', 'Logovanie zamietnutï¿½ch komentï¿½rov mï¿½ï¿½e byï¿½ vykonanï¿½ buï¿½ do databï¿½zy alebo do textovï¿½ho sï¿½boru');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_FILE', 'Sï¿½bor (pozri voï¿½ba "logfile" niï¿½ï¿½ie)');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_DB', 'Databï¿½za');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOGTYPE_NONE', 'Nelogovaï¿½');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_API_COMMENTS', 'Ako naklada» s komentármi pridanými cez API');
-@define('PLUGIN_EVENT_SPAMBLOCK_API_COMMENTS_DESC', 'Toto nastavenie sa týka moderovania (schvaµovania) komentárov vytvorených cez volania API funkcií (vovnútri systému Serendipity) (Trackbacks, WFW:commentAPI komentáre). Pri nastavení "moderova»" budú v¹etky komentáre vy¾adova» schválenie. Nastavením "zamietnu»" budú automaticky zamietnuté. Nastavenie "none" spôsobí, ¾e budú spracované ako be¾né komentáre.');
-@define('PLUGIN_EVENT_SPAMBLOCK_API_MODERATE', 'moderova»');
-@define('PLUGIN_EVENT_SPAMBLOCK_API_REJECT', 'zamietnu»');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_API', 'API komentáre (ako napr. odozvy) sú zakázané');
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_ACTIVATE', 'Zapnú» slovníkový filter');
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_ACTIVATE_DESC', 'V komentároch budú hµadané urèité re»azce obsiahnuté v slovníku. Ak sa tieto re»azce nájdu, bude komentár vyhodnotený ako spam.');
+@define('PLUGIN_EVENT_SPAMBLOCK_API_COMMENTS', 'Ako nakladaï¿½ s komentï¿½rmi pridanï¿½mi cez API');
+@define('PLUGIN_EVENT_SPAMBLOCK_API_COMMENTS_DESC', 'Toto nastavenie sa tï¿½ka moderovania (schvaï¿½ovania) komentï¿½rov vytvorenï¿½ch cez volania API funkciï¿½ (vovnï¿½tri systï¿½mu Serendipity) (Trackbacks, WFW:commentAPI komentï¿½re). Pri nastavenï¿½ "moderovaï¿½" budï¿½ vï¿½etky komentï¿½re vyï¿½adovaï¿½ schvï¿½lenie. Nastavenï¿½m "zamietnuï¿½" budï¿½ automaticky zamietnutï¿½. Nastavenie "none" spï¿½sobï¿½, ï¿½e budï¿½ spracovanï¿½ ako beï¿½nï¿½ komentï¿½re.');
+@define('PLUGIN_EVENT_SPAMBLOCK_API_MODERATE', 'moderovaï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_API_REJECT', 'zamietnuï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_API', 'API komentï¿½re (ako napr. odozvy) sï¿½ zakï¿½zanï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_ACTIVATE', 'Zapnï¿½ slovnï¿½kovï¿½ filter');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_ACTIVATE_DESC', 'V komentï¿½roch budï¿½ hï¿½adanï¿½ urï¿½itï¿½ reï¿½azce obsiahnutï¿½ v slovnï¿½ku. Ak sa tieto reï¿½azce nï¿½jdu, bude komentï¿½r vyhodnotenï¿½ ako spam.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_URLS', 'Pou¾i» filter na adresy URL');
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_URLS_DESC', 'Regulárne výrazy sú povolené, re»azce (jednotlivé adresy) oddelujte bodkoèiarkou (;). ©peciálne znaky ako zavináè (@) musíte oddeli» lomítkami - \\@.');
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_AUTHORS', 'Pou¾i» filter na mená autorov');
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_WORDS', 'Pou¾i» filter na telo komentára');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_URLS', 'Pouï¿½iï¿½ filter na adresy URL');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_URLS_DESC', 'Regulï¿½rne vï¿½razy sï¿½ povolenï¿½, reï¿½azce (jednotlivï¿½ adresy) oddelujte bodkoï¿½iarkou (;). ï¿½peciï¿½lne znaky ako zavinï¿½ï¿½ (@) musï¿½te oddeliï¿½ lomï¿½tkami - \\@.');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_AUTHORS', 'Pouï¿½iï¿½ filter na menï¿½ autorov');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_WORDS', 'Pouï¿½iï¿½ filter na telo komentï¿½ra');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_EMAILS', 'Pou¾i» filter na e-mailovú adresu');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_EMAILS', 'Pouï¿½iï¿½ filter na e-mailovï¿½ adresu');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_CHECKMAIL', 'Nesprávna e-mailová adresa');
-@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL', 'Kontrolova» e-mailové adresy?');
-@define('PLUGIN_EVENT_SPAMBLOCK_REQUIRED_FIELDS', 'Vy¾adované polia komentára');
-@define('PLUGIN_EVENT_SPAMBLOCK_REQUIRED_FIELDS_DESC', 'Zadajte zoznam polí, ktoré musia by» vyplnené na odoslanie komentára. Viac polí oddelujte èiarkou ",". Do úvahy pripadajú polia: name, email, url, replyTo, comment');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_CHECKMAIL', 'Nesprï¿½vna e-mailovï¿½ adresa');
+@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL', 'Kontrolovaï¿½ e-mailovï¿½ adresy?');
+@define('PLUGIN_EVENT_SPAMBLOCK_REQUIRED_FIELDS', 'Vyï¿½adovanï¿½ polia komentï¿½ra');
+@define('PLUGIN_EVENT_SPAMBLOCK_REQUIRED_FIELDS_DESC', 'Zadajte zoznam polï¿½, ktorï¿½ musia byï¿½ vyplnenï¿½ na odoslanie komentï¿½ra. Viac polï¿½ oddelujte ï¿½iarkou ",". Do ï¿½vahy pripadajï¿½ polia: name, email, url, replyTo, comment');
 @define('PLUGIN_EVENT_SPAMBLOCK_REASON_REQUIRED_FIELD', 'Nezadali ste pole %s!');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_CONFIG', 'Konfigurova» antispamové metódy');
-@define('PLUGIN_EVENT_SPAMBLOCK_ADD_AUTHOR', 'Blokova» tohto autora doplnkom "Spamblock"');
-@define('PLUGIN_EVENT_SPAMBLOCK_ADD_URL', 'Blokova» túto adresu URL doplnkom "Spamblock"');
-@define('PLUGIN_EVENT_SPAMBLOCK_ADD_EMAIL', 'Blokova» túto e-mailovú adresu doplnkom "Spamblock"');
-@define('PLUGIN_EVENT_SPAMBLOCK_REMOVE_AUTHOR', 'Zru¹i» blokovánie tohto autora');
-@define('PLUGIN_EVENT_SPAMBLOCK_REMOVE_URL', 'Zru¹i» blokovánie tejto adresy URL');
-@define('PLUGIN_EVENT_SPAMBLOCK_REMOVE_EMAIL', 'Zru¹i» blokovánie tejto e-mailovej adresy');
+@define('PLUGIN_EVENT_SPAMBLOCK_CONFIG', 'Konfigurovaï¿½ antispamovï¿½ metï¿½dy');
+@define('PLUGIN_EVENT_SPAMBLOCK_ADD_AUTHOR', 'Blokovaï¿½ tohto autora doplnkom "Spamblock"');
+@define('PLUGIN_EVENT_SPAMBLOCK_ADD_URL', 'Blokovaï¿½ tï¿½to adresu URL doplnkom "Spamblock"');
+@define('PLUGIN_EVENT_SPAMBLOCK_ADD_EMAIL', 'Blokovaï¿½ tï¿½to e-mailovï¿½ adresu doplnkom "Spamblock"');
+@define('PLUGIN_EVENT_SPAMBLOCK_REMOVE_AUTHOR', 'Zruï¿½iï¿½ blokovï¿½nie tohto autora');
+@define('PLUGIN_EVENT_SPAMBLOCK_REMOVE_URL', 'Zruï¿½iï¿½ blokovï¿½nie tejto adresy URL');
+@define('PLUGIN_EVENT_SPAMBLOCK_REMOVE_EMAIL', 'Zruï¿½iï¿½ blokovï¿½nie tejto e-mailovej adresy');
 
 
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_TITLE', 'Nadpis komentára je rovnaký ako jeho telo');
-@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_TITLE', 'Odmietnuté budú komentáre, ktoré v tele obsahujú iba nadpis.');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_TITLE', 'Nadpis komentï¿½ra je rovnakï¿½ ako jeho telo');
+@define('PLUGIN_EVENT_SPAMBLOCK_FILTER_TITLE', 'Odmietnutï¿½ budï¿½ komentï¿½re, ktorï¿½ v tele obsahujï¿½ iba nadpis.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKURL', 'Kontrolova» URL odoziev');
-@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKURL_DESC', 'Povoli» iba odozvy, kde stránka odozvy naozaj obsahuje odkaz na Vá¹ weblog - kontroluje stránku odozvy.');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_TRACKBACKURL', 'URL stránky odozvy je nepladné.');
+@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKURL', 'Kontrolovaï¿½ URL odoziev');
+@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKURL_DESC', 'Povoliï¿½ iba odozvy, kde strï¿½nka odozvy naozaj obsahuje odkaz na Vï¿½ weblog - kontroluje strï¿½nku odozvy.');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_TRACKBACKURL', 'URL strï¿½nky odozvy je nepladnï¿½.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_SCRAMBLE', 'Zmie¹ané kryptogramy');
+@define('PLUGIN_EVENT_SPAMBLOCK_CAPTCHAS_SCRAMBLE', 'Zmieï¿½anï¿½ kryptogramy');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_HIDE', 'Vypnú» Spamblock pre nasledujúcich autorov');
-@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_DESC', 'Autorom v nasledujúcich skupinách mô¾ete povoli» vkladanie èlánkov bez toho, aby boli kontrolované na spam.');
+@define('PLUGIN_EVENT_SPAMBLOCK_HIDE', 'Vypnï¿½ Spamblock pre nasledujï¿½cich autorov');
+@define('PLUGIN_EVENT_SPAMBLOCK_HIDE_DESC', 'Autorom v nasledujï¿½cich skupinï¿½ch mï¿½ï¿½ete povoliï¿½ vkladanie ï¿½lï¿½nkov bez toho, aby boli kontrolovanï¿½ na spam.');
 
 @define('PLUGIN_EVENT_SPAMBLOCK_AKISMET', 'Akismet API Key');
-@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_DESC', 'Akismet.com je centrálny antispamový a blacklistový server. Mô¾e analyzova» prichádzajúce komentáre a kontrolova», èi sú vedené ako spam. Akismet bol vyvinutý pre WordPress, ale mô¾e by» pou¾itý aj v iných systémoch. Je k tomu potrebný Key z http://www.akismet.com, ktorý získate registráciou na http://www.wordpress.com/. Ak necháte toto pole prázdne, Aksimet sa nebude pou¾íva».');
-@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_FILTER', 'Ako oznaèova» príspevok oznaèený Aksimetom ako spam?');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_AKISMET_SPAMLIST', 'Zamietnuté blacklistom Akismet.com');
+@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_DESC', 'Akismet.com je centrï¿½lny antispamovï¿½ a blacklistovï¿½ server. Mï¿½ï¿½e analyzovaï¿½ prichï¿½dzajï¿½ce komentï¿½re a kontrolovaï¿½, ï¿½i sï¿½ vedenï¿½ ako spam. Akismet bol vyvinutï¿½ pre WordPress, ale mï¿½ï¿½e byï¿½ pouï¿½itï¿½ aj v inï¿½ch systï¿½moch. Je k tomu potrebnï¿½ Key z http://www.akismet.com, ktorï¿½ zï¿½skate registrï¿½ciou na http://www.wordpress.com/. Ak nechï¿½te toto pole prï¿½zdne, Aksimet sa nebude pouï¿½ï¿½vaï¿½.');
+@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_FILTER', 'Ako oznaï¿½ovaï¿½ prï¿½spevok oznaï¿½enï¿½ Aksimetom ako spam?');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_AKISMET_SPAMLIST', 'Zamietnutï¿½ blacklistom Akismet.com');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATION_TREAT', 'Ako naklada» s komentármi oznaèenými na automatickú moderáciu?');
-@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATIONT_TREAT', 'Ako naklada» s odozvami oznaèenými na automatickú moderáciu?');
-@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATIONT', 'Vy¾adova» moderovanie (schvaµovanie) odoziev po tomto poète dní');
-@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATIONT_DESC', 'V¹etky odozvy sa dajú automaticky nastavi» ako moderované. Po uplynutí tu uvedenej doby od publikovania èlánku sa bu
-de vy¾adova» moderovanie (schvaµovanie) odoziev. Hodnota 0 znamená bez moderovania.');
+@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATION_TREAT', 'Ako nakladaï¿½ s komentï¿½rmi oznaï¿½enï¿½mi na automatickï¿½ moderï¿½ciu?');
+@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATIONT_TREAT', 'Ako nakladaï¿½ s odozvami oznaï¿½enï¿½mi na automatickï¿½ moderï¿½ciu?');
+@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATIONT', 'Vyï¿½adovaï¿½ moderovanie (schvaï¿½ovanie) odoziev po tomto poï¿½te dnï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_FORCEMODERATIONT_DESC', 'Vï¿½etky odozvy sa dajï¿½ automaticky nastaviï¿½ ako moderovanï¿½. Po uplynutï¿½ tu uvedenej doby od publikovania ï¿½lï¿½nku sa bu
+de vyï¿½adovaï¿½ moderovanie (schvaï¿½ovanie) odoziev. Hodnota 0 znamenï¿½ bez moderovania.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_CSRF', 'Zapnú» CSRF Ochranu pre komentáre?');
-@define('PLUGIN_EVENT_SPAMBLOCK_CSRF_DESC', 'Ak je zapnuté, bude sa pomocou ¹peciálnej hash hodnota kontrolova», aby boli komentáre pridané iba od pou¾ívateµov s platným èíslom sedenia. Toto zmierni spam a zabráni pou¾ívateµom pridáva» komentáre cez CSRF. U¾ívatelia, ktorí nemajú zapnuté cookies, nebudú môc» pridáva» komentáre.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CSRF_REASON', 'Vá¹ komentár neobsahuje hash sedenia. Komentáre mô¾u by» na tento weblog posielané iba so zapnutými cookies!');
+@define('PLUGIN_EVENT_SPAMBLOCK_CSRF', 'Zapnï¿½ CSRF Ochranu pre komentï¿½re?');
+@define('PLUGIN_EVENT_SPAMBLOCK_CSRF_DESC', 'Ak je zapnutï¿½, bude sa pomocou ï¿½peciï¿½lnej hash hodnota kontrolovaï¿½, aby boli komentï¿½re pridanï¿½ iba od pouï¿½ï¿½vateï¿½ov s platnï¿½m ï¿½ï¿½slom sedenia. Toto zmierni spam a zabrï¿½ni pouï¿½ï¿½vateï¿½om pridï¿½vaï¿½ komentï¿½re cez CSRF. Uï¿½ï¿½vatelia, ktorï¿½ nemajï¿½ zapnutï¿½ cookies, nebudï¿½ mï¿½cï¿½ pridï¿½vaï¿½ komentï¿½re.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CSRF_REASON', 'Vï¿½ komentï¿½r neobsahuje hash sedenia. Komentï¿½re mï¿½ï¿½u byï¿½ na tento weblog posielanï¿½ iba so zapnutï¿½mi cookies!');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_HTACCESS', 'Blokova» ne¾elané IP adresy pomocou HTaccess?');
-@define('PLUGIN_EVENT_SPAMBLOCK_HTACCESS_DESC', 'Aktivovanie tejto voµby pridá IP adresy, z ktorých prichádza spam do súboru .htaccess. Tento bude pravidelne aktualizovaný ka¾dý mesiac.');
+@define('PLUGIN_EVENT_SPAMBLOCK_HTACCESS', 'Blokovaï¿½ neï¿½elanï¿½ IP adresy pomocou HTaccess?');
+@define('PLUGIN_EVENT_SPAMBLOCK_HTACCESS_DESC', 'Aktivovanie tejto voï¿½by pridï¿½ IP adresy, z ktorï¿½ch prichï¿½dza spam do sï¿½boru .htaccess. Tento bude pravidelne aktualizovanï¿½ kaï¿½dï¿½ mesiac.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_LOOK', 'Takto vyzerajú Va¹e kryptogramy (captcha). Ak ste zmenili a ulo¾ili vy¹¹ie uvedené nastavenia a chcete vidie» aktuálny vzhµad kryptogramu, jednoducho na neho kliknite a bude obnovený.');
+@define('PLUGIN_EVENT_SPAMBLOCK_LOOK', 'Takto vyzerajï¿½ Vaï¿½e kryptogramy (captcha). Ak ste zmenili a uloï¿½ili vyï¿½ï¿½ie uvedenï¿½ nastavenia a chcete vidieï¿½ aktuï¿½lny vzhï¿½ad kryptogramu, jednoducho na neho kliknite a bude obnovenï¿½.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION', 'Odozvy/oznámenia: kontrola ip adresy');
-@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION_DESC', 'Má IP odosielateµa súhlasi» s IP poèítaèa, ktorému je zasielaná odozva/oznámenie (trackaback/pingback)? (ODPORÚÈAME!)');
-@define('PLUGIN_EVENT_SPAMBLOCK_REASON_IPVALIDATION', 'Kontrola IP adresy: %s [%s] != ip adresa odosielateµa [%s]');
+@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION', 'Odozvy/oznï¿½menia: kontrola ip adresy');
+@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION_DESC', 'Mï¿½ IP odosielateï¿½a sï¿½hlasiï¿½ s IP poï¿½ï¿½taï¿½a, ktorï¿½mu je zasielanï¿½ odozva/oznï¿½menie (trackaback/pingback)? (ODPORï¿½ï¿½AME!)');
+@define('PLUGIN_EVENT_SPAMBLOCK_REASON_IPVALIDATION', 'Kontrola IP adresy: %s [%s] != ip adresa odosielateï¿½a [%s]');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_DESC', 'Ak je vypnuté, nebude sa vykonáva» ¾iadna kontrola e-mailov. Ak je nastavené na "Áno", autor komentára musí zada» platnú e-mailovú adresu. Nastavenie "Potvrdi» ka¾dý" spôsobí, ¾e ka¾dý komentár musí by» potvredný kliknutím na odkaz v zaslanom e-maile. Pri nastavení "Potvrdi» prvý" musí autor komentára potvrdi» iba svoj prvý komentár. Ostatné komentáre s rovnakým menom a e-mailovou adresou nebudú vy¾adova» potvrdenie.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_ONCE', 'Potvrdi» prvý');
-@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_ALWAYS', 'Potvrdi» ka¾dý');
-@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_MAIL', 'V krátkosti Vám bude doruèený e-mail, pomocou ktorého mô¾ete potvrdi» Vá¹ komentár.');
-@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_INFO', 'Na pridanie komentára sa vy¾aduje potvrdenie pomocou e-mailu. Po odoslaní formulára s komentárom Vám bude zaslaný e-mail, pomocou ktorého dokonèíte pridanie komentára.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_DESC', 'Ak je vypnutï¿½, nebude sa vykonï¿½vaï¿½ ï¿½iadna kontrola e-mailov. Ak je nastavenï¿½ na "ï¿½no", autor komentï¿½ra musï¿½ zadaï¿½ platnï¿½ e-mailovï¿½ adresu. Nastavenie "Potvrdiï¿½ kaï¿½dï¿½" spï¿½sobï¿½, ï¿½e kaï¿½dï¿½ komentï¿½r musï¿½ byï¿½ potvrednï¿½ kliknutï¿½m na odkaz v zaslanom e-maile. Pri nastavenï¿½ "Potvrdiï¿½ prvï¿½" musï¿½ autor komentï¿½ra potvrdiï¿½ iba svoj prvï¿½ komentï¿½r. Ostatnï¿½ komentï¿½re s rovnakï¿½m menom a e-mailovou adresou nebudï¿½ vyï¿½adovaï¿½ potvrdenie.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_ONCE', 'Potvrdiï¿½ prvï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_ALWAYS', 'Potvrdiï¿½ kaï¿½dï¿½');
+@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_MAIL', 'V krï¿½tkosti Vï¿½m bude doruï¿½enï¿½ e-mail, pomocou ktorï¿½ho mï¿½ï¿½ete potvrdiï¿½ Vï¿½ komentï¿½r.');
+@define('PLUGIN_EVENT_SPAMBLOCK_CHECKMAIL_VERIFICATION_INFO', 'Na pridanie komentï¿½ra sa vyï¿½aduje potvrdenie pomocou e-mailu. Po odoslanï¿½ formulï¿½ra s komentï¿½rom Vï¿½m bude zaslanï¿½ e-mail, pomocou ktorï¿½ho dokonï¿½ï¿½te pridanie komentï¿½ra.');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_SERVER', 'Antispamový server');
-@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_SERVER_DESC', 'Na ktorom serveri je zaregistrovaný vy¹¹ie uvedený kµúè? Anonymne znamená, ¾e údaje posielané webovej slu¾be neobsahujú pou¾ívateµské meno a e-mailovú adresu. Aj táto voµba zni¾uje mno¾stvo spamu, i keï nie a¾ tak dobre, ako neanonymne.');
+@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_SERVER', 'Antispamovï¿½ server');
+@define('PLUGIN_EVENT_SPAMBLOCK_AKISMET_SERVER_DESC', 'Na ktorom serveri je zaregistrovanï¿½ vyï¿½ï¿½ie uvedenï¿½ kï¿½ï¿½ï¿½? Anonymne znamenï¿½, ï¿½e ï¿½daje posielanï¿½ webovej sluï¿½be neobsahujï¿½ pouï¿½ï¿½vateï¿½skï¿½ meno a e-mailovï¿½ adresu. Aj tï¿½to voï¿½ba zniï¿½uje mnoï¿½stvo spamu, i keï¿½ nie aï¿½ tak dobre, ako neanonymne.');
 @define('PLUGIN_EVENT_SPAMBLOCK_SERVER_TPAS', 'TypePad Antispam');
-@define('PLUGIN_EVENT_SPAMBLOCK_SERVER_AKISMET', 'pôvodný Akismet');
+@define('PLUGIN_EVENT_SPAMBLOCK_SERVER_AKISMET', 'pï¿½vodnï¿½ Akismet');
 @define('PLUGIN_EVENT_SPAMBLOCK_SERVER_TPAS_ANON', 'TypePad Antispam (anonymne)');
-@define('PLUGIN_EVENT_SPAMBLOCK_SERVER_AKISMET_ANON', 'pôvodný Akismet (anonymne)');
+@define('PLUGIN_EVENT_SPAMBLOCK_SERVER_AKISMET_ANON', 'pï¿½vodnï¿½ Akismet (anonymne)');
 
-@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION_URL_EXCLUDE', 'Vylúèi» adresy URL z overenia IP adresy');
-@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION_URL_EXCLUDE_DESC', 'Adresy URL, pri ktorých sa nemá overova» IP adresa. ' . PLUGIN_EVENT_SPAMBLOCK_FILTER_URLS_DESC);
+@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION_URL_EXCLUDE', 'Vylï¿½ï¿½iï¿½ adresy URL z overenia IP adresy');
+@define('PLUGIN_EVENT_SPAMBLOCK_TRACKBACKIPVALIDATION_URL_EXCLUDE_DESC', 'Adresy URL, pri ktorï¿½ch sa nemï¿½ overovaï¿½ IP adresa. ' . PLUGIN_EVENT_SPAMBLOCK_FILTER_URLS_DESC);
 

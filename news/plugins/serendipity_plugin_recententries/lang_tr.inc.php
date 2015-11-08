@@ -6,12 +6,12 @@
  *  First public version: lang_tr.inc.php
  */
 
-@define('PLUGIN_RECENTENTRIES_TITLE', 'Son Gelen Yazýlar');
-@define('PLUGIN_RECENTENTRIES_BLAHBLAH', 'En yeni yazýlarýn baþlýklarýnýn ve tarihlerinin gösterimi');
-@define('PLUGIN_RECENTENTRIES_NUMBER', 'Yazýlarýn Adedi');
-@define('PLUGIN_RECENTENTRIES_NUMBER_BLAHBLAH', 'Kaç adet yazý gösterilsin? (Öntanýmlý: 10)');
-@define('PLUGIN_RECENTENTRIES_NUMBER_FROM', 'Anasayfada yayýnlanan yazýlar es geç');
-@define('PLUGIN_RECENTENTRIES_NUMBER_FROM_DESC', 'Sadece anasayfada gösterilmeyen son yazýlar gösterilsin. (Öntanýmlý: En son ' . $serendipity['fetchLimit'] . ' yazýlar es geçilecek)');
-@define('PLUGIN_RECENTENTRIES_NUMBER_FROM_RADIO_ALL', 'Tümünü göster');
-@define('PLUGIN_RECENTENTRIES_NUMBER_FROM_RADIO_RECENT', 'Anasayfadaki unsurlarý es geç');
+@define('PLUGIN_RECENTENTRIES_TITLE', 'Son Gelen Yazï¿½lar');
+@define('PLUGIN_RECENTENTRIES_BLAHBLAH', 'En yeni yazï¿½larï¿½n baï¿½lï¿½klarï¿½nï¿½n ve tarihlerinin gï¿½sterimi');
+@define('PLUGIN_RECENTENTRIES_NUMBER', 'Yazï¿½larï¿½n Adedi');
+@define('PLUGIN_RECENTENTRIES_NUMBER_BLAHBLAH', 'Kaï¿½ adet yazï¿½ gï¿½sterilsin? (ï¿½ntanï¿½mlï¿½: 10)');
+@define('PLUGIN_RECENTENTRIES_NUMBER_FROM', 'Anasayfada yayï¿½nlanan yazï¿½lar es geï¿½');
+@define('PLUGIN_RECENTENTRIES_NUMBER_FROM_DESC', 'Sadece anasayfada gï¿½sterilmeyen son yazï¿½lar gï¿½sterilsin. (ï¿½ntanï¿½mlï¿½: En son ' . $serendipity['fetchLimit'] . ' yazï¿½lar es geï¿½ilecek)');
+@define('PLUGIN_RECENTENTRIES_NUMBER_FROM_RADIO_ALL', 'Tï¿½mï¿½nï¿½ gï¿½ster');
+@define('PLUGIN_RECENTENTRIES_NUMBER_FROM_RADIO_RECENT', 'Anasayfadaki unsurlarï¿½ es geï¿½');
 
