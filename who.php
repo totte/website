@@ -1,8 +1,9 @@
 <div class="col-md-12">
-	<h1>Who are we?</h1>
+	<h1>Credits</h1>
 	<h2>Current contributors</h2>
-	<?php
-		echo PrintContributor("boom1992.png",
+	<p>This list is being updated and will be back soon!</p>
+<!--	<?php
+/*		echo PrintContributor("boom1992.png",
 			"Lukas Appelhans",
 			"boom1992",
 			"lukas.appelhans@chakraos.org",
@@ -156,10 +157,10 @@
 			"Traditional Chinese, English",
 			"Taiwan",
 			"1994");
-	?>
+	*/?>
 	<h2>Former contributors</h2>
-	<?php
-		echo PrintFormerContributor("placeholder.png",
+	--><?php
+/*		echo PrintFormerContributor("placeholder.png",
 			"",
 			"admiral0",
 			"",
@@ -274,7 +275,7 @@
 			"malcer",
 			"",
 			"");
-	?>
+	*/?>
 	<h2>Sponsors</h2>
 	<a href="http://www.host1plus.com"><img src="static/img/h1p_logo.png" /></a>
 	<p>We'd like to thank <a href="http://www.host1plus.com">Host1Plus</a> who provides us with our main server at a great discount.</p>
