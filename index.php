@@ -133,6 +133,8 @@ require_once 'functions.php';
 						require_once('campaign.php');
                     } elseif (isset($_GET['mirrors'])) {
                         require_once('mirrors.php');
+                    } elseif (isset($_GET['coc'])) {
+                        require_once('coc.php');
 					} elseif (isset($_GET['infrastructure'])) {
 						require_once('infrastructure.php');
 					} else {
