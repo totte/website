@@ -35,6 +35,7 @@
         <li>Chakra ISO images do not support <strong>unetbootin</strong> and DVDs need to be burned at a speed <strong>no higher than 4×</strong>. To create reliable installation media, please follow the instructions on our <a href="http://chakra-project.org/wiki/index.php?title=Bootable_Medium_Creation" title="Bootable Chakra media  ">wiki instructions</a>.
         <li>There are limitations in detecting <strong>hybrid cards</strong>, so on some systems you might experience a black screen when booting from the ISO or rebooting after the installation. To workaround this just install using the free drivers and then <a href="https://chakraos.org/wiki/index.php?title=Switching_Between_Free_and_Non-free_Video-Drivers" title="Switch between free and nonfree drivers ">switch manually</a> to the proprietary ones.
         <li>It is not possible yet to Install on <strong>RAID</strong>, <strong>LVM</strong>, <strong>LUKS</strong>, although you might find some workarounds on our forum if you want to get your hands dirty.
+		<li>If you use Chakra in <strong>VirtualBox</strong> and experience network issues, run 'systemctl start dhcpcd.service'. After installation you can run 'sudo systemctl enable dhcpcd.service' to make this permanent. If you are experiencing graphics issues, disable 3D acceleration under the 'Display' options.</li>
     </ul>
 </div>
 <div class="col-md-4">
