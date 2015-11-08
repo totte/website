@@ -16,7 +16,7 @@
 			<td>Date</td><td>2015-11-08</td>
 		</tr>
 		<tr>
-			<td>Size</td><td>2.0 GiB</td>
+			<td>Size</td><td>2.2 GiB</td>
 		</tr>
 		<tr>
 			<td>Architecture</td><td>x86-64</td>

@@ -56,18 +56,18 @@
 			"Sr. Packager",
 			"Italian, English, French",
 			"Switzerland",
-			"N/A");
+			"");
 		echo PrintContributor("placeholder.png",
-			"N/A",
+			"",
 			"gallaecio",
-			"N/A",
+			"",
 			"Unknown",
 			"#",
-			"N/A",
+			"",
 			"Sr. Packager",
-			"N/A",
-			"N/A",
-			"N/A");
+			"",
+			"",
+			"");
 		echo PrintContributor("placeholder.png",
 			"Ryan Shipp",
 			"george2",
@@ -78,33 +78,33 @@
 			"Developer (Kapudan)",
 			"English",
 			"USA",
-			"N/A");
+			"");
 		echo PrintContributor("gcala.png",
 			"Giuseppe Calà",
 			"gcala",
-			"N/A",
+			"",
 			"Unknown",
 			"#",
-			"N/A",
+			"",
 			"Sr. Packager",
-			"N/A",
+			"",
 			"Italy",
 			"1973");
 		echo PrintContributor("placeholder.png",
-			"N/A",
+			"",
 			"dezponia",
-			"N/A",
+			"",
 			"Unknown",
 			"#",
-			"N/A",
-			"N/A",
-			"N/A",
-			"N/A",
-			"N/A");
+			"",
+			"",
+			"",
+			"",
+			"");
 		echo PrintContributor("placeholder.png",
 			"Xuetian Weng",
 			"csslayer",
-			"N/A",
+			"",
 			"Unknown",
 			"#",
 			"csslayer.info",
@@ -113,16 +113,16 @@
 			"China",
 			"1990");
 		echo PrintContributor("placeholder.png",
-			"N/A",
+			"",
 			"brli",
-			"N/A",
+			"",
 			"Unknown",
 			"#",
-			"N/A",
+			"",
 			"Sr. Packager",
-			"N/A",
-			"N/A",
-			"N/A");
+			"",
+			"",
+			"");
 		echo PrintContributor("franzmari.png",
 			"Francesco Marinucci",
 			"franzmari",
@@ -140,11 +140,11 @@
 			"ram-z@chakraos.org",
 			"Unknown",
 			"#",
-			"N/A",
+			"",
 			"Sr. Packager, Developer (Tribe)",
 			"English, French, German",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintContributor("placeholder.png",
 			"Jeff Huang",
 			"s8321414",
@@ -160,120 +160,120 @@
 	<h2>Former contributors</h2>
 	<?php
 		echo PrintFormerContributor("placeholder.png",
-			"N/A",
+			"",
 			"admiral0",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("placeholder.png",
-			"N/A",
+			"",
 			"qote",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("manutortosa.png",
 			"Manuel Tortosa",
 			"manutortosa",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("djustice.png",
 			"Drake Justice",
 			"djustice",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("abveritas.png",
 			"Anke Boersma",
 			"abveritas",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("antonio.png",
 			"José Antonio Sánchez Reynaga",
 			"antonioJASR",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("jmc.png",
 			"Daniele Cocca",
 			"jmc",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("lisa.png",
 			"Lisa Vitolo",
 			"shainer",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("codertux.png",
 			"Andrei Nistor",
 			"codertux",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("surfed.png",
 			"Sascha Thier",
 			"surfed",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("florent.png",
 			"Florent Nouvellon",
 			"florent",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("dunkelstern.png",
 			"Johannes Schriewer",
 			"dunkelstern",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("drf.png",
 			"Dario Freddi",
 			"drf",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("jofko.png",
 			"Jozef Korencik",
 			"jofko",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("sandsmark.png",
 			"Martin Sandsmark",
 			"sandsmark",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("heller_barde.png",
 			"Philip Stark",
 			"heller_barde",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("mistvieh.png",
 			"Dennis Brendel",
 			"mistvieh",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("nachtwandler.png",
 			"Dominik Pieper",
 			"nachtwandler",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("philm.png",
 			"Phil Müller",
 			"philm",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("roozbeh.jpg",
 			"Roozbeh Shafiee",
 			"rosha",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("funkyou.png",
 			"Jan Mette",
 			"funkyou",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("placeholder.png",
-			"N/A",
+			"",
 			"pyrdracon",
-			"N/A",
-			"N/A");
+			"",
+			"");
 		echo PrintFormerContributor("placeholder.png",
-			"N/A",
+			"",
 			"malcer",
-			"N/A",
-			"N/A");
+			"",
+			"");
 	?>
 	<h2>Sponsors</h2>
 	<a href="http://www.host1plus.com"><img src="static/img/h1p_logo.png" /></a>
