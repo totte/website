@@ -15,7 +15,7 @@
 	<a href=" http://chakraos.org/wiki/index.php?title=DuckDuckGo"><img src="http://duckduckgo.com/assets/badges/duckduckgo.png" alt="DuckDuckGo" title="Instructions" border="0" /></a><br />
 	<h2>Unixstickers</h2>
 	<p>Shop for Chakra stickers, with 15% of the revenue donated back to Chakra</p>
-	<a class="serendipity_image_link" title="Chakra Stickers" href='http://www.unixstickers.com/tag/chakra'><!-- s9ymdb:4 --><img class="serendipity_image_center" width="120" height="23"  src="/news/uploads/unixstickers1.png" title="Chakra Stickers" alt="" /></a><br />
+	<a title="Chakra Stickers" href='http://www.unixstickers.com/tag/chakra'><img width="120" height="23"  src="static/img/unixstickers.png" title="Chakra Stickers" alt="Chakra stickers" /></a><br />
 	<h2>Zazzle</h2>
 	<p>Shop for Chakra branded mugs etc, with 12% of the revenue shared with Chakra</p>
 	<a class="serendipity_image_link" title="Chakra shop" href='http://www.zazzle.com/thechakraproject'><!-- s9ymdb:5 --><img class="serendipity_image_center" width="160" height="20"  src="/news/uploads/zazzleLogo_468x60.jpg" title="Chakra shop" alt="" /></a>
