@@ -384,39 +384,17 @@
 		</li>
 	</ul>
 	<h2>Acknowledgements</h2>
-	<p>We would like to thank everyone who has enabled us to create Chakra, and/or contributed to it. These are in detail:</p>
+	<p>We would like to thank everyone who has enabled us to create Chakra, and/or contributed to it:</p>
 	<ul>
-		<li>The Arch Linux <a href="http://www.archlinux.org/developers/">developers</a> and <a href="http://bbs.archlinux.org">community</a>, for creating that awesome distribution</li>
+		<li>The Arch Linux <a href="https://www.archlinux.org/people/developers/">developers</a> and community, for creating that awesome distribution</li>
 		<li>The Pacman developers, for creating the best package manager there is</li>
 		<li>The KDE developers, for creating the most powerful desktop environment there is</li>
 		<li>The KDEmod community, which was the starting point for Chakra and our tools</li>
 		<li>Michael Towers (gradgrind) for creating the awesome <a href="http://larch.berlios.de/">larch</a>LiveCD scripts</li>
-		<li>All people providing download and package mirrors</li>
-		<li>All testers who took the mission to test our stuff with patience</li>
-		<li>All people actually reading documentation ;)</li>
-	</ul>
-	<h2>Join us!</h2>
-	<p>We can always use more help in a wide variety of tasks, such as:</p>
-	<ul>
-		<li>Development:
-			<ul>
-				<li>Akabei: C++, Qt, KDE, git</li>
-				<li>Tribe: C++, Qt, KDE, git</li>
-				<li>Kapudan: Python 2 &amp; 3, PyQt, PyKDE, git</li>
-				<li>chakraweb: Python 3, Django 1.6, PostgreSQL, git</li>
-				<li>AIDE: Python 3, Git</li>
-			</ul>
-		</li>
-		<li>Packaging: Shell scripting, ssh, rsync, patching, git, Chakra Buildsystem, Kinky </li>
-		<li>Translating: transifex.com</li>
-		<li>Testing and writing bug reports</li>
-		<li>Writing documentation (the wiki)</li>
-		<li>Provide a mirror for downloads: ssh, rsync</li>
-		<li>...and of course by participating in discussions on our mailing list and forum!</li>
+		<li>All our patient testers</li>
 	</ul>
 	<p><strong>Mailing lists</strong></p>
 	<ul>
-		<li><a href="mailto:chakra-linux@googlegroups.com">Users</a></li>
 		<li><a href="mailto:chakra-devel@googlegroups.com">Developers</a></li>
 		<li><a href="mailto:chakra-packagers@googlegroups.com">Packagers</a></li>
 	</ul>
@@ -432,7 +410,7 @@
 		<li><a href="http://webchat.freenode.net/?channels=chakra">#chakra</a></li>
 		<li><a href="http://webchat.freenode.net/?channels=chakra-devel">#chakra-devel</a></li>
 	</ul>
-	<p><strong>Unofficial Communities</strong></p>
+	<p><strong>Unofficial communities</strong></p>
 	<ul>
 		<li><a href="http://chakraos.es">Spanish</a></li>
 		<li><a href="http://chakra-project.it">Italian</a></li>
