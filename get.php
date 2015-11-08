@@ -2,36 +2,33 @@
 	<h2>Download</h2>
 </div>
 <div class="col-md-8">
-	<h3>Chakra 2015.03 "Euler"</h3>
-	<div class="alert alert-info" role="alert">
-		<strong>Heads up!</strong> <a href="https://chakraos.org/news/index.php?/archives/153-Restructure-of-repositories-system-will-require-manual-intervention.html">Important changes are happening in Chakra at the moment.</a> If you are downloading this ISO to install Chakra, we advise you to wait until our Plasma 5 release is out!
-	</div>
-	<a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/torrents/chakra-2015.03-euler-x86_64.iso.torrent">
+	<h3>Chakra 2015.11 "Fermi"</h3>
+	<a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/torrents/chakra-2015.11-fermi-x86_64.iso.torrent">
 		BitTorrent download
 	</a>
-    <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2015.03/chakra-2015.03-euler-x86_64.iso/download">
+    <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2015.11/chakra-2015.11-fermi-x86_64.iso/download">
         HTTP download (SourceForge)
     </a>
 	<br />
 	<br />
 	<table class="table table-hover">
 		<tr>
-			<td>Date</td><td>2015-03-09</td>
+			<td>Date</td><td>2015-11-08</td>
 		</tr>
 		<tr>
-			<td>Size</td><td>1.8 GiB</td>
+			<td>Size</td><td>2.0 GiB</td>
 		</tr>
 		<tr>
 			<td>Architecture</td><td>x86-64</td>
 		</tr>
 		<tr>
-			<td>MD5 checksum</td><td>837dd07a9e2f70db6b50265ecb1c7283</td>
+			<td>MD5 checksum</td><td>8baf4d9e2a45d5593129b9179848b186</td>
 		</tr>
 		<tr>
-			<td>SHA1 checksum</td><td>db5c48aef0a3386603a71cc3cf31caa86322d3c3</td>
+			<td>SHA1 checksum</td><td>8f9d16df0b1638cf47c3acedd297370750362305</td>
 		</tr>
 	</table>
-    <h4>Known issues</h4>
+    <h3>Known issues</h3>
     <ul>
         <li>The booting process might seem frozen for some seconds. This is due to the required elements loading, please be patient for some seconds to properly boot.
         <li>If you are installing Chakra in <strong>VirtualBox</strong>, make sure to disable 3D acceleration under the  "Display" options if you experience issues with graphics.
