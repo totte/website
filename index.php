@@ -137,8 +137,6 @@ require_once 'functions.php';
                         require_once('codeofconduct.php');
 					} elseif (isset($_GET['legal'])) {
 						require_once('legal.php');
-					} elseif (isset($_GET['infrastructure'])) {
-						require_once('infrastructure.php');
 					} else {
 						require_once('home.php');
 					}
