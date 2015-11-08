@@ -14,36 +14,6 @@
 	<h1>Legal</h1>
 	<h2>Disclaimer</h2>
 	<p>No warranties, either express or implied, are hereby given for anything provided by the Chakra Project ("Software"). All software is supplied without any accompanying guarantee, whether expressly mentioned, implied or tacitly assumed. This information does not include any guarantees regarding quality, does not describe any fair marketable quality, and does not make any claims as to quality quarantees or quarantees regarding the suitability for a special purpose. The user assumes all responsibility for damages resulting from the use of the software, including, but not limited to, frustration, disgust, system abends, disk head-crashes, general malfeasance, floods, fires, shark attack, locust infestation, cyclones, hurricanes, tsunamis, local electromagnetic disruptions, hydraulic brake system failure, invasion, hashing collisions, normal wear and tear of friction surfaces, cosmic radiation, inadvertent destruction of sensitive electronic components, windstorms, the riders of nazgul, infuriated chickens, premature activation of a distant early warning system, peasant uprisings, halitosis, artillery bombardment, explosions, cave-ins, borg-assimilation and/or frogs falling from the sky.</p>
-	<h2>Donate</h2>
-	<p>The Chakra LiveCD, our appendant tools and the packages are built by a small community of developers and packagers, each making their own special contribution. This site is a showcase for our collective work and is built to inform about and celebrate free software.</p>
-	<p>Of course these contributions are not everything that is done to keep the project alive and rocking. There are running costs like the rental of our main server and the traffic it generates, and of course the electricity bills of our packagers.</p>
-	<p>If technical development, documentation, or support aren't your strong points, making a donation to this project is your opportunity to help us out a bit and enable us to care more about the stuff we like to do, instead of always having an eye on the running costs.</p>
-	<p>Many thanks in advance for each donation!</p>
-	<table class="centered" width="926px" border="0" align="center">
-		<tr>
-			<!--<th width="160px" align="center">
-				Donate via PayPal: <br/> <br/>
-				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-					<input type="hidden" name="cmd" value="_s-xclick" />
-					<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----" />
-					<input type="image" src="https://www.paypal.com/en_US/GB/i/btn/btn_donateCC_LG.gif" name="submit" alt="PayPal - The safer, easier way to pay online." />
-					<img alt="" border="0" src="https://www.paypal.com/it_IT/i/scr/pixel.gif" width="1" height="1" />
-				</form>
-			</th> -->
-			<th width="160px" align="center">
-				Donate via Flattr: <br/> <br/>
-				<a class="FlattrButton" style="display:none;" href="http://www.chakraos.org"></a>
-			</th>
-		</tr>
-	</table>
-	<p>If you want to donate something else, like a box of tasty cornflakes or one of your hamsters, just write a mail to <a href="mailto:chakra-cabal@googlegroups.com">chakra-cabal@googlegroups.com</a> and we'll figure that out.</p>
-	<h3>Usage of donations</h3>
-	<p>Donations are mainly used to cover our running expenses, and to make sure that we can adapt our infrastructure to possible increases of users and visitors of our site.</p>
-	<p>Any possible overplusses will be used for stuff like travel costs for developer meetings and helping out our developers and packagers on special occasions, like replacing broken hardware for example.</p>
-	<h3>Donation status</h3>
-	<p>We try to be fully open about what we do with donations. Please check out the <a href="wiki/index.php/Donation_Status">donation status page</a> in our Wiki.</p>
-	<h3>Donation conditions</h3>
-	<p>A donation is not associated with any rights or privileges. A donation is not associated with any right to a say about its application. Because we care about privacy, all donations will be kept anonymous by default and contributors will not be published or imparted. However, if you want to appear on our public list of donators, tell us. Donation receipts relevant for taxes can not be issued, because the Chakra Project is not a charitable organization or a registered association. From a judicial point of view, all donations are private gifts to the developers of the Chakra Project</p>
 	<h1>Chakra Community Code of Conduct</h1>
 	<h2>Preamble</h2>
 	<p>In the Chakra community, participants from all over the world come together to create, distribute and make use of Free Software for the desktop. This is made possible by the support, hard work and enthusiasm of thousands of people, including those who create and use KDE software.</p>
