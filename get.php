@@ -7,7 +7,7 @@
 		<strong>Heads up!</strong> <a href="https://chakraos.org/news/index.php?/archives/153-Restructure-of-repositories-system-will-require-manual-intervention.html">Important changes are happening in Chakra at the moment.</a> If you are downloading this ISO to install Chakra, we advise you to wait until our Plasma 5 release is out!
 	</div>
 	<a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/torrents/chakra-2015.03-euler-x86_64.iso.torrent">
-		BitTorrent download (recommended)
+		BitTorrent download
 	</a>
     <a class="btn btn-primary btn-lg" href="http://sourceforge.net/projects/chakra/files/2015.03/chakra-2015.03-euler-x86_64.iso/download">
         HTTP download (SourceForge)
