@@ -150,7 +150,7 @@ require_once 'functions.php';
 					var now = new Date();
 					document.write("Copyright &copy; 2006-" + now.getFullYear());
 				</script>
-				<a href="mailto:administrator@chakraos.org">Chakra</a>
+				<a href="mailto:info@chakraos.org">Chakra</a>
 				&nbsp;
 				&middot;
 				&nbsp;
