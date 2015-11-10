@@ -28,14 +28,14 @@
 			<td>SHA1 checksum</td><td>8f9d16df0b1638cf47c3acedd297370750362305</td>
 		</tr>
 	</table>
-    <h3>Known issues</h3>
-    <ul>
+    <h4>Known issues</h4>
+    <small><ul>
         <li>The booting process might seem frozen for some seconds. This is due to the required elements loading, please be patient for some seconds to properly boot.</li>
         <li>Chakra ISO images do not support <strong>unetbootin</strong> and DVDs need to be burned at a speed <strong>no higher than 4×</strong>. To create reliable installation media, please follow the instructions on our <a href="http://chakra-project.org/wiki/index.php?title=Bootable_Medium_Creation" title="Bootable Chakra media  ">wiki instructions</a>.</li>
         <li>There are limitations in detecting <strong>hybrid cards</strong>, so on some systems you might experience a black screen when booting from the ISO or rebooting after the installation. To workaround this just install using the free drivers and then <a href="https://chakraos.org/wiki/index.php?title=Switching_Between_Free_and_Non-free_Video-Drivers" title="Switch between free and nonfree drivers ">switch manually</a> to the proprietary ones.</li>
         <li>It is not possible yet to Install on <strong>RAID</strong>, <strong>LVM</strong>, <strong>LUKS</strong>, although you might find some workarounds on our forum if you want to get your hands dirty.</li>
-		<li>If you use Chakra in <strong>VirtualBox</strong> and experience network issues, run 'systemctl start dhcpcd.service'. After installation you can run 'sudo systemctl enable dhcpcd.service' to make this permanent. If you are experiencing graphics issues, disable 3D acceleration under the 'Display' options.</li>
-    </ul>
+		<li>If you use Chakra in VirtualBox and experience network issues, use the network applet and click <kbd>Configure network connection...</kbd> in the top-right corner to open the connection editor. Then click <kbd>Add</kbd>, select <kbd>Wired Ethernet</kbd> and press <kbd>OK</kbd> to use the default settings. If you are experiencing graphics issues, disable 3D acceleration under the <kbd>Display</kbd> options.</li>
+    </ul></small>
 </div>
 <div class="col-md-4">
 	<img src="static/img/laptop.png" alt="wtflol" />
