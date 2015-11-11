@@ -28,9 +28,9 @@
 			<td>SHA1 checksum</td><td>8f9d16df0b1638cf47c3acedd297370750362305</td>
 		</tr>
 	</table>
+	<br>
     <h4>Known issues</h4>
     <small><ul>
-        <li>The booting process might seem frozen for some seconds. This is due to the required elements loading, please be patient for some seconds to properly boot.</li>
         <li>Chakra ISO images do not support <strong>unetbootin</strong> and DVDs need to be burned at a speed <strong>no higher than 4×</strong>. To create reliable installation media, please follow the instructions on our <a href="http://chakra-project.org/wiki/index.php?title=Bootable_Medium_Creation" title="Bootable Chakra media  ">wiki instructions</a>.</li>
         <li>There are limitations in detecting <strong>hybrid cards</strong>, so on some systems you might experience a black screen when booting from the ISO or rebooting after the installation. To workaround this just install using the free drivers and then <a href="https://chakraos.org/wiki/index.php?title=Switching_Between_Free_and_Non-free_Video-Drivers" title="Switch between free and nonfree drivers ">switch manually</a> to the proprietary ones.</li>
         <li>It is not possible yet to Install on <strong>RAID</strong>, <strong>LVM</strong>, <strong>LUKS</strong>, although you might find some workarounds on our forum if you want to get your hands dirty.</li>
