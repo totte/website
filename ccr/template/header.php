@@ -17,7 +17,7 @@
 <div id="shadow_left"><div id="shadow_right">
     <div id="head_container">
 	<div id="title">
-	    <div id="logo"><h1 id="chakratitle"><a href="http://www.chakraos.org/" title="Chakra">Chakra</a></h1></div>
+	    <div id="logo"><h1 id="chakratitle"><a href="chakraos.org/" title="Chakra">Chakra</a></h1></div>
 	</div>
       <div id="main_nav">
         <ul>
@@ -45,17 +45,17 @@ if (isset($_COOKIE["AURSID"])) {
 <?php
 	$SID = $_COOKIE['AURSID'];
 	$atype = account_from_sid($SID);
-	if ($atype == "Trusted User" || $atype == "Developer") { 
+	if ($atype == "Trusted User" || $atype == "Developer") {
 ?>
 	      <li><a href="account.php?Action=DisplayAccount&ID=<?php print uid_from_sid($_COOKIE["AURSID"]); ?>"><?php print __("My Account"); ?></a></li>
-	      <li><a href="tu.php"><?php print __("Trusted User"); ?></a></li> 
+	      <li><a href="tu.php"><?php print __("Trusted User"); ?></a></li>
 <?php
 	}
 }
 ?>
           <li><a href="http://groups.google.com/group/chakra-packagers"><?php print __("Discussion"); ?></a></li>
           <li><a href="packages.php"><?php print __("Packages"); ?></a></li>
-          <li><a href="account.php"><?php print __("Accounts"); ?></a></li> 
+          <li><a href="account.php"><?php print __("Accounts"); ?></a></li>
           <li><a href="index.php">CCR <?php print __("Home"); ?></a></li>
         </ul>
       </div>
@@ -90,5 +90,5 @@ if (isset($_COOKIE["AURSID"])) {
         <?php  include_once("login_form.php"); ?>
 
     </div>
-    <div id="maincontent"> 
+    <div id="maincontent">
 	  <!-- Start of main content -->

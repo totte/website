@@ -4,7 +4,7 @@
 <?php } elseif ($total == 0) { ?>
 <div class="pgbox">
 <div class='pgboxbody'><?php print __("No packages matched your search criteria."); ?>
-<br><br><a href="http://www.chakraos.org/packages/index.php?act=search&subdir=&sortby=date&order=descending&searchpattern=<?php print urlencode($_GET['K']); ?>"><?php print __("Search for results in the main repository"); ?></a>
+<br><br><a href="chakraos.org/packages/index.php?act=search&subdir=&sortby=date&order=descending&searchpattern=<?php print urlencode($_GET['K']); ?>"><?php print __("Search for results in the main repository"); ?></a>
 </div>
 </div>
 <?php } elseif ($total == 1) {
@@ -62,7 +62,7 @@
 		$atype = account_from_sid($_COOKIE['AURSID']);
 	} else {
 		$atype = "";
-	} 
+	}
 	for ($i = 0; $row = mysql_fetch_assoc($result); $i++) {
 		(($i % 2) == 0) ? $c = "data1" : $c = "data2";
 		if ($row["OutOfDate"]): $c = "outofdate"; endif;
@@ -112,7 +112,7 @@
 		</span>
 		<br /><br />
 	</div>
-<?php 	if ($SID) { 
+<?php 	if ($SID) {
 ?>	<div>
 		<select name='action'>
 			<option><?php print __("Actions") ?></option>
@@ -126,12 +126,12 @@
 			<option value='do_Notify'><?php print __("Notify") ?></option>
 			<option value='do_UnNotify'><?php print __("UnNotify") ?></option>
 		</select>
-<?php 		if ($atype == "Trusted User" || $atype == "Developer") { 
+<?php 		if ($atype == "Trusted User" || $atype == "Developer") {
 ?>			<input type='checkbox' name='confirm_Delete' value='1' /> <?php print __("Confirm") ?>
-<?php 		} 
+<?php 		}
 ?>		<input type='submit' class='button' style='width: 40px' value='<?php print __("Go") ?>' />
 	</div>
-<?php   } 
+<?php   }
 ?>	</td>
 	<td class='show_results_footer'>
   		<span class='blue'><?php print __("Showing results %s - %s of %s", $first, $last, $total) ?></span>
@@ -144,7 +144,7 @@
 				}
 ?>				<a href="packages.php?<?php print mkurl("O=0") ?>"><img src="images/arrow-left-double.png" alt="<<" align="top"></a>
 				<a href="packages.php?<?php print mkurl("O=$O") ?>"><img src="images/arrow-left.png" alt="<" align="top"></a>
-<?php   		} 
+<?php   		}
 
 			if ($_GET['PP'] > 0) {
 				$pages = ceil($total / $_GET['PP']);
@@ -179,12 +179,12 @@
 
 				print ($pages > $morepages) ? '...' : '';
 
-				if ($total - $_GET['PP'] - $_GET['O'] > 0) { 
+				if ($total - $_GET['PP'] - $_GET['O'] > 0) {
 ?>					<a href='packages.php?<?php print mkurl('O=' . ($_GET['O'] + $_GET['PP'])) ?>'>
 					<img src="images/arrow-right.png" alt=">" align="top"></a>
 					<a href='packages.php?<?php print mkurl('O=' . ($total - $_GET['PP'])) ?>'>
 					<img src="images/arrow-right-double.png" alt=">>" align="top"></a>
-<?php 				} 
+<?php 				}
 			}
 ?>			</div>
 	</td>
@@ -193,6 +193,6 @@
 	</form>
 	</div>
 <?php	}
-?>	
+?>
 
 

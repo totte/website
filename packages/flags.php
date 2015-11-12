@@ -12,7 +12,7 @@ include 'Mail.php';
 
 $isflagged = false;
 $error = null;
-$parsing_errors = array( 
+$parsing_errors = array(
     "recaptcha"=>"There was an error parsing the recaptcha. go back and try again.",
     "email"=>"The provided email don't appears to be correct, plese go back and fix it.",
     "broken"=>"If you want to flag a package as broken, you must provide additional intormation."
@@ -29,17 +29,17 @@ $resp = recaptcha_check_answer ($recaptcha_private_key,
 
 // Prevent to use this script standalone
 if(!isset($_POST['p'])) {
-    Header ('Location: http://www.chakraos.org/packages/index.php');
+    Header ('Location: chakraos.org/packages/index.php');
 }
 
 // Parse variables
 $package_name = ( isset($_POST['p']) ) ? $_POST['p'] : "";
 $package_vers = ( isset($_POST['v']) ) ? $_POST['v'] : "";
-$package_subd = ( isset($_POST['s']) ) ? $_POST['s'] : "";        
+$package_subd = ( isset($_POST['s']) ) ? $_POST['s'] : "";
 $package_file = ( isset($_POST['f']) ) ? $_POST['f'] : "";
-$package_mail = ( isset($_POST['e']) ) ? $_POST['e'] : "";  
+$package_mail = ( isset($_POST['e']) ) ? $_POST['e'] : "";
 $package_comm = ( isset($_POST['c']) ) ? $_POST['c'] : "";
-$package_type = ( isset($_POST['t']) ) ? $_POST['t'] : "";    
+$package_type = ( isset($_POST['t']) ) ? $_POST['t'] : "";
 
 // Form is empty or there was an error parsing the parameters
 if($_POST['do_flag'] !== "yes") {
@@ -73,7 +73,7 @@ if($_POST['do_flag'] !== "yes") {
     echo "</form>";
     echo "<table class=cctable border=0;>";
     echo "<br /><br />";
-    echo "<tr><td><a href='http://www.chakraos.org/packages/index.php?act=show&subdir=".$package_subd."&file=".$package_file."' onMouseOver='return statusMsg(\"".quoteJS($messages["edt12"])."\");' onMouseOut='return statusMsg(\"\");'>".$messages["edt12"]."</a></td></tr>";
+    echo "<tr><td><a href='chakraos.org/packages/index.php?act=show&subdir=".$package_subd."&file=".$package_file."' onMouseOver='return statusMsg(\"".quoteJS($messages["edt12"])."\");' onMouseOut='return statusMsg(\"\");'>".$messages["edt12"]."</a></td></tr>";
     echo "</table>";
     cpFooter();
 } else {
@@ -127,9 +127,9 @@ if($_POST['do_flag'] !== "yes") {
                 die;
             }
             $q = "INSERT INTO Flags (Id, Name, Version, Email, Comment, Flag) ";
-            $q.= "VALUES (null, '$package_name', '$package_vers','$package_mail','$package_comm','$package_type')";     
+            $q.= "VALUES (null, '$package_name', '$package_vers','$package_mail','$package_comm','$package_type')";
             db_query($q,$dbh);
-            
+
             // This should not be translated !!
             $body = 'Package details: http://chakraos.org/packages/index.php?act=show&subdir='.$package_subd.'&sortby=date&file='.$package_file."\n"
             . "\n\n---\nThe package ".$package_name."-".$package_vers." has been flagged as ".$package_type."\n"

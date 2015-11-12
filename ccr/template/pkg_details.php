@@ -117,9 +117,9 @@ $submitted_time = ($row["SubmittedTS"] == 0) ? __("unknown") : gmdate("Y/m/d - H
 			if (!is_null($darr[2])) {
 				echo "<a href=\"packages.php?ID=" . urlencode($darr[2]) . "\">" . $darr[0] . htmlentities($darr[1]) . "</a>";
 			}
-			else {	
+			else {
 			      $noversion = explode ("<",$darr[0],2);
-			      echo "<a href='http://www.chakraos.org/packages/index.php?act=search&subdir=&sortby=date&order=descending&searchpattern=^" . urlencode($noversion[0]) . "-[0-9]'>" . $darr[0] . htmlentities($darr[1]) . "</a>";
+			      echo "<a href='chakraos.org/packages/index.php?act=search&subdir=&sortby=date&order=descending&searchpattern=^" . urlencode($noversion[0]) . "-[0-9]'>" . $darr[0] . htmlentities($darr[1]) . "</a>";
 			}
 		}
 
