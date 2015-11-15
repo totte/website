@@ -25,9 +25,9 @@ $dbh = db_connect();
 <p>
 <?php
 echo __("Welcome to the Chakra Community Repo. Please read the %hCCR User Guidelines%h and %hCCR TU Guidelines%h for more information.",
-	"<a href=\"chakraos.org/wiki/index.php?title=Chakra_Community_Repository\">",
+	"<a href=\"../wiki/index.php?title=Chakra_Community_Repository\">",
 	"</a>",
-	"<a href=\"chakraos.org/wiki/index.php?title=How_to_become_a_packager#CCR_Trusted_User\">",
+	"<a href=\"../wiki/index.php?title=How_to_become_a_packager#CCR_Trusted_User\">",
 	"</a>"
         );
 ?>
@@ -37,7 +37,7 @@ echo __("Welcome to the Chakra Community Repo. Please read the %hCCR User Guidel
 <?php
 echo __("Contributed PKGBUILDs and PKGINFOs %hmust%h conform to the %hChakra Packaging Standards%h otherwise they will be deleted!",
 	"<b>", "</b>",
-	"<a href=\"chakraos.org/wiki/index.php?title=Packaging_Standards\">",
+	"<a href=\"../wiki/index.php?title=Packaging_Standards\">",
 	"</a>"
         );
 ?>
