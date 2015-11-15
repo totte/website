@@ -383,6 +383,11 @@
 				Department of Computer Science and Engineering, Yuan Ze University, Taiwan, R.O.C
 				</a>
 		</li>
+		<li>
+			<a href="http://www.acc.umu.se/">
+				Academic Computer Club, Umeå University, Sweden
+			</a>
+		</li>
 	</ul>
 	<h2>Acknowledgements</h2>
 	<p>We would like to thank everyone who has enabled us to create Chakra, and/or contributed to it:</p>
