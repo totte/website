@@ -17,7 +17,7 @@
 <div id="shadow_left"><div id="shadow_right">
     <div id="head_container">
 	<div id="title">
-	    <div id="logo"><h1 id="chakratitle"><a href="chakraos.org/" title="Chakra">Chakra</a></h1></div>
+	    <div id="logo"><h1 id="chakratitle">Chakra</h1></div>
 	</div>
       <div id="main_nav">
         <ul>
