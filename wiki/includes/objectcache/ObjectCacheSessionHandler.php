@@ -21,6 +21,8 @@
  * @ingroup Cache
  */
 
+use MediaWiki\Logger\LoggerFactory;
+
 /**
  * Session storage in object cache.
  * Used if $wgSessionsInObjectCache is true.
@@ -28,6 +30,9 @@
  * @ingroup Cache
  */
 class ObjectCacheSessionHandler {
+	/** @var array Map of (session ID => SHA-1 of the data) */
+	protected static $hashCache = array();
+
 	/**
 	 * Install a session handler for the current web request
 	 */
@@ -49,10 +54,11 @@ class ObjectCacheSessionHandler {
 
 	/**
 	 * Get the cache storage object to use for session storage
-	 * @return ObjectCache
+	 * @return BagOStuff
 	 */
-	static function getCache() {
+	protected static function getCache() {
 		global $wgSessionCacheType;
+
 		return ObjectCache::getInstance( $wgSessionCacheType );
 	}
 
@@ -62,8 +68,16 @@ class ObjectCacheSessionHandler {
 	 * @param string $id Session id
 	 * @return string Cache key
 	 */
-	static function getKey( $id ) {
+	protected static function getKey( $id ) {
 		return wfMemcKey( 'session', $id );
+	}
+
+	/**
+	 * @param mixed $data
+	 * @return string
+	 */
+	protected static function getHash( $data ) {
+		return sha1( serialize( $data ) );
 	}
 
 	/**
@@ -94,23 +108,38 @@ class ObjectCacheSessionHandler {
 	 * @return mixed Session data
 	 */
 	static function read( $id ) {
+		$stime = microtime( true );
 		$data = self::getCache()->get( self::getKey( $id ) );
-		if ( $data === false ) {
-			return '';
-		}
-		return $data;
+		$real = microtime( true ) - $stime;
+
+		RequestContext::getMain()->getStats()->timing( "session.read", 1000 * $real );
+
+		self::$hashCache = array( $id => self::getHash( $data ) );
+
+		return ( $data === false ) ? '' : $data;
 	}
 
 	/**
 	 * Callback when writing session data.
 	 *
 	 * @param string $id Session id
-	 * @param mixed $data Session data
+	 * @param string $data Session data
 	 * @return bool Success
 	 */
 	static function write( $id, $data ) {
 		global $wgObjectCacheSessionExpiry;
-		self::getCache()->set( self::getKey( $id ), $data, $wgObjectCacheSessionExpiry );
+
+		// Only issue a write if anything changed (PHP 5.6 already does this)
+		if ( !isset( self::$hashCache[$id] )
+			|| self::getHash( $data ) !== self::$hashCache[$id]
+		) {
+			$stime = microtime( true );
+			self::getCache()->set( self::getKey( $id ), $data, $wgObjectCacheSessionExpiry );
+			$real = microtime( true ) - $stime;
+
+			RequestContext::getMain()->getStats()->timing( "session.write", 1000 * $real );
+		}
+
 		return true;
 	}
 
@@ -121,7 +150,12 @@ class ObjectCacheSessionHandler {
 	 * @return bool Success
 	 */
 	static function destroy( $id ) {
+		$stime = microtime( true );
 		self::getCache()->delete( self::getKey( $id ) );
+		$real = microtime( true ) - $stime;
+
+		RequestContext::getMain()->getStats()->timing( "session.destroy", 1000 * $real );
+
 		return true;
 	}
 
@@ -137,10 +171,37 @@ class ObjectCacheSessionHandler {
 	}
 
 	/**
-	 * Shutdown function. See the comment inside ObjectCacheSessionHandler::install
-	 * for rationale.
+	 * Shutdown function.
+	 * See the comment inside ObjectCacheSessionHandler::install for rationale.
 	 */
 	static function handleShutdown() {
 		session_write_close();
+	}
+
+	/**
+	 * Pre-emptive session renewal function
+	 */
+	static function renewCurrentSession() {
+		global $wgObjectCacheSessionExpiry;
+
+		// Once a session is at half TTL, renew it
+		$window = $wgObjectCacheSessionExpiry / 2;
+		$logger = LoggerFactory::getInstance( 'SessionHandler' );
+
+		$now = microtime( true );
+		// Session are only written in object stores when $_SESSION changes,
+		// which also renews the TTL ($wgObjectCacheSessionExpiry). If a user
+		// is active but not causing session data changes, it may suddenly
+		// expire as they view a form, blocking the first submission.
+		// Make a dummy change every so often to avoid this.
+		if ( !isset( $_SESSION['wsExpiresUnix'] ) ) {
+			$_SESSION['wsExpiresUnix'] = $now + $wgObjectCacheSessionExpiry;
+
+			$logger->info( "Set expiry for session " . session_id(), array() );
+		} elseif ( ( $now + $window ) > $_SESSION['wsExpiresUnix'] ) {
+			$_SESSION['wsExpiresUnix'] = $now + $wgObjectCacheSessionExpiry;
+
+			$logger->info( "Renewed session " . session_id(), array() );
+		}
 	}
 }

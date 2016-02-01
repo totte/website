@@ -123,9 +123,9 @@ class DjVuImage {
 	}
 
 	function getInfo() {
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		$file = fopen( $this->mFilename, 'rb' );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 		if ( $file === false ) {
 			wfDebug( __METHOD__ . ": missing or failed file read\n" );
 
@@ -150,7 +150,7 @@ class DjVuImage {
 				wfDebug( __METHOD__ . ": not a DjVu file\n" );
 			} elseif ( $subtype == 'DJVU' ) {
 				// Single-page document
-				$info = $this->getPageInfo( $file, $formLength );
+				$info = $this->getPageInfo( $file );
 			} elseif ( $subtype == 'DJVM' ) {
 				// Multi-page document
 				$info = $this->getMultiPageInfo( $file, $formLength );
@@ -202,7 +202,7 @@ class DjVuImage {
 				if ( $subtype == 'DJVU' ) {
 					wfDebug( __METHOD__ . ": found first subpage\n" );
 
-					return $this->getPageInfo( $file, $length );
+					return $this->getPageInfo( $file );
 				}
 				$this->skipChunk( $file, $length - 4 );
 			} else {
@@ -216,7 +216,7 @@ class DjVuImage {
 		return false;
 	}
 
-	private function getPageInfo( $file, $formLength ) {
+	private function getPageInfo( $file ) {
 		list( $chunk, $length ) = $this->readChunk( $file );
 		if ( $chunk != 'INFO' ) {
 			wfDebug( __METHOD__ . ": expected INFO chunk, got '$chunk'\n" );
@@ -265,37 +265,34 @@ class DjVuImage {
 
 	/**
 	 * Return an XML string describing the DjVu image
-	 * @return string
+	 * @return string|bool
 	 */
 	function retrieveMetaData() {
 		global $wgDjvuToXML, $wgDjvuDump, $wgDjvuTxt;
-		wfProfileIn( __METHOD__ );
+
+		if ( !$this->isValid() ) {
+			return false;
+		}
 
 		if ( isset( $wgDjvuDump ) ) {
 			# djvudump is faster as of version 3.5
 			# http://sourceforge.net/tracker/index.php?func=detail&aid=1704049&group_id=32953&atid=406583
-			wfProfileIn( 'djvudump' );
 			$cmd = wfEscapeShellArg( $wgDjvuDump ) . ' ' . wfEscapeShellArg( $this->mFilename );
 			$dump = wfShellExec( $cmd );
 			$xml = $this->convertDumpToXML( $dump );
-			wfProfileOut( 'djvudump' );
 		} elseif ( isset( $wgDjvuToXML ) ) {
-			wfProfileIn( 'djvutoxml' );
 			$cmd = wfEscapeShellArg( $wgDjvuToXML ) . ' --without-anno --without-text ' .
 				wfEscapeShellArg( $this->mFilename );
 			$xml = wfShellExec( $cmd );
-			wfProfileOut( 'djvutoxml' );
 		} else {
 			$xml = null;
 		}
 		# Text layer
 		if ( isset( $wgDjvuTxt ) ) {
-			wfProfileIn( 'djvutxt' );
 			$cmd = wfEscapeShellArg( $wgDjvuTxt ) . ' --detail=page ' . wfEscapeShellArg( $this->mFilename );
 			wfDebug( __METHOD__ . ": $cmd\n" );
 			$retval = '';
 			$txt = wfShellExec( $cmd, $retval, array(), array( 'memory' => self::DJVUTXT_MEMORY_LIMIT ) );
-			wfProfileOut( 'djvutxt' );
 			if ( $retval == 0 ) {
 				# Strip some control characters
 				$txt = preg_replace( "/[\013\035\037]/", "", $txt );
@@ -316,14 +313,13 @@ EOR;
 				$xml = $xml . $txt . '</mw-djvu>';
 			}
 		}
-		wfProfileOut( __METHOD__ );
 
 		return $xml;
 	}
 
 	function pageTextCallback( $matches ) {
 		# Get rid of invalid UTF-8, strip control characters
-		$val = htmlspecialchars( UtfNormal::cleanUp( stripcslashes( $matches[1] ) ) );
+		$val = htmlspecialchars( UtfNormal\Validator::cleanUp( stripcslashes( $matches[1] ) ) );
 		$val = str_replace( array( "\n", '�' ), array( '&#10;', '' ), $val );
 		return '<PAGE value="' . $val . '" />';
 	}

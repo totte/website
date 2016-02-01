@@ -162,7 +162,7 @@ class ApiQueryFilearchive extends ApiQueryBase {
 			}
 
 			$file = array();
-			$file['id'] = $row->fa_id;
+			$file['id'] = (int)$row->fa_id;
 			$file['name'] = $row->fa_name;
 			$title = Title::makeTitle( NS_FILE, $row->fa_name );
 			self::addTitleInfo( $file, $title );
@@ -179,7 +179,7 @@ class ApiQueryFilearchive extends ApiQueryBase {
 			if ( $fld_user &&
 				Revision::userCanBitfield( $row->fa_deleted, File::DELETED_USER, $user )
 			) {
-				$file['userid'] = $row->fa_user;
+				$file['userid'] = (int)$row->fa_user;
 				$file['user'] = $row->fa_user_text;
 			}
 			if ( $fld_sha1 ) {
@@ -193,7 +193,7 @@ class ApiQueryFilearchive extends ApiQueryBase {
 
 				$pageCount = ArchivedFile::newFromRow( $row )->pageCount();
 				if ( $pageCount !== false ) {
-					$vals['pagecount'] = $pageCount;
+					$file['pagecount'] = $pageCount;
 				}
 
 				$file['height'] = $row->fa_height;
@@ -218,17 +218,17 @@ class ApiQueryFilearchive extends ApiQueryBase {
 			}
 
 			if ( $row->fa_deleted & File::DELETED_FILE ) {
-				$file['filehidden'] = '';
+				$file['filehidden'] = true;
 			}
 			if ( $row->fa_deleted & File::DELETED_COMMENT ) {
-				$file['commenthidden'] = '';
+				$file['commenthidden'] = true;
 			}
 			if ( $row->fa_deleted & File::DELETED_USER ) {
-				$file['userhidden'] = '';
+				$file['userhidden'] = true;
 			}
 			if ( $row->fa_deleted & File::DELETED_RESTRICTED ) {
 				// This file is deleted for normal admins
-				$file['suppressed'] = '';
+				$file['suppressed'] = true;
 			}
 
 			$fit = $result->addValue( array( 'query', $this->getModuleName() ), null, $file );
@@ -240,22 +240,14 @@ class ApiQueryFilearchive extends ApiQueryBase {
 			}
 		}
 
-		$result->setIndexedTagName_internal( array( 'query', $this->getModuleName() ), 'fa' );
+		$result->addIndexedTagName( array( 'query', $this->getModuleName() ), 'fa' );
 	}
 
 	public function getAllowedParams() {
 		return array(
 			'from' => null,
-			'continue' => null,
 			'to' => null,
 			'prefix' => null,
-			'limit' => array(
-				ApiBase::PARAM_DFLT => 10,
-				ApiBase::PARAM_TYPE => 'limit',
-				ApiBase::PARAM_MIN => 1,
-				ApiBase::PARAM_MAX => ApiBase::LIMIT_BIG1,
-				ApiBase::PARAM_MAX2 => ApiBase::LIMIT_BIG2
-			),
 			'dir' => array(
 				ApiBase::PARAM_DFLT => 'ascending',
 				ApiBase::PARAM_TYPE => array(
@@ -282,49 +274,25 @@ class ApiQueryFilearchive extends ApiQueryBase {
 					'bitdepth',
 					'archivename',
 				),
+				ApiBase::PARAM_HELP_MSG_PER_VALUE => array(),
+			),
+			'limit' => array(
+				ApiBase::PARAM_DFLT => 10,
+				ApiBase::PARAM_TYPE => 'limit',
+				ApiBase::PARAM_MIN => 1,
+				ApiBase::PARAM_MAX => ApiBase::LIMIT_BIG1,
+				ApiBase::PARAM_MAX2 => ApiBase::LIMIT_BIG2
+			),
+			'continue' => array(
+				ApiBase::PARAM_HELP_MSG => 'api-help-param-continue',
 			),
 		);
 	}
 
-	public function getParamDescription() {
+	protected function getExamplesMessages() {
 		return array(
-			'from' => 'The image title to start enumerating from',
-			'continue' => 'When more results are available, use this to continue',
-			'to' => 'The image title to stop enumerating at',
-			'prefix' => 'Search for all image titles that begin with this value',
-			'dir' => 'The direction in which to list',
-			'limit' => 'How many images to return in total',
-			'sha1' => "SHA1 hash of image. Overrides {$this->getModulePrefix()}sha1base36",
-			'sha1base36' => 'SHA1 hash of image in base 36 (used in MediaWiki)',
-			'prop' => array(
-				'What image information to get:',
-				' sha1              - Adds SHA-1 hash for the image',
-				' timestamp         - Adds timestamp for the uploaded version',
-				' user              - Adds user who uploaded the image version',
-				' size              - Adds the size of the image in bytes and the height, ' .
-					'width and page count (if applicable)',
-				' dimensions        - Alias for size',
-				' description       - Adds description the image version',
-				' parseddescription - Parse the description on the version',
-				' mime              - Adds MIME of the image',
-				' mediatype         - Adds the media type of the image',
-				' metadata          - Lists Exif metadata for the version of the image',
-				' bitdepth          - Adds the bit depth of the version',
-				' archivename       - Adds the file name of the archive version for non-latest versions'
-			),
-		);
-	}
-
-	public function getDescription() {
-		return 'Enumerate all deleted files sequentially.';
-	}
-
-	public function getExamples() {
-		return array(
-			'api.php?action=query&list=filearchive' => array(
-				'Simple Use',
-				'Show a list of all deleted files',
-			),
+			'action=query&list=filearchive'
+				=> 'apihelp-query+filearchive-example-simple',
 		);
 	}
 

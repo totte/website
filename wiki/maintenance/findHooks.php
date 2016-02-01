@@ -72,6 +72,7 @@ class FindHooks extends Maintenance {
 			$IP . '/includes/api/',
 			$IP . '/includes/cache/',
 			$IP . '/includes/changes/',
+			$IP . '/includes/changetags/',
 			$IP . '/includes/clientpool/',
 			$IP . '/includes/content/',
 			$IP . '/includes/context/',
@@ -80,6 +81,7 @@ class FindHooks extends Maintenance {
 			$IP . '/includes/debug/',
 			$IP . '/includes/deferred/',
 			$IP . '/includes/diff/',
+			$IP . '/includes/exception/',
 			$IP . '/includes/externalstore/',
 			$IP . '/includes/filebackend/',
 			$IP . '/includes/filerepo/',
@@ -91,9 +93,11 @@ class FindHooks extends Maintenance {
 			$IP . '/includes/jobqueue/',
 			$IP . '/includes/json/',
 			$IP . '/includes/logging/',
+			$IP . '/includes/mail/',
 			$IP . '/includes/media/',
 			$IP . '/includes/page/',
 			$IP . '/includes/parser/',
+			$IP . '/includes/password/',
 			$IP . '/includes/rcfeed/',
 			$IP . '/includes/resourceloader/',
 			$IP . '/includes/revisiondelete/',
@@ -118,9 +122,9 @@ class FindHooks extends Maintenance {
 		}
 
 		$potential = array_unique( $potential );
-		$bad = array_unique( $bad );
-		$todo = array_diff( $potential, $documented );
-		$deprecated = array_diff( $documented, $potential );
+		$bad = array_diff( array_unique( $bad ), self::$ignore );
+		$todo = array_diff( $potential, $documented, self::$ignore );
+		$deprecated = array_diff( $documented, $potential, self::$ignore );
 
 		// let's show the results:
 		$this->printArray( 'Undocumented', $todo );
@@ -129,6 +133,8 @@ class FindHooks extends Maintenance {
 
 		if ( count( $todo ) == 0 && count( $deprecated ) == 0 && count( $bad ) == 0 ) {
 			$this->output( "Looks good!\n" );
+		} else {
+			$this->error( 'The script finished with errors.', 1 );
 		}
 	}
 
@@ -163,36 +169,39 @@ class FindHooks extends Maintenance {
 	 * @return array Array of documented hooks
 	 */
 	private function getHooksFromOnlineDoc() {
-		// All hooks
-		$allhookdata = Http::get(
-			'http://www.mediawiki.org/w/api.php?action=query&list=categorymembers&'
-			. 'cmtitle=Category:MediaWiki_hooks&cmlimit=500&format=php'
-		);
-		$allhookdata = unserialize( $allhookdata );
-		$allhooks = array();
-		foreach ( $allhookdata['query']['categorymembers'] as $page ) {
-			$found = preg_match( '/Manual\:Hooks\/([a-zA-Z0-9- :]+)/', $page['title'], $matches );
-			if ( $found ) {
-				$hook = str_replace( ' ', '_', $matches[1] );
-				$allhooks[] = $hook;
-			}
-		}
-		// Removed hooks
-		$oldhookdata = Http::get(
-			'http://www.mediawiki.org/w/api.php?action=query&list=categorymembers&'
-			. 'cmtitle=Category:Removed_hooks&cmlimit=500&format=php'
-		);
-		$oldhookdata = unserialize( $oldhookdata );
-		$removed = array();
-		foreach ( $oldhookdata['query']['categorymembers'] as $page ) {
-			$found = preg_match( '/Manual\:Hooks\/([a-zA-Z0-9- :]+)/', $page['title'], $matches );
-			if ( $found ) {
-				$hook = str_replace( ' ', '_', $matches[1] );
-				$removed[] = $hook;
-			}
-		}
-
+		$allhooks = $this->getHooksFromOnlineDocCategory( 'MediaWiki_hooks' );
+		$removed = $this->getHooksFromOnlineDocCategory( 'Removed_hooks' );
 		return array_diff( $allhooks, $removed );
+	}
+
+	/**
+	 * @param string $title
+	 * @return array
+	 */
+	private function getHooksFromOnlineDocCategory( $title ) {
+		$params = array(
+			'action' => 'query',
+			'list' => 'categorymembers',
+			'cmtitle' => "Category:$title",
+			'cmlimit' => 500,
+			'format' => 'json',
+			'continue' => '',
+		);
+
+		$retval = array();
+		while ( true ) {
+			$json = Http::get( wfAppendQuery( 'http://www.mediawiki.org/w/api.php', $params ), array(), __METHOD__ );
+			$data = FormatJson::decode( $json, true );
+			foreach ( $data['query']['categorymembers'] as $page ) {
+				if ( preg_match( '/Manual\:Hooks\/([a-zA-Z0-9- :]+)/', $page['title'], $m ) ) {
+					$retval[] = str_replace( ' ', '_', $m[1] );
+				}
+			}
+			if ( !isset( $data['continue'] ) ) {
+				return $retval;
+			}
+			$params = array_replace( $params, $data['continue'] );
+		}
 	}
 
 	/**
@@ -283,9 +292,7 @@ class FindHooks extends Maintenance {
 		}
 
 		foreach ( $arr as $v ) {
-			if ( !in_array( $v, self::$ignore ) ) {
-				$this->output( "$msg: $v\n" );
-			}
+			$this->output( "$msg: $v\n" );
 		}
 	}
 }

@@ -87,13 +87,18 @@ class SpecialPageLanguage extends FormSpecialPage {
 	}
 
 	protected function postText() {
-		return $this->showLogFragment( $this->par );
+		if ( $this->par ) {
+			return $this->showLogFragment( $this->par );
+		}
+		return '';
+	}
+
+	protected function getDisplayFormat() {
+		return 'ooui';
 	}
 
 	public function alterForm( HTMLForm $form ) {
-		$form->setDisplayFormat( 'vform' );
-		$form->setWrapperLegend( false );
-		wfRunHooks( 'LanguageSelector', array( $this->getOutput(), 'mw-languageselector' ) );
+		Hooks::run( 'LanguageSelector', array( $this->getOutput(), 'mw-languageselector' ) );
 	}
 
 	/**

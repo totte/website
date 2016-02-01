@@ -67,7 +67,7 @@ class ChangesList extends ContextSource {
 		$user = $context->getUser();
 		$sk = $context->getSkin();
 		$list = null;
-		if ( wfRunHooks( 'FetchChangesList', array( $user, &$sk, &$list ) ) ) {
+		if ( Hooks::run( 'FetchChangesList', array( $user, &$sk, &$list ) ) ) {
 			$new = $context->getRequest()->getBool( 'enhanced', $user->getOption( 'usenewrc' ) );
 
 			return $new ? new EnhancedChangesList( $context ) : new OldChangesList( $context );
@@ -180,7 +180,7 @@ class ChangesList extends ContextSource {
 	 * @param ResultWrapper|array $rows
 	 */
 	public function initChangesListRows( $rows ) {
-		wfRunHooks( 'ChangesListInitRows', array( $this, $rows ) );
+		Hooks::run( 'ChangesListInitRows', array( $this, $rows ) );
 	}
 
 	/**
@@ -204,7 +204,8 @@ class ChangesList extends ContextSource {
 		$code = $lang->getCode();
 		static $fastCharDiff = array();
 		if ( !isset( $fastCharDiff[$code] ) ) {
-			$fastCharDiff[$code] = $config->get( 'MiserMode' ) || $context->msg( 'rc-change-size' )->plain() === '$1';
+			$fastCharDiff[$code] = $config->get( 'MiserMode' )
+				|| $context->msg( 'rc-change-size' )->plain() === '$1';
 		}
 
 		$formattedSize = $lang->formatNum( $szdiff );
@@ -364,10 +365,23 @@ class ChangesList extends ContextSource {
 		# RTL/LTR marker
 		$articlelink .= $this->getLanguage()->getDirMark();
 
-		wfRunHooks( 'ChangesListInsertArticleLink',
+		Hooks::run( 'ChangesListInsertArticleLink',
 			array( &$this, &$articlelink, &$s, &$rc, $unpatrolled, $watched ) );
 
 		$s .= " $articlelink";
+	}
+
+	/**
+	 * @param RecentChange $rc
+	 * @param bool $unpatrolled
+	 * @param bool $watched
+	 * @return string
+	 * @since 1.26
+	 */
+	public function getArticleLink( RecentChange $rc, $unpatrolled, $watched ) {
+		$s = '';
+		$this->insertArticleLink( $s, $rc, $unpatrolled, $watched );
+		return $s;
 	}
 
 	/**
@@ -543,6 +557,17 @@ class ChangesList extends ContextSource {
 	}
 
 	/**
+	 * @param RecentChange $rc
+	 * @return string
+	 * @since 1.26
+	 */
+	public function getRollback( RecentChange $rc ) {
+		$s = '';
+		$this->insertRollback( $s, $rc );
+		return $s;
+	}
+
+	/**
 	 * @param string $s
 	 * @param RecentChange $rc
 	 * @param array $classes
@@ -558,6 +583,18 @@ class ChangesList extends ContextSource {
 		);
 		$classes = array_merge( $classes, $newClasses );
 		$s .= ' ' . $tagSummary;
+	}
+
+	/**
+	 * @param RecentChange $rc
+	 * @param array $classes
+	 * @return string
+	 * @since 1.26
+	 */
+	public function getTags( RecentChange $rc, array &$classes ) {
+		$s = '';
+		$this->insertTags( $s, $rc, $classes );
+		return $s;
 	}
 
 	public function insertExtra( &$s, &$rc, &$classes ) {

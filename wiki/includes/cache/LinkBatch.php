@@ -78,7 +78,7 @@ class LinkBatch {
 			$this->data[$ns] = array();
 		}
 
-		$this->data[$ns][str_replace( ' ', '_', $dbkey )] = 1;
+		$this->data[$ns][strtr( $dbkey, ' ', '_' )] = 1;
 	}
 
 	/**
@@ -128,11 +128,9 @@ class LinkBatch {
 	 * @return array Remaining IDs
 	 */
 	protected function executeInto( &$cache ) {
-		wfProfileIn( __METHOD__ );
 		$res = $this->doQuery();
 		$this->doGenderQuery();
 		$ids = $this->addResultToCache( $cache, $res );
-		wfProfileOut( __METHOD__ );
 
 		return $ids;
 	}
@@ -185,7 +183,6 @@ class LinkBatch {
 		if ( $this->isEmpty() ) {
 			return false;
 		}
-		wfProfileIn( __METHOD__ );
 
 		// This is similar to LinkHolderArray::replaceInternal
 		$dbr = wfGetDB( DB_SLAVE );
@@ -205,7 +202,6 @@ class LinkBatch {
 			$caller .= " (for {$this->caller})";
 		}
 		$res = $dbr->select( $table, $fields, $conds, $caller );
-		wfProfileOut( __METHOD__ );
 
 		return $res;
 	}

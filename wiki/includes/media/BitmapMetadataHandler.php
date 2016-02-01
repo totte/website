@@ -21,6 +21,8 @@
  * @ingroup Media
  */
 
+use MediaWiki\Logger\LoggerFactory;
+
 /**
  * Class to deal with reconciling and extracting metadata from bitmap images.
  * This is meant to comply with http://www.metadataworkinggroup.org/pdf/mwg_guidance.pdf
@@ -61,7 +63,7 @@ class BitmapMetadataHandler {
 	private function doApp13( $app13 ) {
 		try {
 			$this->iptcType = JpegMetadataExtractor::doPSIR( $app13 );
-		} catch ( MWException $e ) {
+		} catch ( Exception $e ) {
 			// Error reading the iptc hash information.
 			// This probably means the App13 segment is something other than what we expect.
 			// However, still try to read it, and treat it as if the hash didn't exist.
@@ -154,7 +156,7 @@ class BitmapMetadataHandler {
 	 * @throws MWException On invalid file.
 	 */
 	static function Jpeg( $filename ) {
-		$showXMP = function_exists( 'xml_parser_create_ns' );
+		$showXMP = XMPReader::isSupported();
 		$meta = new self();
 
 		$seg = JpegMetadataExtractor::segmentSplitter( $filename );
@@ -167,7 +169,7 @@ class BitmapMetadataHandler {
 			}
 		}
 		if ( isset( $seg['XMP'] ) && $showXMP ) {
-			$xmp = new XMPReader();
+			$xmp = new XMPReader( LoggerFactory::getInstance( 'XMP' ) );
 			$xmp->parse( $seg['XMP'] );
 			foreach ( $seg['XMP_ext'] as $xmpExt ) {
 				/* Support for extended xmp in jpeg files
@@ -196,14 +198,14 @@ class BitmapMetadataHandler {
 	 * @return array Array for storage in img_metadata.
 	 */
 	public static function PNG( $filename ) {
-		$showXMP = function_exists( 'xml_parser_create_ns' );
+		$showXMP = XMPReader::isSupported();
 
 		$meta = new self();
 		$array = PNGMetadataExtractor::getMetadata( $filename );
 		if ( isset( $array['text']['xmp']['x-default'] )
 			&& $array['text']['xmp']['x-default'] !== '' && $showXMP
 		) {
-			$xmp = new XMPReader();
+			$xmp = new XMPReader( LoggerFactory::getInstance( 'XMP' ) );
 			$xmp->parse( $array['text']['xmp']['x-default'] );
 			$xmpRes = $xmp->getResults();
 			foreach ( $xmpRes as $type => $xmpSection ) {
@@ -236,8 +238,8 @@ class BitmapMetadataHandler {
 			$meta->addMetadata( array( 'GIFFileComment' => $baseArray['comment'] ), 'native' );
 		}
 
-		if ( $baseArray['xmp'] !== '' && function_exists( 'xml_parser_create_ns' ) ) {
-			$xmp = new XMPReader();
+		if ( $baseArray['xmp'] !== '' && XMPReader::isSupported() ) {
+			$xmp = new XMPReader( LoggerFactory::getInstance( 'XMP' ) );
 			$xmp->parse( $baseArray['xmp'] );
 			$xmpRes = $xmp->getResults();
 			foreach ( $xmpRes as $type => $xmpSection ) {

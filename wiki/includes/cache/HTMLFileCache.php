@@ -48,6 +48,7 @@ class HTMLFileCache extends FileCacheBase {
 	 * @throws MWException
 	 */
 	public function __construct( $title, $action ) {
+		parent::__construct();
 		$allowedTypes = self::cacheablePageActions();
 		if ( !in_array( $action, $allowedTypes ) ) {
 			throw new MWException( 'Invalid file cache type given.' );
@@ -131,7 +132,7 @@ class HTMLFileCache extends FileCacheBase {
 			return false;
 		}
 		// Allow extensions to disable caching
-		return wfRunHooks( 'HTMLFileCache::useFileCache', array( $context ) );
+		return Hooks::run( 'HTMLFileCache::useFileCache', array( $context ) );
 	}
 
 	/**

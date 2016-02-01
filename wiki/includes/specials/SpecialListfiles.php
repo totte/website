@@ -84,14 +84,26 @@ class ImageListPager extends TablePager {
 	function __construct( IContextSource $context, $userName = null, $search = '',
 		$including = false, $showAll = false
 	) {
+		$this->setContext( $context );
 		$this->mIncluding = $including;
 		$this->mShowAll = $showAll;
 
-		if ( $userName ) {
+		if ( $userName !== null && $userName !== '' ) {
 			$nt = Title::newFromText( $userName, NS_USER );
+			$user = User::newFromName( $userName, false );
 			if ( !is_null( $nt ) ) {
 				$this->mUserName = $nt->getText();
 			}
+			if ( !$user || ( $user->isAnon() && !User::isIP( $user->getName() ) ) ) {
+				$this->getOutput()->wrapWikiMsg(
+					"<div class=\"mw-userpage-userdoesnotexist error\">\n$1\n</div>",
+					array(
+						'listfiles-userdoesnotexist',
+						wfEscapeWikiText( $userName ),
+					)
+				);
+			}
+
 		}
 
 		if ( $search !== '' && !$this->getConfig()->get( 'MiserMode' ) ) {
@@ -107,7 +119,7 @@ class ImageListPager extends TablePager {
 		}
 
 		if ( !$including ) {
-			if ( $context->getRequest()->getText( 'sort', 'img_date' ) == 'img_date' ) {
+			if ( $this->getRequest()->getText( 'sort', 'img_date' ) == 'img_date' ) {
 				$this->mDefaultDirection = IndexPager::DIR_DESCENDING;
 			} else {
 				$this->mDefaultDirection = IndexPager::DIR_ASCENDING;
@@ -203,7 +215,9 @@ class ImageListPager extends TablePager {
 			} else {
 				return false;
 			}
-		} elseif ( $this->getConfig()->get( 'MiserMode' ) && $this->mShowAll /* && mUserName === null */ ) {
+		} elseif ( $this->getConfig()->get( 'MiserMode' )
+			&& $this->mShowAll /* && mUserName === null */
+		) {
 			// no oi_timestamp index, so only alphabetical sorting in this case.
 			if ( $field === 'img_name' ) {
 				return true;
@@ -300,6 +314,7 @@ class ImageListPager extends TablePager {
 	 * @param int $limit
 	 * @param bool $asc
 	 * @return array
+	 * @throws MWException
 	 */
 	function reallyDoQuery( $offset, $limit, $asc ) {
 		$prevTableName = $this->mTableName;
@@ -422,7 +437,7 @@ class ImageListPager extends TablePager {
 	function formatValue( $field, $value ) {
 		switch ( $field ) {
 			case 'thumb':
-				$opt = array( 'time' => $this->mCurrentRow->img_timestamp );
+				$opt = array( 'time' => wfTimestamp( TS_MW, $this->mCurrentRow->img_timestamp ) );
 				$file = RepoGroup::singleton()->getLocalRepo()->findFile( $value, $opt );
 				// If statement for paranoia
 				if ( $file ) {
@@ -519,6 +534,7 @@ class ImageListPager extends TablePager {
 			);
 		}
 
+		$this->getOutput()->addModules( 'mediawiki.userSuggest' );
 		$fields['user'] = array(
 			'type' => 'text',
 			'name' => 'user',
@@ -527,6 +543,7 @@ class ImageListPager extends TablePager {
 			'default' => $this->mUserName,
 			'size' => '40',
 			'maxlength' => '255',
+			'cssclass' => 'mw-autocomplete-user', // used by mediawiki.userSuggest
 		);
 
 		$fields['ilshowall'] = array(
@@ -541,6 +558,7 @@ class ImageListPager extends TablePager {
 		unset( $query['title'] );
 		unset( $query['limit'] );
 		unset( $query['ilsearch'] );
+		unset( $query['ilshowall'] );
 		unset( $query['user'] );
 
 		$form = new HTMLForm( $fields, $this->getContext() );

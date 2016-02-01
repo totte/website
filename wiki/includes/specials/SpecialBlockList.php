@@ -47,6 +47,7 @@ class SpecialBlockList extends SpecialPage {
 		$lang = $this->getLanguage();
 		$out->setPageTitle( $this->msg( 'ipblocklist' ) );
 		$out->addModuleStyles( 'mediawiki.special' );
+		$out->addModules( 'mediawiki.userSuggest' );
 
 		$request = $this->getRequest();
 		$par = $request->getVal( 'ip', $par );
@@ -64,6 +65,9 @@ class SpecialBlockList extends SpecialPage {
 			return;
 		}
 
+		# setup BlockListPager here to get the actual default Limit
+		$pager = $this->getBlockListPager();
+
 		# Just show the block list
 		$fields = array(
 			'Target' => array(
@@ -72,14 +76,15 @@ class SpecialBlockList extends SpecialPage {
 				'tabindex' => '1',
 				'size' => '45',
 				'default' => $this->target,
+				'cssclass' => 'mw-autocomplete-user', // used by mediawiki.userSuggest
 			),
 			'Options' => array(
 				'type' => 'multiselect',
-				'options' => array(
-					$this->msg( 'blocklist-userblocks' )->text() => 'userblocks',
-					$this->msg( 'blocklist-tempblocks' )->text() => 'tempblocks',
-					$this->msg( 'blocklist-addressblocks' )->text() => 'addressblocks',
-					$this->msg( 'blocklist-rangeblocks' )->text() => 'rangeblocks',
+				'options-messages' => array(
+					'blocklist-userblocks' => 'userblocks',
+					'blocklist-tempblocks' => 'tempblocks',
+					'blocklist-addressblocks' => 'addressblocks',
+					'blocklist-rangeblocks' => 'rangeblocks',
 				),
 				'flatlist' => true,
 			),
@@ -94,7 +99,7 @@ class SpecialBlockList extends SpecialPage {
 					$lang->formatNum( 500 ) => 500,
 				),
 				'name' => 'limit',
-				'default' => 50,
+				'default' => $pager->getLimit(),
 			),
 		);
 		$context = new DerivativeContext( $this->getContext() );
@@ -103,18 +108,18 @@ class SpecialBlockList extends SpecialPage {
 		$form->setMethod( 'get' );
 		$form->setWrapperLegendMsg( 'ipblocklist-legend' );
 		$form->setSubmitTextMsg( 'ipblocklist-submit' );
+		$form->setSubmitProgressive();
 		$form->prepareForm();
 
 		$form->displayForm( '' );
-		$this->showList();
+		$this->showList( $pager );
 	}
 
-	function showList() {
-		# Purge expired entries on one in every 10 queries
-		if ( !mt_rand( 0, 10 ) ) {
-			Block::purgeExpired();
-		}
-
+	/**
+	 * Setup a new BlockListPager instance.
+	 * @return BlockListPager
+	 */
+	protected function getBlockListPager() {
 		$conds = array();
 		# Is the user allowed to see hidden blocks?
 		if ( !$this->getUser()->isAllowed( 'hideuser' ) ) {
@@ -165,11 +170,19 @@ class SpecialBlockList extends SpecialPage {
 			$conds[] = "ipb_range_end = ipb_range_start";
 		}
 
+		return new BlockListPager( $this, $conds );
+	}
+
+	/**
+	 * Show the list of blocked accounts matching the actual filter.
+	 * @param BlockListPager $pager The BlockListPager instance for this page
+	 */
+	protected function showList( BlockListPager $pager ) {
+		$out = $this->getOutput();
+
 		# Check for other blocks, i.e. global/tor blocks
 		$otherBlockLink = array();
-		wfRunHooks( 'OtherBlockLogLink', array( &$otherBlockLink, $this->target ) );
-
-		$out = $this->getOutput();
+		Hooks::run( 'OtherBlockLogLink', array( &$otherBlockLink, $this->target ) );
 
 		# Show additional header for the local block only when other blocks exists.
 		# Not necessary in a standard installation without such extensions enabled
@@ -179,7 +192,6 @@ class SpecialBlockList extends SpecialPage {
 			);
 		}
 
-		$pager = new BlockListPager( $this, $conds );
 		if ( $pager->getNumRows() ) {
 			$out->addParserOutputContent( $pager->getFullOutput() );
 		} elseif ( $this->target ) {
@@ -251,7 +263,7 @@ class BlockListPager extends TablePager {
 	function formatValue( $name, $value ) {
 		static $msg = null;
 		if ( $msg === null ) {
-			$msg = array(
+			$keys = array(
 				'anononlyblock',
 				'createaccountblock',
 				'noautoblockblock',
@@ -259,19 +271,23 @@ class BlockListPager extends TablePager {
 				'blocklist-nousertalk',
 				'unblocklink',
 				'change-blocklink',
-				'infiniteblock',
 			);
-			$msg = array_combine( $msg, array_map( array( $this, 'msg' ), $msg ) );
+
+			foreach ( $keys as $key ) {
+				$msg[$key] = $this->msg( $key )->escaped();
+			}
 		}
 
 		/** @var $row object */
 		$row = $this->mCurrentRow;
 
+		$language = $this->getLanguage();
+
 		$formatted = '';
 
 		switch ( $name ) {
 			case 'ipb_timestamp':
-				$formatted = $this->getLanguage()->userTimeAndDate( $value, $this->getUser() );
+				$formatted = htmlspecialchars( $language->userTimeAndDate( $value, $this->getUser() ) );
 				break;
 
 			case 'ipb_target':
@@ -297,7 +313,10 @@ class BlockListPager extends TablePager {
 				break;
 
 			case 'ipb_expiry':
-				$formatted = $this->getLanguage()->formatExpiry( $value, /* User preference timezone */true );
+				$formatted = htmlspecialchars( $language->formatExpiry(
+					$value,
+					/* User preference timezone */true
+				) );
 				if ( $this->getUser()->isAllowed( 'block' ) ) {
 					if ( $row->ipb_auto ) {
 						$links[] = Linker::linkKnown(
@@ -320,7 +339,7 @@ class BlockListPager extends TablePager {
 						'span',
 						array( 'class' => 'mw-blocklist-actions' ),
 						$this->msg( 'parentheses' )->rawParams(
-							$this->getLanguage()->pipeList( $links ) )->escaped()
+							$language->pipeList( $links ) )->escaped()
 					);
 				}
 				break;
@@ -358,7 +377,7 @@ class BlockListPager extends TablePager {
 					$properties[] = $msg['blocklist-nousertalk'];
 				}
 
-				$formatted = $this->getLanguage()->commaList( $properties );
+				$formatted = $language->commaList( $properties );
 				break;
 
 			default:
@@ -396,6 +415,10 @@ class BlockListPager extends TablePager {
 			'join_conds' => array( 'user' => array( 'LEFT JOIN', 'user_id = ipb_by' ) )
 		);
 
+		# Filter out any expired blocks
+		$db = $this->getDatabase();
+		$info['conds'][] = 'ipb_expiry > ' . $db->addQuotes( $db->timestamp() );
+
 		# Is the user allowed to see hidden blocks?
 		if ( !$this->getUser()->isAllowed( 'hideuser' ) ) {
 			$info['conds']['ipb_deleted'] = 0;
@@ -425,31 +448,20 @@ class BlockListPager extends TablePager {
 	 * @param ResultWrapper $result
 	 */
 	function preprocessResults( $result ) {
-		wfProfileIn( __METHOD__ );
 		# Do a link batch query
 		$lb = new LinkBatch;
 		$lb->setCaller( __METHOD__ );
 
-		$userids = array();
-
 		foreach ( $result as $row ) {
-			$userids[] = $row->ipb_by;
+			$lb->add( NS_USER, $row->ipb_address );
+			$lb->add( NS_USER_TALK, $row->ipb_address );
 
-			# Usernames and titles are in fact related by a simple substitution of space -> underscore
-			# The last few lines of Title::secureAndSplit() tell the story.
-			$name = str_replace( ' ', '_', $row->ipb_address );
-			$lb->add( NS_USER, $name );
-			$lb->add( NS_USER_TALK, $name );
-		}
-
-		$ua = UserArray::newFromIDs( $userids );
-		foreach ( $ua as $user ) {
-			$name = str_replace( ' ', '_', $user->getName() );
-			$lb->add( NS_USER, $name );
-			$lb->add( NS_USER_TALK, $name );
+			if ( isset( $row->by_user_name ) ) {
+				$lb->add( NS_USER, $row->by_user_name );
+				$lb->add( NS_USER_TALK, $row->by_user_name );
+			}
 		}
 
 		$lb->execute();
-		wfProfileOut( __METHOD__ );
 	}
 }

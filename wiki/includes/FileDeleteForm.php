@@ -201,7 +201,7 @@ class FileDeleteForm {
 						$dbw->rollback( __METHOD__ );
 					}
 				}
-			} catch ( MWException $e ) {
+			} catch ( Exception $e ) {
 				// Rollback before returning to prevent UI from displaying
 				// incorrect "View or restore N deleted edits?"
 				$dbw->rollback( __METHOD__ );
@@ -210,7 +210,7 @@ class FileDeleteForm {
 		}
 
 		if ( $status->isOK() ) {
-			wfRunHooks( 'FileDeleteComplete', array( &$file, &$oldimage, &$page, &$user, &$reason ) );
+			Hooks::run( 'FileDeleteComplete', array( &$file, &$oldimage, &$page, &$user, &$reason ) );
 		}
 
 		return $status;
@@ -296,8 +296,8 @@ class FileDeleteForm {
 			Xml::closeElement( 'form' );
 
 			if ( $wgUser->isAllowed( 'editinterface' ) ) {
-				$title = Title::makeTitle( NS_MEDIAWIKI, 'Filedelete-reason-dropdown' );
-				$link = Linker::link(
+				$title = wfMessage( 'filedelete-reason-dropdown' )->inContentLanguage()->getTitle();
+				$link = Linker::linkKnown(
 					$title,
 					wfMessage( 'filedelete-edit-reasonlist' )->escaped(),
 					array(),

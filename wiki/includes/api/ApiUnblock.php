@@ -53,7 +53,13 @@ class ApiUnblock extends ApiBase {
 		if ( $user->isBlocked() ) {
 			$status = SpecialBlock::checkUnblockSelf( $params['user'], $user );
 			if ( $status !== true ) {
-				$this->dieUsageMsg( $status );
+				$msg = $this->parseMsg( $status );
+				$this->dieUsage(
+					$msg['info'],
+					$msg['code'],
+					0,
+					array( 'blockinfo' => ApiQueryUserInfo::getBlockInfo( $user->getBlock() ) )
+				);
 			}
 		}
 
@@ -93,30 +99,16 @@ class ApiUnblock extends ApiBase {
 		);
 	}
 
-	public function getParamDescription() {
-		$p = $this->getModulePrefix();
-
-		return array(
-			'id' => "ID of the block you want to unblock (obtained through list=blocks). " .
-				"Cannot be used together with {$p}user",
-			'user' => "Username, IP address or IP range you want to unblock. " .
-				"Cannot be used together with {$p}id",
-			'reason' => 'Reason for unblock',
-		);
-	}
-
-	public function getDescription() {
-		return 'Unblock a user.';
-	}
-
 	public function needsToken() {
 		return 'csrf';
 	}
 
-	public function getExamples() {
+	protected function getExamplesMessages() {
 		return array(
-			'api.php?action=unblock&id=105',
-			'api.php?action=unblock&user=Bob&reason=Sorry%20Bob'
+			'action=unblock&id=105'
+				=> 'apihelp-unblock-example-id',
+			'action=unblock&user=Bob&reason=Sorry%20Bob'
+				=> 'apihelp-unblock-example-user',
 		);
 	}
 

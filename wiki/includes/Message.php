@@ -156,7 +156,7 @@
  *
  * @since 1.17
  */
-class Message {
+class Message implements MessageSpecifier, Serializable {
 
 	/**
 	 * In which language to get this message. True, which is the default,
@@ -226,8 +226,9 @@ class Message {
 	/**
 	 * @since 1.17
 	 *
-	 * @param string|string[] $key Message key or array of message keys to try and use the first
-	 * non-empty message for.
+	 * @param string|string[]|MessageSpecifier $key Message key, or array of
+	 * message keys to try and use the first non-empty message for, or a
+	 * MessageSpecifier to copy from.
 	 * @param array $params Message parameters.
 	 * @param Language $language Optional language of the message, defaults to $wgLang.
 	 *
@@ -235,6 +236,16 @@ class Message {
 	 */
 	public function __construct( $key, $params = array(), Language $language = null ) {
 		global $wgLang;
+
+		if ( $key instanceof MessageSpecifier ) {
+			if ( $params ) {
+				throw new InvalidArgumentException(
+					'$params must be empty if $key is a MessageSpecifier'
+				);
+			}
+			$params = $key->getParams();
+			$key = $key->getKey();
+		}
 
 		if ( !is_string( $key ) && !is_array( $key ) ) {
 			throw new InvalidArgumentException( '$key must be a string or an array' );
@@ -249,7 +260,42 @@ class Message {
 		$this->key = reset( $this->keysToTry );
 
 		$this->parameters = array_values( $params );
-		$this->language = $language ? $language : $wgLang;
+		$this->language = $language ?: $wgLang;
+	}
+
+	/**
+	 * @see Serializable::serialize()
+	 * @since 1.26
+	 * @return string
+	 */
+	public function serialize() {
+		return serialize( array(
+			'interface' => $this->interface,
+			'language' => $this->language->getCode(),
+			'key' => $this->key,
+			'keysToTry' => $this->keysToTry,
+			'parameters' => $this->parameters,
+			'format' => $this->format,
+			'useDatabase' => $this->useDatabase,
+			'title' => $this->title,
+		) );
+	}
+
+	/**
+	 * @see Serializable::unserialize()
+	 * @since 1.26
+	 * @param string $serialized
+	 */
+	public function unserialize( $serialized ) {
+		$data = unserialize( $serialized );
+		$this->interface = $data['interface'];
+		$this->key = $data['key'];
+		$this->keysToTry = $data['keysToTry'];
+		$this->parameters = $data['parameters'];
+		$this->format = $data['format'];
+		$this->useDatabase = $data['useDatabase'];
+		$this->language = Language::factory( $data['language'] );
+		$this->title = $data['title'];
 	}
 
 	/**
@@ -276,7 +322,7 @@ class Message {
 	 * Returns the message key.
 	 *
 	 * If a list of multiple possible keys was supplied to the constructor, this method may
-	 * return any of these keys. After the message ahs been fetched, this method will return
+	 * return any of these keys. After the message has been fetched, this method will return
 	 * the key that was actually used to fetch the message.
 	 *
 	 * @since 1.21
@@ -327,7 +373,7 @@ class Message {
 	 *
 	 * @since 1.17
 	 *
-	 * @param string|string[] $key Message key or array of keys.
+	 * @param string|string[]|MessageSpecifier $key
 	 * @param mixed $param,... Parameters as strings.
 	 *
 	 * @return Message
@@ -362,6 +408,31 @@ class Message {
 			}
 		}
 		return new self( $keys );
+	}
+
+	/**
+	 * Get a title object for a mediawiki message, where it can be found in the mediawiki namespace.
+	 * The title will be for the current language, if the message key is in
+	 * $wgForceUIMsgAsContentMsg it will be append with the language code (except content
+	 * language), because Message::inContentLanguage will also return in user language.
+	 *
+	 * @see $wgForceUIMsgAsContentMsg
+	 * @return Title
+	 * @since 1.26
+	 */
+	public function getTitle() {
+		global $wgContLang, $wgForceUIMsgAsContentMsg;
+
+		$code = $this->language->getCode();
+		$title = $this->key;
+		if (
+			$wgContLang->getCode() !== $code
+			&& in_array( $this->key, (array)$wgForceUIMsgAsContentMsg )
+		) {
+			$title .= '/' . $code;
+		}
+
+		return Title::makeTitle( NS_MEDIAWIKI, $wgContLang->ucfirst( strtr( $title, ' ', '_' ) ) );
 	}
 
 	/**
@@ -541,6 +612,30 @@ class Message {
 	}
 
 	/**
+	 * Add parameters that are plaintext and will be passed through without
+	 * the content being evaluated.  Plaintext parameters are not valid as
+	 * arguments to parser functions. This differs from self::rawParams in
+	 * that the Message class handles escaping to match the output format.
+	 *
+	 * @since 1.25
+	 *
+	 * @param string|string[] $param,... plaintext parameters, or a single argument that is
+	 * an array of plaintext parameters.
+	 *
+	 * @return Message $this
+	 */
+	public function plaintextParams( /*...*/ ) {
+		$params = func_get_args();
+		if ( isset( $params[0] ) && is_array( $params[0] ) ) {
+			$params = $params[0];
+		}
+		foreach ( $params as $param ) {
+			$this->parameters[] = self::plaintextParam( $param );
+		}
+		return $this;
+	}
+
+	/**
 	 * Set the language and the title from a context object
 	 *
 	 * @since 1.19
@@ -573,7 +668,7 @@ class Message {
 		if ( $lang instanceof Language || $lang instanceof StubUserLang ) {
 			$this->language = $lang;
 		} elseif ( is_string( $lang ) ) {
-			if ( $this->language->getCode() != $lang ) {
+			if ( !$this->language instanceof Language || $this->language->getCode() != $lang ) {
 				$this->language = Language::factory( $lang );
 			}
 		} else {
@@ -674,11 +769,10 @@ class Message {
 		$string = $this->fetchMessage();
 
 		if ( $string === false ) {
-			$key = htmlspecialchars( $this->key );
-			if ( $this->format === 'plain' ) {
-				return '<' . $key . '>';
+			if ( $this->format === 'plain' || $this->format === 'text' ) {
+				return '<' . $this->key . '>';
 			}
-			return '&lt;' . $key . '&gt;';
+			return '&lt;' . htmlspecialchars( $this->key ) . '&gt;';
 		}
 
 		# Replace $* with a list of parameters for &uselang=qqx.
@@ -735,10 +829,10 @@ class Message {
 				// Doh! Cause a fatal error after all?
 			}
 
-			if ( $this->format === 'plain' ) {
+			if ( $this->format === 'plain' || $this->format === 'text' ) {
 				return '<' . $this->key . '>';
 			}
-			return '&lt;' . $this->key . '&gt;';
+			return '&lt;' . htmlspecialchars( $this->key ) . '&gt;';
 		}
 	}
 
@@ -917,6 +1011,17 @@ class Message {
 	}
 
 	/**
+	 * @since 1.25
+	 *
+	 * @param string $plaintext
+	 *
+	 * @return string[] Array with a single "plaintext" key.
+	 */
+	public static function plaintextParam( $plaintext ) {
+		return array( 'plaintext' => $plaintext );
+	}
+
+	/**
 	 * Substitutes any parameters into the message text.
 	 *
 	 * @since 1.17
@@ -965,6 +1070,8 @@ class Message {
 				return array( 'before', $this->language->formatSize( $param['size'] ) );
 			} elseif ( isset( $param['bitrate'] ) ) {
 				return array( 'before', $this->language->formatBitrate( $param['bitrate'] ) );
+			} elseif ( isset( $param['plaintext'] ) ) {
+				return array( 'after', $this->formatPlaintext( $param['plaintext'] ) );
 			} else {
 				$warning = 'Invalid parameter for message "' . $this->getKey() . '": ' .
 					htmlspecialchars( serialize( $param ) );
@@ -1050,6 +1157,31 @@ class Message {
 		return $this->message;
 	}
 
+	/**
+	 * Formats a message parameter wrapped with 'plaintext'. Ensures that
+	 * the entire string is displayed unchanged when displayed in the output
+	 * format.
+	 *
+	 * @since 1.25
+	 *
+	 * @param string $plaintext String to ensure plaintext output of
+	 *
+	 * @return string Input plaintext encoded for output to $this->format
+	 */
+	protected function formatPlaintext( $plaintext ) {
+		switch ( $this->format ) {
+		case 'text':
+		case 'plain':
+			return $plaintext;
+
+		case 'parse':
+		case 'block-parse':
+		case 'escaped':
+		default:
+			return htmlspecialchars( $plaintext, ENT_QUOTES );
+
+		}
+	}
 }
 
 /**

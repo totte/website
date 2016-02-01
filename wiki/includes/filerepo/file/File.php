@@ -47,7 +47,7 @@
  *
  * @ingroup FileAbstraction
  */
-abstract class File {
+abstract class File implements IDBAccessObject {
 	// Bitfield values akin to the Revision deletion constants
 	const DELETED_FILE = 1;
 	const DELETED_COMMENT = 2;
@@ -138,10 +138,10 @@ abstract class File {
 	/** @var Title */
 	protected $redirectTitle;
 
-	/** @var bool Wether the output of transform() for this file is likely to be valid. */
+	/** @var bool Whether the output of transform() for this file is likely to be valid. */
 	protected $canRender;
 
-	/** @var bool Wether this media file is in a format that is unlikely to
+	/** @var bool Whether this media file is in a format that is unlikely to
 	 *    contain viruses or malicious content
 	 */
 	protected $isSafeFile;
@@ -163,7 +163,8 @@ abstract class File {
 	 * @param FileRepo|bool $repo
 	 */
 	function __construct( $title, $repo ) {
-		if ( $title !== false ) { // subclasses may not use MW titles
+		// Some subclasses do not use $title, but set name/title some other way
+		if ( $title !== false ) {
 			$title = self::normalizeTitle( $title, 'exception' );
 		}
 		$this->title = $title;
@@ -212,14 +213,15 @@ abstract class File {
 	}
 
 	/**
-	 * Normalize a file extension to the common form, and ensure it's clean.
-	 * Extensions with non-alphanumeric characters will be discarded.
+	 * Normalize a file extension to the common form, making it lowercase and checking some synonyms,
+	 * and ensure it's clean. Extensions with non-alphanumeric characters will be discarded.
+	 * Keep in sync with mw.Title.normalizeExtension() in JS.
 	 *
-	 * @param string $ext (without the .)
-	 * @return string
+	 * @param string $extension File extension (without the leading dot)
+	 * @return string File extension in canonical form
 	 */
-	static function normalizeExtension( $ext ) {
-		$lower = strtolower( $ext );
+	static function normalizeExtension( $extension ) {
+		$lower = strtolower( $extension );
 		$squish = array(
 			'htm' => 'html',
 			'jpeg' => 'jpg',
@@ -420,7 +422,13 @@ abstract class File {
 	public function getLocalRefPath() {
 		$this->assertRepoDefined();
 		if ( !isset( $this->fsFile ) ) {
+			$starttime = microtime( true );
 			$this->fsFile = $this->repo->getLocalReference( $this->getPath() );
+
+			$statTiming = microtime( true ) - $starttime;
+			RequestContext::getMain()->getStats()->timing(
+				'media.thumbnail.generate.fetchoriginal', 1000 * $statTiming );
+
 			if ( !$this->fsFile ) {
 				$this->fsFile = false; // null => false; cache negative hits
 			}
@@ -490,7 +498,7 @@ abstract class File {
 		sort( $sortedBuckets );
 
 		foreach ( $sortedBuckets as $bucket ) {
-			if ( $bucket > $imageWidth ) {
+			if ( $bucket >= $imageWidth ) {
 				return false;
 			}
 
@@ -837,6 +845,18 @@ abstract class File {
 	}
 
 	/**
+	 * Load any lazy-loaded file object fields from source
+	 *
+	 * This is only useful when setting $flags
+	 *
+	 * Overridden by LocalFile to actually query the DB
+	 *
+	 * @param integer $flags Bitfield of File::READ_* constants
+	 */
+	public function load( $flags = 0 ) {
+	}
+
+	/**
 	 * Returns true if file exists in the repository.
 	 *
 	 * Overridden by LocalFile to avoid unnecessary stat calls.
@@ -996,7 +1016,6 @@ abstract class File {
 	function transform( $params, $flags = 0 ) {
 		global $wgThumbnailEpoch;
 
-		wfProfileIn( __METHOD__ );
 		do {
 			if ( !$this->canRender() ) {
 				$thumb = $this->iconThumb();
@@ -1069,8 +1088,6 @@ abstract class File {
 			}
 		} while ( false );
 
-		wfProfileOut( __METHOD__ );
-
 		return is_object( $thumb ) ? $thumb : false;
 	}
 
@@ -1082,7 +1099,9 @@ abstract class File {
 	 * @return bool|MediaTransformOutput
 	 */
 	public function generateAndSaveThumb( $tmpFile, $transformParams, $flags ) {
-		global $wgUseSquid, $wgIgnoreImageErrors;
+		global $wgIgnoreImageErrors;
+
+		$stats = RequestContext::getMain()->getStats();
 
 		$handler = $this->getHandler();
 
@@ -1099,11 +1118,14 @@ abstract class File {
 			$this->generateBucketsIfNeeded( $normalisedParams, $flags );
 		}
 
+		$starttime = microtime( true );
+
 		// Actually render the thumbnail...
-		wfProfileIn( __METHOD__ . '-doTransform' );
 		$thumb = $handler->doTransform( $this, $tmpThumbPath, $thumbUrl, $transformParams );
-		wfProfileOut( __METHOD__ . '-doTransform' );
 		$tmpFile->bind( $thumb ); // keep alive with $thumb
+
+		$statTiming = microtime( true ) - $starttime;
+		$stats->timing( 'media.thumbnail.generate.transform', 1000 * $statTiming );
 
 		if ( !$thumb ) { // bad params?
 			$thumb = false;
@@ -1115,6 +1137,9 @@ abstract class File {
 			}
 		} elseif ( $this->repo && $thumb->hasFile() && !$thumb->fileIsSource() ) {
 			// Copy the thumbnail from the file system into storage...
+
+			$starttime = microtime( true );
+
 			$disposition = $this->getThumbDisposition( $thumbName );
 			$status = $this->repo->quickImport( $tmpThumbPath, $thumbPath, $disposition );
 			if ( $status->isOK() ) {
@@ -1122,17 +1147,12 @@ abstract class File {
 			} else {
 				$thumb = $this->transformErrorOutput( $thumbPath, $thumbUrl, $transformParams, $flags );
 			}
-			// Give extensions a chance to do something with this thumbnail...
-			wfRunHooks( 'FileTransformed', array( $this, $thumb, $tmpThumbPath, $thumbPath ) );
-		}
 
-		// Purge. Useful in the event of Core -> Squid connection failure or squid
-		// purge collisions from elsewhere during failure. Don't keep triggering for
-		// "thumbs" which have the main image URL though (bug 13776)
-		if ( $wgUseSquid ) {
-			if ( !$thumb || $thumb->isError() || $thumb->getUrl() != $this->getURL() ) {
-				SquidUpdate::purge( array( $thumbUrl ) );
-			}
+			$statTiming = microtime( true ) - $starttime;
+			$stats->timing( 'media.thumbnail.generate.store', 1000 * $statTiming );
+
+			// Give extensions a chance to do something with this thumbnail...
+			Hooks::run( 'FileTransformed', array( $this, $thumb, $tmpThumbPath, $thumbPath ) );
 		}
 
 		return $thumb;
@@ -1159,12 +1179,12 @@ abstract class File {
 			return false;
 		}
 
+		$starttime = microtime( true );
+
 		$params['physicalWidth'] = $bucket;
 		$params['width'] = $bucket;
 
 		$params = $this->getHandler()->sanitizeParamsForBucketing( $params );
-
-		$bucketName = $this->getBucketThumbName( $bucket );
 
 		$tmpFile = $this->makeTransformTmpFile( $bucketPath );
 
@@ -1174,6 +1194,8 @@ abstract class File {
 
 		$thumb = $this->generateAndSaveThumb( $tmpFile, $params, $flags );
 
+		$buckettime = microtime( true ) - $starttime;
+
 		if ( !$thumb || $thumb->isError() ) {
 			return false;
 		}
@@ -1182,6 +1204,9 @@ abstract class File {
 		// For the caching to work, we need to make the tmp file survive as long as
 		// this object exists
 		$tmpFile->bind( $this );
+
+		RequestContext::getMain()->getStats()->timing(
+			'media.thumbnail.generate.bucket', 1000 * $buckettime );
 
 		return true;
 	}
@@ -1237,7 +1262,7 @@ abstract class File {
 			$that = $this;
 			$work = new PoolCounterWorkViaCallback( 'GetLocalFileCopy', sha1( $this->getName() ),
 				array(
-					'doWork' => function() use ( $that ) {
+					'doWork' => function () use ( $that ) {
 						return $that->getLocalRefPath();
 					}
 				)
@@ -1458,7 +1483,7 @@ abstract class File {
 
 	/**
 	 * Get the path of the file relative to the public zone root.
-	 * This function is overriden in OldLocalFile to be like getArchiveRel().
+	 * This function is overridden in OldLocalFile to be like getArchiveRel().
 	 *
 	 * @return string
 	 */
@@ -1502,7 +1527,7 @@ abstract class File {
 
 	/**
 	 * Get urlencoded path of the file relative to the public zone root.
-	 * This function is overriden in OldLocalFile to be like getArchiveUrl().
+	 * This function is overridden in OldLocalFile to be like getArchiveUrl().
 	 *
 	 * @return string
 	 */
@@ -1770,14 +1795,15 @@ abstract class File {
 	}
 
 	/**
+	 * @param bool|IContextSource $context Context to use (optional)
 	 * @return bool
 	 */
-	function formatMetadata() {
+	function formatMetadata( $context = false ) {
 		if ( !$this->getHandler() ) {
 			return false;
 		}
 
-		return $this->getHandler()->formatMetadata( $this, $this->getMetadata() );
+		return $this->getHandler()->formatMetadata( $this, $context );
 	}
 
 	/**
@@ -2013,7 +2039,7 @@ abstract class File {
 				wfDebug( "miss\n" );
 			}
 			wfDebug( "Fetching shared description from $renderUrl\n" );
-			$res = Http::get( $renderUrl );
+			$res = Http::get( $renderUrl, array(), __METHOD__ );
 			if ( $res && $this->repo->descriptionCacheExpiry > 0 ) {
 				$wgMemc->set( $key, $res, $this->repo->descriptionCacheExpiry );
 			}
@@ -2049,6 +2075,17 @@ abstract class File {
 		$this->assertRepoDefined();
 
 		return $this->repo->getFileTimestamp( $this->getPath() );
+	}
+
+	/**
+	 * Returns the timestamp (in TS_MW format) of the last change of the description page.
+	 * Returns false if the file does not have a description page, or retrieving the timestamp
+	 * would be expensive.
+	 * @since 1.25
+	 * @return string|bool
+	 */
+	public function getDescriptionTouched() {
+		return false;
 	}
 
 	/**
@@ -2210,5 +2247,14 @@ abstract class File {
 	public function isExpensiveToThumbnail() {
 		$handler = $this->getHandler();
 		return $handler ? $handler->isExpensiveToThumbnail( $this ) : false;
+	}
+
+	/**
+	 * Whether the thumbnails created on the same server as this code is running.
+	 * @since 1.25
+	 * @return bool
+	 */
+	public function isTransformedLocally() {
+		return true;
 	}
 }

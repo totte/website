@@ -112,17 +112,22 @@ class ApiFeedWatchlist extends ApiBase {
 			$module = new ApiMain( $fauxReq );
 			$module->execute();
 
-			// Get data array
-			$data = $module->getResultData();
-
+			$data = $module->getResult()->getResultData( array( 'query', 'watchlist' ) );
 			$feedItems = array();
-			foreach ( (array)$data['query']['watchlist'] as $info ) {
-				$feedItems[] = $this->createFeedItem( $info );
+			foreach ( (array)$data as $key => $info ) {
+				if ( ApiResult::isMetadataKey( $key ) ) {
+					continue;
+				}
+				$feedItem = $this->createFeedItem( $info );
+				if ( $feedItem ) {
+					$feedItems[] = $feedItem;
+				}
 			}
 
 			$msg = wfMessage( 'watchlist' )->inContentLanguage()->text();
 
-			$feedTitle = $this->getConfig()->get( 'Sitename' ) . ' - ' . $msg . ' [' . $this->getConfig()->get( 'LanguageCode' ) . ']';
+			$feedTitle = $this->getConfig()->get( 'Sitename' ) . ' - ' . $msg .
+				' [' . $this->getConfig()->get( 'LanguageCode' ) . ']';
 			$feedUrl = SpecialPage::getTitleFor( 'Watchlist' )->getFullURL();
 
 			$feed = new $feedClasses[$params['feedformat']] (
@@ -164,12 +169,29 @@ class ApiFeedWatchlist extends ApiBase {
 	 * @return FeedItem
 	 */
 	private function createFeedItem( $info ) {
+		if ( !isset( $info['title'] ) ) {
+			// Probably a revdeled log entry, skip it.
+			return null;
+		}
+
 		$titleStr = $info['title'];
 		$title = Title::newFromText( $titleStr );
+		$curidParam = array();
+		if ( !$title || $title->isExternal() ) {
+			// Probably a formerly-valid title that's now conflicting with an
+			// interwiki prefix or the like.
+			if ( isset( $info['pageid'] ) ) {
+				$title = Title::newFromId( $info['pageid'] );
+				$curidParam = array( 'curid' => $info['pageid'] );
+			}
+			if ( !$title || $title->isExternal() ) {
+				return null;
+			}
+		}
 		if ( isset( $info['revid'] ) ) {
 			$titleUrl = $title->getFullURL( array( 'diff' => $info['revid'] ) );
 		} else {
-			$titleUrl = $title->getFullURL();
+			$titleUrl = $title->getFullURL( $curidParam );
 		}
 		$comment = isset( $info['comment'] ) ? $info['comment'] : null;
 
@@ -188,9 +210,14 @@ class ApiFeedWatchlist extends ApiBase {
 		}
 
 		$timestamp = $info['timestamp'];
-		$user = $info['user'];
 
-		$completeText = "$comment ($user)";
+		if ( isset( $info['user'] ) ) {
+			$user = $info['user'];
+			$completeText = "$comment ($user)";
+		} else {
+			$user = '';
+			$completeText = (string)$comment;
+		}
 
 		return new FeedItem( $titleStr, $completeText, $titleUrl, $timestamp, $user );
 	}
@@ -219,50 +246,42 @@ class ApiFeedWatchlist extends ApiBase {
 			),
 			'linktosections' => false,
 		);
+
+		$copyParams = array(
+			'allrev' => 'allrev',
+			'owner' => 'wlowner',
+			'token' => 'wltoken',
+			'show' => 'wlshow',
+			'type' => 'wltype',
+			'excludeuser' => 'wlexcludeuser',
+		);
 		if ( $flags ) {
 			$wlparams = $this->getWatchlistModule()->getAllowedParams( $flags );
-			$ret['allrev'] = $wlparams['allrev'];
-			$ret['wlowner'] = $wlparams['owner'];
-			$ret['wltoken'] = $wlparams['token'];
-			$ret['wlshow'] = $wlparams['show'];
-			$ret['wltype'] = $wlparams['type'];
-			$ret['wlexcludeuser'] = $wlparams['excludeuser'];
+			foreach ( $copyParams as $from => $to ) {
+				$p = $wlparams[$from];
+				if ( !is_array( $p ) ) {
+					$p = array( ApiBase::PARAM_DFLT => $p );
+				}
+				if ( !isset( $p[ApiBase::PARAM_HELP_MSG] ) ) {
+					$p[ApiBase::PARAM_HELP_MSG] = "apihelp-query+watchlist-param-$from";
+				}
+				$ret[$to] = $p;
+			}
 		} else {
-			$ret['allrev'] = null;
-			$ret['wlowner'] = null;
-			$ret['wltoken'] = null;
-			$ret['wlshow'] = null;
-			$ret['wltype'] = null;
-			$ret['wlexcludeuser'] = null;
+			foreach ( $copyParams as $from => $to ) {
+				$ret[$to] = null;
+			}
 		}
 
 		return $ret;
 	}
 
-	public function getParamDescription() {
-		$wldescr = $this->getWatchlistModule()->getParamDescription();
-
+	protected function getExamplesMessages() {
 		return array(
-			'feedformat' => 'The format of the feed',
-			'hours' => 'List pages modified within this many hours from now',
-			'linktosections' => 'Link directly to changed sections if possible',
-			'allrev' => $wldescr['allrev'],
-			'wlowner' => $wldescr['owner'],
-			'wltoken' => $wldescr['token'],
-			'wlshow' => $wldescr['show'],
-			'wltype' => $wldescr['type'],
-			'wlexcludeuser' => $wldescr['excludeuser'],
-		);
-	}
-
-	public function getDescription() {
-		return 'Returns a watchlist feed.';
-	}
-
-	public function getExamples() {
-		return array(
-			'api.php?action=feedwatchlist',
-			'api.php?action=feedwatchlist&allrev=&hours=6'
+			'action=feedwatchlist'
+				=> 'apihelp-feedwatchlist-example-default',
+			'action=feedwatchlist&allrev=&hours=6'
+				=> 'apihelp-feedwatchlist-example-all6hrs',
 		);
 	}
 

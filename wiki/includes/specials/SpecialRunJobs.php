@@ -22,6 +22,8 @@
  * @author Aaron Schulz
  */
 
+use MediaWiki\Logger\LoggerFactory;
+
 /**
  * Special page designed for running background tasks (internal use only)
  *
@@ -36,14 +38,14 @@ class SpecialRunJobs extends UnlistedSpecialPage {
 		$this->getOutput()->disable();
 
 		if ( wfReadOnly() ) {
-			header( "HTTP/1.0 423 Locked" );
+			// HTTP 423 Locked
+			HttpStatus::header( 423 );
 			print 'Wiki is in read-only mode';
 
 			return;
 		} elseif ( !$this->getRequest()->wasPosted() ) {
-			header( "HTTP/1.0 400 Bad Request" );
+			HttpStatus::header( 400 );
 			print 'Request must be POSTed';
-
 			return;
 		}
 
@@ -53,22 +55,21 @@ class SpecialRunJobs extends UnlistedSpecialPage {
 		$params = array_intersect_key( $this->getRequest()->getValues(), $required + $optional );
 		$missing = array_diff_key( $required, $params );
 		if ( count( $missing ) ) {
-			header( "HTTP/1.0 400 Bad Request" );
+			HttpStatus::header( 400 );
 			print 'Missing parameters: ' . implode( ', ', array_keys( $missing ) );
-
 			return;
 		}
 
 		$squery = $params;
 		unset( $squery['signature'] );
-		$cSig = self::getQuerySignature( $squery, $this->getConfig()->get( 'SecretKey' ) ); // correct signature
-		$rSig = $params['signature']; // provided signature
+		$correctSignature = self::getQuerySignature( $squery, $this->getConfig()->get( 'SecretKey' ) );
+		$providedSignature = $params['signature'];
 
-		$verified = is_string( $rSig ) && hash_equals( $cSig, $rSig );
+		$verified = is_string( $providedSignature )
+			&& hash_equals( $correctSignature, $providedSignature );
 		if ( !$verified || $params['sigexpiry'] < time() ) {
-			header( "HTTP/1.0 400 Bad Request" );
+			HttpStatus::header( 400 );
 			print 'Invalid or stale signature provided';
-
 			return;
 		}
 
@@ -80,7 +81,8 @@ class SpecialRunJobs extends UnlistedSpecialPage {
 			// but it needs to know when it is safe to disconnect. Until this
 			// reaches ignore_user_abort(), it is not safe as the jobs won't run.
 			ignore_user_abort( true ); // jobs may take a bit of time
-			header( "HTTP/1.0 202 Accepted" );
+			// HTTP 202 Accepted
+			HttpStatus::header( 202 );
 			ob_flush();
 			flush();
 			// Once the client receives this response, it can disconnect
@@ -88,7 +90,7 @@ class SpecialRunJobs extends UnlistedSpecialPage {
 
 		// Do all of the specified tasks...
 		if ( in_array( 'jobs', explode( '|', $params['tasks'] ) ) ) {
-			$runner = new JobRunner();
+			$runner = new JobRunner( LoggerFactory::getInstance( 'runJobs' ) );
 			$response = $runner->run( array(
 				'type'     => $params['type'],
 				'maxJobs'  => $params['maxjobs'] ? $params['maxjobs'] : 1,

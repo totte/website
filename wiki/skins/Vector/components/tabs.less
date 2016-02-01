@@ -134,7 +134,6 @@ div#mw-head div.vectorMenu h3 {
 	.background-image('images/tab-break.png');
 	background-repeat: no-repeat;
 	background-position: bottom right;
-	margin-left: -1px;
 	font-size: 1em;
 	height: 2.5em;
 	// This effectively moves the "background border" outside of the element to act like a real
@@ -185,6 +184,8 @@ div.vectorMenu div.menu {
 	clear: both;
 	text-align: left;
 	display: none;
+	// overlap indicators (which has z-index 1, too)
+	z-index: 1;
 }
 
 /* Enable forcing showing of the menu for accessibility */

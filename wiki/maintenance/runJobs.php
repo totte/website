@@ -23,6 +23,8 @@
 
 require_once __DIR__ . '/Maintenance.php';
 
+use MediaWiki\Logger\LoggerFactory;
+
 /**
  * Maintenance script that runs pending jobs.
  *
@@ -50,9 +52,7 @@ class RunJobs extends Maintenance {
 	}
 
 	public function execute() {
-		if ( wfReadOnly() ) {
-			$this->error( "Unable to run jobs; the wiki is in read-only mode.", 1 ); // die
-		}
+		global $wgCommandLineMode;
 
 		if ( $this->hasOption( 'procs' ) ) {
 			$procs = intval( $this->getOption( 'procs' ) );
@@ -66,21 +66,29 @@ class RunJobs extends Maintenance {
 			}
 		}
 
-		$json = ( $this->getOption( 'result' ) === 'json' );
+		$outputJSON = ( $this->getOption( 'result' ) === 'json' );
 
-		$runner = new JobRunner();
-		if ( !$json ) {
+		// Enable DBO_TRX for atomicity; JobRunner manages transactions
+		// and works well in web server mode already (@TODO: this is a hack)
+		$wgCommandLineMode = false;
+
+		$runner = new JobRunner( LoggerFactory::getInstance( 'runJobs' ) );
+		if ( !$outputJSON ) {
 			$runner->setDebugHandler( array( $this, 'debugInternal' ) );
 		}
+
 		$response = $runner->run( array(
 			'type'     => $this->getOption( 'type', false ),
 			'maxJobs'  => $this->getOption( 'maxjobs', false ),
 			'maxTime'  => $this->getOption( 'maxtime', false ),
 			'throttle' => $this->hasOption( 'nothrottle' ) ? false : true,
 		) );
-		if ( $json ) {
+
+		if ( $outputJSON ) {
 			$this->output( FormatJson::encode( $response, true ) );
 		}
+
+		$wgCommandLineMode = true;
 	}
 
 	/**

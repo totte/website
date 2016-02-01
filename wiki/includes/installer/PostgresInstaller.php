@@ -83,10 +83,7 @@ class PostgresInstaller extends DatabaseInstaller {
 
 	function submitConnectForm() {
 		// Get variables from the request
-		$newValues = $this->setVarsFromRequest( array(
-			'wgDBserver', 'wgDBport', 'wgDBname', 'wgDBmwschema',
-			'_InstallUser', '_InstallPassword'
-		) );
+		$newValues = $this->setVarsFromRequest( array( 'wgDBserver', 'wgDBport', 'wgDBname', 'wgDBmwschema' ) );
 
 		// Validate them
 		$status = Status::newGood();
@@ -97,12 +94,6 @@ class PostgresInstaller extends DatabaseInstaller {
 		}
 		if ( !preg_match( '/^[a-zA-Z0-9_]*$/', $newValues['wgDBmwschema'] ) ) {
 			$status->fatal( 'config-invalid-schema', $newValues['wgDBmwschema'] );
-		}
-		if ( !strlen( $newValues['_InstallUser'] ) ) {
-			$status->fatal( 'config-db-username-empty' );
-		}
-		if ( !strlen( $newValues['_InstallPassword'] ) ) {
-			$status->fatal( 'config-db-password-empty', $newValues['_InstallUser'] );
 		}
 
 		// Submit user box
@@ -262,11 +253,13 @@ class PostgresInstaller extends DatabaseInstaller {
 		$status = Status::newGood();
 		foreach ( $dbs as $db ) {
 			try {
-				$conn = new DatabasePostgres(
-					$this->getVar( 'wgDBserver' ),
-					$user,
-					$password,
-					$db );
+				$p = array(
+					'host' => $this->getVar( 'wgDBserver' ),
+					'user' => $user,
+					'password' => $password,
+					'dbname' => $db
+				);
+				$conn = DatabaseBase::factory( 'postgres', $p );
 			} catch ( DBConnectionError $error ) {
 				$conn = false;
 				$status->fatal( 'config-pg-test-error', $db,
@@ -627,9 +620,9 @@ class PostgresInstaller extends DatabaseInstaller {
 	public function getGlobalDefaults() {
 		// The default $wgDBmwschema is null, which breaks Postgres and other DBMSes that require
 		// the use of a schema, so we need to set it here
-		return array(
+		return array_merge( parent::getGlobalDefaults(), array(
 			'wgDBmwschema' => 'mediawiki',
-		);
+		) );
 	}
 
 	public function setupPLpgSQL() {

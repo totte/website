@@ -45,6 +45,7 @@ class ApiQuery extends ApiBase {
 		'categories' => 'ApiQueryCategories',
 		'categoryinfo' => 'ApiQueryCategoryInfo',
 		'contributors' => 'ApiQueryContributors',
+		'deletedrevisions' => 'ApiQueryDeletedRevisions',
 		'duplicatefiles' => 'ApiQueryDuplicateFiles',
 		'extlinks' => 'ApiQueryExternalLinks',
 		'fileusage' => 'ApiQueryBacklinksprop',
@@ -69,6 +70,7 @@ class ApiQuery extends ApiBase {
 	 */
 	private static $QueryListModules = array(
 		'allcategories' => 'ApiQueryAllCategories',
+		'alldeletedrevisions' => 'ApiQueryAllDeletedRevisions',
 		'allfileusages' => 'ApiQueryAllLinks',
 		'allimages' => 'ApiQueryAllImages',
 		'alllinks' => 'ApiQueryAllLinks',
@@ -141,6 +143,8 @@ class ApiQuery extends ApiBase {
 		$this->mModuleMgr->addModules( self::$QueryMetaModules, 'meta' );
 		$this->mModuleMgr->addModules( $config->get( 'APIMetaModules' ), 'meta' );
 
+		Hooks::run( 'ApiQuery::moduleManager', array( $this->mModuleMgr ) );
+
 		// Create PageSet that will process titles/pageids/revids/generator
 		$this->mPageSet = new ApiPageSet( $this );
 	}
@@ -165,9 +169,7 @@ class ApiQuery extends ApiBase {
 	 */
 	public function getNamedDB( $name, $db, $groups ) {
 		if ( !array_key_exists( $name, $this->mNamedDB ) ) {
-			$this->profileDBIn();
 			$this->mNamedDB[$name] = wfGetDB( $db, $groups );
-			$this->profileDBOut();
 		}
 
 		return $this->mNamedDB[$name];
@@ -255,11 +257,11 @@ class ApiQuery extends ApiBase {
 		$this->instantiateModules( $allModules, 'meta' );
 
 		// Filter modules based on continue parameter
-		list( $generatorDone, $modules ) = $this->getResult()->beginContinuation(
-			$this->mParams['continue'], $allModules, $propModules
-		);
+		$continuationManager = new ApiContinuationManager( $this, $allModules, $propModules );
+		$this->setContinuationManager( $continuationManager );
+		$modules = $continuationManager->getRunModules();
 
-		if ( !$generatorDone ) {
+		if ( !$continuationManager->isGeneratorDone() ) {
 			// Query modules may optimize data requests through the $this->getPageSet()
 			// object by adding extra fields from the page table.
 			foreach ( $modules as $module ) {
@@ -281,19 +283,35 @@ class ApiQuery extends ApiBase {
 			$params = $module->extractRequestParams();
 			$cacheMode = $this->mergeCacheMode(
 				$cacheMode, $module->getCacheMode( $params ) );
-			$module->profileIn();
 			$module->execute();
-			wfRunHooks( 'APIQueryAfterExecute', array( &$module ) );
-			$module->profileOut();
+			Hooks::run( 'APIQueryAfterExecute', array( &$module ) );
 		}
 
 		// Set the cache mode
 		$this->getMain()->setCacheMode( $cacheMode );
 
 		// Write the continuation data into the result
-		$this->getResult()->endContinuation(
-			$this->mParams['continue'] === null ? 'raw' : 'standard'
-		);
+		$this->setContinuationManager( null );
+		if ( $this->mParams['rawcontinue'] ) {
+			$data = $continuationManager->getRawContinuation();
+			if ( $data ) {
+				$this->getResult()->addValue( null, 'query-continue', $data,
+					ApiResult::ADD_ON_TOP | ApiResult::NO_SIZE_CHECK );
+			}
+		} else {
+			$continuationManager->setContinuationIntoResult( $this->getResult() );
+		}
+
+		/// @todo: Remove this after a suitable period of time. When REL1_26 is cut, if not before.
+		if ( $this->mParams['continue'] === null && !$this->mParams['rawcontinue'] &&
+			$this->getResult()->getResultData( 'continue' ) !== null
+		) {
+			$this->setWarning(
+				'Formatting of continuation data has changed. ' .
+				'To receive raw query-continue data, use the \'rawcontinue\' parameter. ' .
+				'To silence this warning, pass an empty string for \'continue\' in the initial query.'
+			);
+		}
 	}
 
 	/**
@@ -384,18 +402,18 @@ class ApiQuery extends ApiBase {
 		foreach ( $pageSet->getMissingTitles() as $fakeId => $title ) {
 			$vals = array();
 			ApiQueryBase::addTitleInfo( $vals, $title );
-			$vals['missing'] = '';
+			$vals['missing'] = true;
 			$pages[$fakeId] = $vals;
 		}
 		// Report any invalid titles
-		foreach ( $pageSet->getInvalidTitles() as $fakeId => $title ) {
-			$pages[$fakeId] = array( 'title' => $title, 'invalid' => '' );
+		foreach ( $pageSet->getInvalidTitlesAndReasons() as $fakeId => $data ) {
+			$pages[$fakeId] = $data + array( 'invalid' => true );
 		}
 		// Report any missing page ids
 		foreach ( $pageSet->getMissingPageIDs() as $pageid ) {
 			$pages[$pageid] = array(
 				'pageid' => $pageid,
-				'missing' => ''
+				'missing' => true
 			);
 		}
 		// Report special pages
@@ -403,15 +421,15 @@ class ApiQuery extends ApiBase {
 		foreach ( $pageSet->getSpecialTitles() as $fakeId => $title ) {
 			$vals = array();
 			ApiQueryBase::addTitleInfo( $vals, $title );
-			$vals['special'] = '';
+			$vals['special'] = true;
 			if ( $title->isSpecialPage() &&
 				!SpecialPageFactory::exists( $title->getDBkey() )
 			) {
-				$vals['missing'] = '';
+				$vals['missing'] = true;
 			} elseif ( $title->getNamespace() == NS_MEDIA &&
 				!wfFindFile( $title )
 			) {
-				$vals['missing'] = '';
+				$vals['missing'] = true;
 			}
 			$pages[$fakeId] = $vals;
 		}
@@ -425,15 +443,18 @@ class ApiQuery extends ApiBase {
 		}
 
 		if ( count( $pages ) ) {
+			$pageSet->populateGeneratorData( $pages );
+			ApiResult::setArrayType( $pages, 'BCarray' );
+
 			if ( $this->mParams['indexpageids'] ) {
-				$pageIDs = array_keys( $pages );
+				$pageIDs = array_keys( ApiResult::stripMetadataNonRecursive( $pages ) );
 				// json treats all map keys as strings - converting to match
 				$pageIDs = array_map( 'strval', $pageIDs );
-				$result->setIndexedTagName( $pageIDs, 'id' );
+				ApiResult::setIndexedTagName( $pageIDs, 'id' );
 				$fit = $fit && $result->addValue( 'query', 'pageids', $pageIDs );
 			}
 
-			$result->setIndexedTagName( $pages, 'page' );
+			ApiResult::setIndexedTagName( $pages, 'page' );
 			$fit = $fit && $result->addValue( 'query', 'pages', $pages );
 		}
 
@@ -462,8 +483,8 @@ class ApiQuery extends ApiBase {
 	 */
 	public function setGeneratorContinue( $module, $paramName, $paramValue ) {
 		wfDeprecated( __METHOD__, '1.24' );
-		$this->getResult()->setGeneratorContinueParam( $module, $paramName, $paramValue );
-		return $this->getParameter( 'continue' ) !== null;
+		$this->getContinuationManager()->addGeneratorContinueParam( $module, $paramName, $paramValue );
+		return !$this->getParameter( 'rawcontinue' );
 	}
 
 	/**
@@ -504,9 +525,8 @@ class ApiQuery extends ApiBase {
 			$result->addValue( null, 'text', $exportxml, ApiResult::NO_SIZE_CHECK );
 			$result->addValue( null, 'mime', 'text/xml', ApiResult::NO_SIZE_CHECK );
 		} else {
-			$r = array();
-			ApiResult::setContent( $r, $exportxml );
-			$result->addValue( 'query', 'export', $r, ApiResult::NO_SIZE_CHECK );
+			$result->addValue( 'query', 'export', $exportxml, ApiResult::NO_SIZE_CHECK );
+			$result->addValue( 'query', ApiResult::META_BC_SUBELEMENTS, array( 'export' ) );
 		}
 	}
 
@@ -528,7 +548,9 @@ class ApiQuery extends ApiBase {
 			'export' => false,
 			'exportnowrap' => false,
 			'iwurl' => false,
-			'continue' => null,
+			'continue' => array(
+				ApiBase::PARAM_HELP_MSG => 'api-help-param-continue',
+			),
 			'rawcontinue' => false,
 		);
 		if ( $flags ) {
@@ -540,9 +562,11 @@ class ApiQuery extends ApiBase {
 
 	/**
 	 * Override the parent to generate help messages for all available query modules.
+	 * @deprecated since 1.25
 	 * @return string
 	 */
 	public function makeHelpMsg() {
+		wfDeprecated( __METHOD__, '1.25' );
 
 		// Use parent to make default message for the query module
 		$msg = parent::makeHelpMsg();
@@ -562,6 +586,7 @@ class ApiQuery extends ApiBase {
 
 	/**
 	 * For all modules of a given group, generate help messages and join them together
+	 * @deprecated since 1.25
 	 * @param string $group Module group
 	 * @return string
 	 */
@@ -594,44 +619,13 @@ class ApiQuery extends ApiBase {
 		return true;
 	}
 
-	public function getParamDescription() {
-		return $this->getPageSet()->getFinalParamDescription() + array(
-			'prop' => 'Which properties to get for the titles/revisions/pageids. ' .
-				'Module help is available below',
-			'list' => 'Which lists to get. Module help is available below',
-			'meta' => 'Which metadata to get about the site. Module help is available below',
-			'indexpageids' => 'Include an additional pageids section listing all returned page IDs',
-			'export' => 'Export the current revisions of all given or generated pages',
-			'exportnowrap' => 'Return the export XML without wrapping it in an ' .
-				'XML result (same format as Special:Export). Can only be used with export',
-			'iwurl' => 'Whether to get the full URL if the title is an interwiki link',
-			'continue' => array(
-				'When present, formats query-continue as key-value pairs that ' .
-					'should simply be merged into the original request.',
-				'This parameter must be set to an empty string in the initial query.',
-				'This parameter is recommended for all new development, and ' .
-					'will be made default in the next API version.'
-			),
-			'rawcontinue' => 'Currently ignored. In the future, \'continue=\' will become the ' .
-				'default and this will be needed to receive the raw query-continue data.',
-		);
-	}
-
-	public function getDescription() {
+	protected function getExamplesMessages() {
 		return array(
-			'Query API module allows applications to get needed pieces of data ' .
-				'from the MediaWiki databases,',
-			'and is loosely based on the old query.php interface.',
-			'All data modifications will first have to use query to acquire a ' .
-				'token to prevent abuse from malicious sites.'
-		);
-	}
-
-	public function getExamples() {
-		return array(
-			'api.php?action=query&prop=revisions&meta=siteinfo&' .
-				'titles=Main%20Page&rvprop=user|comment&continue=',
-			'api.php?action=query&generator=allpages&gapprefix=API/&prop=revisions&continue=',
+			'action=query&prop=revisions&meta=siteinfo&' .
+				'titles=Main%20Page&rvprop=user|comment&continue='
+				=> 'apihelp-query-example-revisions',
+			'action=query&generator=allpages&gapprefix=API/&prop=revisions&continue='
+				=> 'apihelp-query-example-allpages',
 		);
 	}
 

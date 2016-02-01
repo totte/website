@@ -287,10 +287,10 @@ class WebInstallerLanguage extends WebInstallerPage {
 	public function getLanguageSelector( $name, $label, $selectedCode, $helpHtml = '' ) {
 		global $wgDummyLanguageCodes;
 
-		$s = $helpHtml;
+		$output = $helpHtml;
 
-		$s .= Html::openElement( 'select', array( 'id' => $name, 'name' => $name,
-				'tabindex' => $this->parent->nextTabIndex() ) ) . "\n";
+		$select = new XmlSelect( $name, $name, $selectedCode );
+		$select->setAttribute( 'tabindex', $this->parent->nextTabIndex() );
 
 		$languages = Language::fetchLanguageNames();
 		ksort( $languages );
@@ -298,11 +298,11 @@ class WebInstallerLanguage extends WebInstallerPage {
 			if ( isset( $wgDummyLanguageCodes[$code] ) ) {
 				continue;
 			}
-			$s .= "\n" . Xml::option( "$code - $lang", $code, $code == $selectedCode );
+			$select->addOption( "$code - $lang", $code );
 		}
-		$s .= "\n</select>\n";
 
-		return $this->parent->label( $label, $name, $s );
+		$output .= $select->getHTML();
+		return $this->parent->label( $label, $name, $output );
 	}
 
 }
@@ -669,6 +669,8 @@ class WebInstallerUpgrade extends WebInstallerPage {
 	}
 
 	public function showDoneMessage() {
+		global $wgScriptExtension;
+
 		$this->startForm();
 		$regenerate = !$this->getVar( '_ExistingDBSettings' );
 		if ( $regenerate ) {
@@ -682,7 +684,7 @@ class WebInstallerUpgrade extends WebInstallerPage {
 				wfMessage( $msg,
 					$this->getVar( 'wgServer' ) .
 					$this->getVar( 'wgScriptPath' ) . '/index' .
-					$this->getVar( 'wgScriptExtension' )
+					$wgScriptExtension
 				)->plain(), 'tick-32.png'
 			)
 		);
@@ -796,6 +798,9 @@ class WebInstallerName extends WebInstallerPage {
 			) ) .
 			$this->parent->getTextBox( array(
 				'var' => '_AdminEmail',
+				'attribs' => array(
+					'dir' => 'ltr',
+				),
 				'label' => 'config-admin-email',
 				'help' => $this->parent->getHelpBox( 'config-admin-email-help' )
 			) ) .
@@ -828,6 +833,8 @@ class WebInstallerName extends WebInstallerPage {
 	 * @return bool
 	 */
 	public function submit() {
+		global $wgPasswordPolicy;
+
 		$retVal = true;
 		$this->parent->setVarsFromRequest( array( 'wgSitename', '_NamespaceType',
 			'_AdminName', '_AdminPassword', '_AdminPasswordConfirm', '_AdminEmail',
@@ -904,13 +911,21 @@ class WebInstallerName extends WebInstallerPage {
 		$pwd = $this->getVar( '_AdminPassword' );
 		$user = User::newFromName( $cname );
 		if ( $user ) {
-			$valid = $user->getPasswordValidity( $pwd );
+			$upp = new UserPasswordPolicy(
+				$wgPasswordPolicy['policies'],
+				$wgPasswordPolicy['checks']
+			);
+			$status = $upp->checkUserPasswordForGroups(
+				$user,
+				$pwd,
+				array( 'bureaucrat', 'sysop' )  // per Installer::createSysop()
+			);
+			$valid = $status->isGood() ? true : $status->getMessage();
 		} else {
 			$valid = 'config-admin-name-invalid';
 		}
 		if ( strval( $pwd ) === '' ) {
-			# $user->getPasswordValidity just checks for $wgMinimalPasswordLength.
-			# This message is more specific and helpful.
+			// Provide a more specific and helpful message if password field is left blank
 			$msg = 'config-admin-password-blank';
 		} elseif ( $pwd !== $this->getVar( '_AdminPasswordConfirm' ) ) {
 			$msg = 'config-admin-password-mismatch';
@@ -918,7 +933,7 @@ class WebInstallerName extends WebInstallerPage {
 			$msg = $valid;
 		}
 		if ( $msg !== false ) {
-			call_user_func_array( array( $this->parent, 'showError' ), (array)$msg );
+			call_user_func( array( $this->parent, 'showError' ), $msg );
 			$this->setVar( '_AdminPassword', '' );
 			$this->setVar( '_AdminPasswordConfirm', '' );
 			$retVal = false;
@@ -1030,14 +1045,15 @@ class WebInstallerOptions extends WebInstallerPage {
 		$skins = $this->parent->findExtensions( 'skins' );
 		$skinHtml = $this->getFieldSetStart( 'config-skins' );
 
-		if ( $skins ) {
-			$skinNames = array_map( 'strtolower', $skins );
+		$skinNames = array_map( 'strtolower', $skins );
+		$chosenSkinName = $this->getVar( 'wgDefaultSkin', $this->parent->getDefaultSkin( $skinNames ) );
 
+		if ( $skins ) {
 			$radioButtons = $this->parent->getRadioElements( array(
 				'var' => 'wgDefaultSkin',
 				'itemLabels' => array_fill_keys( $skinNames, 'config-skins-use-as-default' ),
 				'values' => $skinNames,
-				'value' => $this->getVar( 'wgDefaultSkin', $this->parent->getDefaultSkin( $skinNames ) ),
+				'value' => $chosenSkinName,
 			) );
 
 			foreach ( $skins as $skin ) {
@@ -1052,7 +1068,9 @@ class WebInstallerOptions extends WebInstallerPage {
 					'</div>';
 			}
 		} else {
-			$skinHtml .= $this->parent->getWarningBox( wfMessage( 'config-skins-missing' )->plain() );
+			$skinHtml .=
+				$this->parent->getWarningBox( wfMessage( 'config-skins-missing' )->plain() ) .
+				Html::hidden( 'config_wgDefaultSkin', $chosenSkinName );
 		}
 
 		$skinHtml .= $this->parent->getHelpBox( 'config-skins-help' ) .
@@ -1177,7 +1195,7 @@ class WebInstallerOptions extends WebInstallerPage {
 		) );
 		$styleUrl = $server . dirname( dirname( $this->parent->getUrl() ) ) .
 			'/mw-config/config-cc.css';
-		$iframeUrl = 'http://creativecommons.org/license/?' .
+		$iframeUrl = '//creativecommons.org/license/?' .
 			wfArrayToCgi( array(
 				'partner' => 'MediaWiki',
 				'exit_url' => $exitUrl,
@@ -1284,8 +1302,7 @@ class WebInstallerOptions extends WebInstallerPage {
 
 		$retVal = true;
 
-		if ( !array_key_exists( $this->getVar( '_RightsProfile' ), $this->parent->rightsProfiles )
-		) {
+		if ( !array_key_exists( $this->getVar( '_RightsProfile' ), $this->parent->rightsProfiles ) ) {
 			reset( $this->parent->rightsProfiles );
 			$this->setVar( '_RightsProfile', key( $this->parent->rightsProfiles ) );
 		}
@@ -1461,7 +1478,7 @@ class WebInstallerComplete extends WebInstallerPage {
 			strpos( $_SERVER['HTTP_USER_AGENT'], 'MSIE' ) !== false
 		) {
 			// JS appears to be the only method that works consistently with IE7+
-			$this->addHtml( "\n<script>jQuery( function () { document.location = " .
+			$this->addHtml( "\n<script>jQuery( function () { location.href = " .
 				Xml::encodeJsVar( $lsUrl ) . "; } );</script>\n" );
 		} else {
 			$this->parent->request->response()->header( "Refresh: 0;url=$lsUrl" );
@@ -1474,8 +1491,7 @@ class WebInstallerComplete extends WebInstallerPage {
 				wfMessage( 'config-install-done',
 					$lsUrl,
 					$this->getVar( 'wgServer' ) .
-					$this->getVar( 'wgScriptPath' ) . '/index' .
-					$this->getVar( 'wgScriptExtension' ),
+					$this->getVar( 'wgScriptPath' ) . '/index.php',
 					'<downloadlink/>'
 				)->plain(), 'tick-32.png'
 			)

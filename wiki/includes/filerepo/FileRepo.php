@@ -49,6 +49,9 @@ class FileRepo {
 	/** @var int */
 	public $descriptionCacheExpiry;
 
+	/** @var bool */
+	protected $hasSha1Storage = false;
+
 	/** @var FileBackend */
 	protected $backend;
 
@@ -63,7 +66,7 @@ class FileRepo {
 	protected $transformVia404;
 
 	/** @var string URL of image description pages, e.g.
-	 *    http://en.wikipedia.org/wiki/File:
+	 *    https://en.wikipedia.org/wiki/File:
 	 */
 	protected $descBaseUrl;
 
@@ -76,7 +79,7 @@ class FileRepo {
 	 *    to $wgScriptExtension, e.g. .php5 defaults to .php */
 	protected $scriptExtension;
 
-	/** @var string Equivalent to $wgArticlePath, e.g. http://en.wikipedia.org/wiki/$1 */
+	/** @var string Equivalent to $wgArticlePath, e.g. https://en.wikipedia.org/wiki/$1 */
 	protected $articleUrl;
 
 	/** @var bool Equivalent to $wgCapitalLinks (or $wgCapitalLinkOverrides[NS_FILE],
@@ -113,6 +116,9 @@ class FileRepo {
 
 	/** @var string The URL of the repo's favicon, if any */
 	protected $favicon;
+
+	/** @var bool Whether all zones should be private (e.g. private wiki repo) */
+	protected $isPrivate;
 
 	/**
 	 * Factory functions for creating new files
@@ -269,7 +275,7 @@ class FileRepo {
 	 * @return string|bool
 	 */
 	public function getZoneUrl( $zone, $ext = null ) {
-		if ( in_array( $zone, array( 'public', 'temp', 'thumb', 'transcoded' ) ) ) {
+		if ( in_array( $zone, array( 'public', 'thumb', 'transcoded' ) ) ) {
 			// standard public zones
 			if ( $ext !== null && isset( $this->zones[$zone]['urlsByExt'][$ext] ) ) {
 				// custom URL for extension/zone
@@ -283,7 +289,6 @@ class FileRepo {
 			case 'public':
 				return $this->url;
 			case 'temp':
-				return "{$this->url}/temp";
 			case 'deleted':
 				return false; // no public URL
 			case 'thumb':
@@ -404,6 +409,7 @@ class FileRepo {
 	 *   private:        If true, return restricted (deleted) files if the current
 	 *                   user is allowed to view them. Otherwise, such files will not
 	 *                   be found. If a User object, use that user instead of the current.
+	 *   latest:         If true, load from the latest available data into File objects
 	 * @return File|bool False on failure
 	 */
 	public function findFile( $title, $options = array() ) {
@@ -411,27 +417,35 @@ class FileRepo {
 		if ( !$title ) {
 			return false;
 		}
+		if ( isset( $options['bypassCache'] ) ) {
+			$options['latest'] = $options['bypassCache']; // b/c
+		}
 		$time = isset( $options['time'] ) ? $options['time'] : false;
+		$flags = !empty( $options['latest'] ) ? File::READ_LATEST : 0;
 		# First try the current version of the file to see if it precedes the timestamp
 		$img = $this->newFile( $title );
 		if ( !$img ) {
 			return false;
 		}
+		$img->load( $flags );
 		if ( $img->exists() && ( !$time || $img->getTimestamp() == $time ) ) {
 			return $img;
 		}
 		# Now try an old version of the file
 		if ( $time !== false ) {
 			$img = $this->newFile( $title, $time );
-			if ( $img && $img->exists() ) {
-				if ( !$img->isDeleted( File::DELETED_FILE ) ) {
-					return $img; // always OK
-				} elseif ( !empty( $options['private'] ) &&
-					$img->userCan( File::DELETED_FILE,
-						$options['private'] instanceof User ? $options['private'] : null
-					)
-				) {
-					return $img;
+			if ( $img ) {
+				$img->load( $flags );
+				if ( $img->exists() ) {
+					if ( !$img->isDeleted( File::DELETED_FILE ) ) {
+						return $img; // always OK
+					} elseif ( !empty( $options['private'] ) &&
+						$img->userCan( File::DELETED_FILE,
+							$options['private'] instanceof User ? $options['private'] : null
+						)
+					) {
+						return $img;
+					}
 				}
 			}
 		}
@@ -446,6 +460,7 @@ class FileRepo {
 			if ( !$img ) {
 				return false;
 			}
+			$img->load( $flags );
 			if ( $img->exists() ) {
 				$img->redirectedFrom( $title->getDBkey() );
 
@@ -897,9 +912,9 @@ class FileRepo {
 		$status->merge( $backend->doOperations( $operations, $opts ) );
 		// Cleanup for disk source files...
 		foreach ( $sourceFSFilesToDelete as $file ) {
-			wfSuppressWarnings();
+			MediaWiki\suppressWarnings();
 			unlink( $file ); // FS cleanup
-			wfRestoreWarnings();
+			MediaWiki\restoreWarnings();
 		}
 
 		return $status;
@@ -1285,9 +1300,9 @@ class FileRepo {
 		}
 		// Cleanup for disk source files...
 		foreach ( $sourceFSFilesToDelete as $file ) {
-			wfSuppressWarnings();
+			MediaWiki\suppressWarnings();
 			unlink( $file ); // FS cleanup
-			wfRestoreWarnings();
+			MediaWiki\restoreWarnings();
 		}
 
 		return $status;
@@ -1305,7 +1320,10 @@ class FileRepo {
 		list( , $container, ) = FileBackend::splitStoragePath( $path );
 
 		$params = array( 'dir' => $path );
-		if ( $this->isPrivate || $container === $this->zones['deleted']['container'] ) {
+		if ( $this->isPrivate
+			|| $container === $this->zones['deleted']['container']
+			|| $container === $this->zones['temp']['container']
+		) {
 			# Take all available measures to prevent web accessibility of new deleted
 			# directories, in case the user has not configured offline storage
 			$params = array( 'noAccess' => true, 'noListing' => true ) + $params;
@@ -1676,23 +1694,26 @@ class FileRepo {
 	 * Create a new fatal error
 	 *
 	 * @param string $message
-	 * @return FileRepoStatus
+	 * @return Status
 	 */
 	public function newFatal( $message /*, parameters...*/ ) {
-		$params = func_get_args();
-		array_unshift( $params, $this );
+		$status = call_user_func_array( array( 'Status', 'newFatal' ), func_get_args() );
+		$status->cleanCallback = $this->getErrorCleanupFunction();
 
-		return call_user_func_array( array( 'FileRepoStatus', 'newFatal' ), $params );
+		return $status;
 	}
 
 	/**
 	 * Create a new good result
 	 *
 	 * @param null|string $value
-	 * @return FileRepoStatus
+	 * @return Status
 	 */
 	public function newGood( $value = null ) {
-		return FileRepoStatus::newGood( $this, $value );
+		$status = Status::newGood( $value );
+		$status->cleanCallback = $this->getErrorCleanupFunction();
+
+		return $status;
 	}
 
 	/**
@@ -1785,9 +1806,9 @@ class FileRepo {
 	}
 
 	/**
-	 * Get an temporary FileRepo associated with this repo.
-	 * Files will be created in the temp zone of this repo and
-	 * thumbnails in a /temp subdirectory in thumb zone of this repo.
+	 * Get a temporary private FileRepo associated with this repo.
+	 *
+	 * Files will be created in the temp zone of this repo.
 	 * It will have the same backend as this repo.
 	 *
 	 * @return TempFileRepo
@@ -1798,26 +1819,26 @@ class FileRepo {
 			'backend' => $this->backend,
 			'zones' => array(
 				'public' => array(
+					// Same place storeTemp() uses in the base repo, though
+					// the path hashing is mismatched, which is annoying.
 					'container' => $this->zones['temp']['container'],
 					'directory' => $this->zones['temp']['directory']
 				),
 				'thumb' => array(
-					'container' => $this->zones['thumb']['container'],
-					'directory' => $this->zones['thumb']['directory'] == ''
-						? 'temp'
-						: $this->zones['thumb']['directory'] . '/temp'
+					'container' => $this->zones['temp']['container'],
+					'directory' => $this->zones['temp']['directory'] == ''
+						? 'thumb'
+						: $this->zones['temp']['directory'] . '/thumb'
 				),
 				'transcoded' => array(
-					'container' => $this->zones['transcoded']['container'],
-					'directory' => $this->zones['transcoded']['directory'] == ''
-						? 'temp'
-						: $this->zones['transcoded']['directory'] . '/temp'
+					'container' => $this->zones['temp']['container'],
+					'directory' => $this->zones['temp']['directory'] == ''
+						? 'transcoded'
+						: $this->zones['temp']['directory'] . '/transcoded'
 				)
 			),
-			'url' => $this->getZoneUrl( 'temp' ),
-			'thumbUrl' => $this->getZoneUrl( 'thumb' ) . '/temp',
-			'transcodedUrl' => $this->getZoneUrl( 'transcoded' ) . '/temp',
-			'hashLevels' => $this->hashLevels // performance
+			'hashLevels' => $this->hashLevels, // performance
+			'isPrivate' => true // all in temp zone
 		) );
 	}
 
@@ -1866,6 +1887,14 @@ class FileRepo {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Returns whether or not storage is SHA-1 based
+	 * @return boolean
+	 */
+	public function hasSha1Storage() {
+		return $this->hasSha1Storage;
 	}
 }
 

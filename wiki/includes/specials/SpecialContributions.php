@@ -38,6 +38,7 @@ class SpecialContributions extends IncludableSpecialPage {
 		$this->outputHeader();
 		$out = $this->getOutput();
 		$out->addModuleStyles( 'mediawiki.special' );
+		$this->addHelpLink( 'Help:User contributions' );
 
 		$this->opts = array();
 		$request = $this->getRequest();
@@ -176,7 +177,7 @@ class SpecialContributions extends IncludableSpecialPage {
 		// Add RSS/atom links
 		$this->addFeedLinks( $feedParams );
 
-		if ( wfRunHooks( 'SpecialContributionsBeforeMainOutput', array( $id, $userObj, $this ) ) ) {
+		if ( Hooks::run( 'SpecialContributionsBeforeMainOutput', array( $id, $userObj, $this ) ) ) {
 			if ( !$this->including() ) {
 				$out->addHTML( $this->getForm() );
 			}
@@ -386,7 +387,7 @@ class SpecialContributions extends IncludableSpecialPage {
 			);
 		}
 
-		wfRunHooks( 'ContributionsToolLinks', array( $id, $userpage, &$tools ) );
+		Hooks::run( 'ContributionsToolLinks', array( $id, $userpage, &$tools ) );
 
 		return $tools;
 	}
@@ -478,17 +479,14 @@ class SpecialContributions extends IncludableSpecialPage {
 		if ( $tagFilter ) {
 			$filterSelection = Html::rawElement(
 				'td',
-				array( 'class' => 'mw-label' ),
-				array_shift( $tagFilter )
-			);
-			$filterSelection .= Html::rawElement(
-				'td',
-				array( 'class' => 'mw-input' ),
-				implode( '&#160', $tagFilter )
+				array(),
+				array_shift( $tagFilter ) . implode( '&#160', $tagFilter )
 			);
 		} else {
 			$filterSelection = Html::rawElement( 'td', array( 'colspan' => 2 ), '' );
 		}
+
+		$this->getOutput()->addModules( 'mediawiki.userSuggest' );
 
 		$labelNewbies = Xml::radioLabel(
 			$this->msg( 'sp-contributions-newbies' )->text(),
@@ -510,9 +508,15 @@ class SpecialContributions extends IncludableSpecialPage {
 			'target',
 			$this->opts['target'],
 			'text',
-			array( 'size' => '40', 'required' => '', 'class' => 'mw-input' ) +
-				( $this->opts['target'] ? array() : array( 'autofocus' )
-				)
+			array(
+				'size' => '40',
+				'required' => '',
+				'class' => array(
+					'mw-input',
+					'mw-ui-input-inline',
+					'mw-autocomplete-user', // used by mediawiki.userSuggest
+				),
+			) + ( $this->opts['target'] ? array() : array( 'autofocus' ) )
 		);
 		$targetSelection = Html::rawElement(
 			'td',
@@ -522,16 +526,12 @@ class SpecialContributions extends IncludableSpecialPage {
 
 		$namespaceSelection = Xml::tags(
 			'td',
-			array( 'class' => 'mw-label' ),
+			array(),
 			Xml::label(
 				$this->msg( 'namespace' )->text(),
 				'namespace',
 				''
-			)
-		);
-		$namespaceSelection .= Html::rawElement(
-			'td',
-			null,
+			) .
 			Html::namespaceSelector(
 				array( 'selected' => $this->opts['namespace'], 'all' => '' ),
 				array(
@@ -617,9 +617,9 @@ class SpecialContributions extends IncludableSpecialPage {
 				$this->opts['year'] === '' ? MWTimestamp::getInstance()->format( 'Y' ) : $this->opts['year'],
 				$this->opts['month']
 			) . ' ' .
-				Xml::submitButton(
+				Html::submitButton(
 					$this->msg( 'sp-contributions-submit' )->text(),
-					array( 'class' => 'mw-submit' )
+					array( 'class' => 'mw-submit' ), array( 'mw-ui-progressive' )
 				)
 		);
 
@@ -659,7 +659,7 @@ class ContribsPager extends ReverseChronologicalPager {
 	public $mDb;
 	public $preventClickjacking = false;
 
-	/** @var DatabaseBase */
+	/** @var IDatabase */
 	public $mDbSecondary;
 
 	/**
@@ -673,10 +673,7 @@ class ContribsPager extends ReverseChronologicalPager {
 		$msgs = array(
 			'diff',
 			'hist',
-			'newarticle',
 			'pipe-separator',
-			'rev-delundel',
-			'rollbacklink',
 			'uctop'
 		);
 
@@ -715,7 +712,7 @@ class ContribsPager extends ReverseChronologicalPager {
 
 	/**
 	 * This method basically executes the exact same code as the parent class, though with
-	 * a hook added, to allow extentions to add additional queries.
+	 * a hook added, to allow extensions to add additional queries.
 	 *
 	 * @param string $offset Index offset, inclusive
 	 * @param int $limit Exact query limit
@@ -728,7 +725,6 @@ class ContribsPager extends ReverseChronologicalPager {
 			$limit,
 			$descending
 		);
-		$pager = $this;
 
 		/*
 		 * This hook will allow extensions to add in additional queries, so they can get their data
@@ -751,9 +747,9 @@ class ContribsPager extends ReverseChronologicalPager {
 		$data = array( $this->mDb->select(
 			$tables, $fields, $conds, $fname, $options, $join_conds
 		) );
-		wfRunHooks(
+		Hooks::run(
 			'ContribsPager::reallyDoQuery',
-			array( &$data, $pager, $offset, $limit, $descending )
+			array( &$data, $this, $offset, $limit, $descending )
 		);
 
 		$result = array();
@@ -828,7 +824,7 @@ class ContribsPager extends ReverseChronologicalPager {
 			$this->tagFilter
 		);
 
-		wfRunHooks( 'ContribsPager::getQueryInfo', array( &$this, &$queryInfo ) );
+		Hooks::run( 'ContribsPager::getQueryInfo', array( &$this, &$queryInfo ) );
 
 		return $queryInfo;
 	}
@@ -935,7 +931,7 @@ class ContribsPager extends ReverseChronologicalPager {
 	 * @return string
 	 */
 	function getStartBody() {
-		return "<ul>\n";
+		return "<ul class=\"mw-contributions-list\">\n";
 	}
 
 	/**
@@ -958,7 +954,6 @@ class ContribsPager extends ReverseChronologicalPager {
 	 * @return string
 	 */
 	function formatRow( $row ) {
-		wfProfileIn( __METHOD__ );
 
 		$ret = '';
 		$classes = array();
@@ -970,14 +965,14 @@ class ContribsPager extends ReverseChronologicalPager {
 		 * we're definitely dealing with revision data and we may proceed, if not, we'll leave it
 		 * to extensions to subscribe to the hook to parse the row.
 		 */
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		try {
 			$rev = new Revision( $row );
 			$validRevision = (bool)$rev->getId();
-		} catch ( MWException $e ) {
+		} catch ( Exception $e ) {
 			$validRevision = false;
 		}
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 
 		if ( $validRevision ) {
 			$classes = array();
@@ -1113,7 +1108,7 @@ class ContribsPager extends ReverseChronologicalPager {
 		}
 
 		// Let extensions add data
-		wfRunHooks( 'ContributionsLineEnding', array( $this, &$ret, $row, &$classes ) );
+		Hooks::run( 'ContributionsLineEnding', array( $this, &$ret, $row, &$classes ) );
 
 		if ( $classes === array() && $ret === '' ) {
 			wfDebug( "Dropping Special:Contribution row that could not be formatted\n" );
@@ -1121,8 +1116,6 @@ class ContribsPager extends ReverseChronologicalPager {
 		} else {
 			$ret = Html::rawElement( 'li', array( 'class' => $classes ), $ret ) . "\n";
 		}
-
-		wfProfileOut( __METHOD__ );
 
 		return $ret;
 	}

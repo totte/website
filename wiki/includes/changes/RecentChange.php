@@ -89,6 +89,16 @@ class RecentChange {
 	 */
 	public $counter = -1;
 
+	/**
+	 * @var array Array of change types
+	 */
+	private static $changeTypes = array(
+		'edit' => RC_EDIT,
+		'new' => RC_NEW,
+		'log' => RC_LOG,
+		'external' => RC_EXTERNAL,
+	);
+
 	# Factory methods
 
 	/**
@@ -119,18 +129,10 @@ class RecentChange {
 			return $retval;
 		}
 
-		switch ( $type ) {
-			case 'edit':
-				return RC_EDIT;
-			case 'new':
-				return RC_NEW;
-			case 'log':
-				return RC_LOG;
-			case 'external':
-				return RC_EXTERNAL;
-			default:
-				throw new MWException( "Unknown type '$type'" );
+		if ( !array_key_exists( $type, self::$changeTypes ) ) {
+			throw new MWException( "Unknown type '$type'" );
 		}
+		return self::$changeTypes[$type];
 	}
 
 	/**
@@ -140,31 +142,25 @@ class RecentChange {
 	 * @return string $type
 	 */
 	public static function parseFromRCType( $rcType ) {
-		switch ( $rcType ) {
-			case RC_EDIT:
-				$type = 'edit';
-				break;
-			case RC_NEW:
-				$type = 'new';
-				break;
-			case RC_LOG:
-				$type = 'log';
-				break;
-			case RC_EXTERNAL:
-				$type = 'external';
-				break;
-			default:
-				$type = "$rcType";
-		}
+		return array_search( $rcType, self::$changeTypes, true ) ?: "$rcType";
+	}
 
-		return $type;
+	/**
+	 * Get an array of all change types
+	 *
+	 * @since 1.26
+	 *
+	 * @return array
+	 */
+	public static function getChangeTypes() {
+		return array_keys( self::$changeTypes );
 	}
 
 	/**
 	 * Obtain the recent change with a given rc_id value
 	 *
 	 * @param int $rcid The rc_id value to retrieve
-	 * @return RecentChange
+	 * @return RecentChange|null
 	 */
 	public static function newFromId( $rcid ) {
 		return self::newFromConds( array( 'rc_id' => $rcid ), __METHOD__ );
@@ -176,7 +172,7 @@ class RecentChange {
 	 * @param array $conds Array of conditions
 	 * @param mixed $fname Override the method name in profiling/logs
 	 * @param array $options Query options
-	 * @return RecentChange
+	 * @return RecentChange|null
 	 */
 	public static function newFromConds( $conds, $fname = __METHOD__, $options = array() ) {
 		$dbr = wfGetDB( DB_SLAVE );
@@ -257,7 +253,7 @@ class RecentChange {
 	public function getPerformer() {
 		if ( $this->mPerformer === false ) {
 			if ( $this->mAttribs['rc_user'] ) {
-				$this->mPerformer = User::newFromID( $this->mAttribs['rc_user'] );
+				$this->mPerformer = User::newFromId( $this->mAttribs['rc_user'] );
 			} else {
 				$this->mPerformer = User::newFromName( $this->mAttribs['rc_user_text'], false );
 			}
@@ -283,7 +279,7 @@ class RecentChange {
 		}
 
 		# If our database is strict about IP addresses, use NULL instead of an empty string
-		if ( $dbw->strictIPs() and $this->mAttribs['rc_ip'] == '' ) {
+		if ( $dbw->strictIPs() && $this->mAttribs['rc_ip'] == '' ) {
 			unset( $this->mAttribs['rc_ip'] );
 		}
 
@@ -298,7 +294,7 @@ class RecentChange {
 		$this->mAttribs['rc_id'] = $dbw->nextSequenceValue( 'recentchanges_rc_id_seq' );
 
 		## If we are using foreign keys, an entry of 0 for the page_id will fail, so use NULL
-		if ( $dbw->cascadingDeletes() and $this->mAttribs['rc_cur_id'] == 0 ) {
+		if ( $dbw->cascadingDeletes() && $this->mAttribs['rc_cur_id'] == 0 ) {
 			unset( $this->mAttribs['rc_cur_id'] );
 		}
 
@@ -309,7 +305,7 @@ class RecentChange {
 		$this->mAttribs['rc_id'] = $dbw->insertId();
 
 		# Notify extensions
-		wfRunHooks( 'RecentChange_save', array( &$this ) );
+		Hooks::run( 'RecentChange_save', array( &$this ) );
 
 		# Notify external application via UDP
 		if ( !$noudp ) {
@@ -321,7 +317,7 @@ class RecentChange {
 			$editor = $this->getPerformer();
 			$title = $this->getTitle();
 
-			if ( wfRunHooks( 'AbortEmailNotification', array( $editor, $title, $this ) ) ) {
+			if ( Hooks::run( 'AbortEmailNotification', array( $editor, $title, $this ) ) ) {
 				# @todo FIXME: This would be better as an extension hook
 				$enotif = new EmailNotification();
 				$enotif->notifyOnPageChange( $editor, $title,
@@ -331,6 +327,11 @@ class RecentChange {
 					$this->mAttribs['rc_last_oldid'],
 					$this->mExtra['pageStatus'] );
 			}
+		}
+
+		// Update the cached list of active users
+		if ( $this->mAttribs['rc_user'] > 0 ) {
+			JobQueueGroup::singleton()->lazyPush( RecentChangesUpdateJob::newCacheUpdateJob() );
 		}
 	}
 
@@ -377,6 +378,13 @@ class RecentChange {
 			/** @var $formatter RCFeedFormatter */
 			$formatter = is_object( $feed['formatter'] ) ? $feed['formatter'] : new $feed['formatter']();
 			$line = $formatter->getLine( $feed, $this, $actionComment );
+			if ( !$line ) {
+				// T109544
+				// If a feed formatter returns null, this will otherwise cause an
+				// error in at least RedisPubSubFeedEngine.
+				// Not sure where/how this should best be handled.
+				continue;
+			}
 
 			$engine->send( $feed, $line );
 		}
@@ -445,12 +453,12 @@ class RecentChange {
 		// Automatic patrol needs "autopatrol", ordinary patrol needs "patrol"
 		$right = $auto ? 'autopatrol' : 'patrol';
 		$errors = array_merge( $errors, $this->getTitle()->getUserPermissionsErrors( $right, $user ) );
-		if ( !wfRunHooks( 'MarkPatrolled', array( $this->getAttribute( 'rc_id' ), &$user, false ) ) ) {
+		if ( !Hooks::run( 'MarkPatrolled', array( $this->getAttribute( 'rc_id' ), &$user, false ) ) ) {
 			$errors[] = array( 'hookaborted' );
 		}
 		// Users without the 'autopatrol' right can't patrol their
 		// own revisions
-		if ( $user->getName() == $this->getAttribute( 'rc_user_text' )
+		if ( $user->getName() === $this->getAttribute( 'rc_user_text' )
 			&& !$user->isAllowed( 'autopatrol' )
 		) {
 			$errors[] = array( 'markedaspatrollederror-noautopatrol' );
@@ -466,7 +474,7 @@ class RecentChange {
 		$this->reallyMarkPatrolled();
 		// Log this patrol event
 		PatrolLog::record( $this, $auto, $user );
-		wfRunHooks( 'MarkPatrolledComplete', array( $this->getAttribute( 'rc_id' ), &$user, false ) );
+		Hooks::run( 'MarkPatrolledComplete', array( $this->getAttribute( 'rc_id' ), &$user, false ) );
 
 		return array();
 	}
@@ -512,8 +520,10 @@ class RecentChange {
 	 * @param int $patrol
 	 * @return RecentChange
 	 */
-	public static function notifyEdit( $timestamp, &$title, $minor, &$user, $comment, $oldId,
-		$lastTimestamp, $bot, $ip = '', $oldSize = 0, $newSize = 0, $newId = 0, $patrol = 0 ) {
+	public static function notifyEdit(
+		$timestamp, &$title, $minor, &$user, $comment, $oldId, $lastTimestamp,
+		$bot, $ip = '', $oldSize = 0, $newSize = 0, $newId = 0, $patrol = 0
+	) {
 		$rc = new RecentChange;
 		$rc->mTitle = $title;
 		$rc->mPerformer = $user;
@@ -550,7 +560,13 @@ class RecentChange {
 			'newSize' => $newSize,
 			'pageStatus' => 'changed'
 		);
-		$rc->save();
+
+		DeferredUpdates::addCallableUpdate( function() use ( $rc ) {
+			$rc->save();
+			if ( $rc->mAttribs['rc_patrolled'] ) {
+				PatrolLog::record( $rc, true, $rc->getPerformer() );
+			}
+		} );
 
 		return $rc;
 	}
@@ -571,8 +587,10 @@ class RecentChange {
 	 * @param int $patrol
 	 * @return RecentChange
 	 */
-	public static function notifyNew( $timestamp, &$title, $minor, &$user, $comment, $bot,
-		$ip = '', $size = 0, $newId = 0, $patrol = 0 ) {
+	public static function notifyNew(
+		$timestamp, &$title, $minor, &$user, $comment, $bot,
+		$ip = '', $size = 0, $newId = 0, $patrol = 0
+	) {
 		$rc = new RecentChange;
 		$rc->mTitle = $title;
 		$rc->mPerformer = $user;
@@ -609,7 +627,13 @@ class RecentChange {
 			'newSize' => $size,
 			'pageStatus' => 'created'
 		);
-		$rc->save();
+
+		DeferredUpdates::addCallableUpdate( function() use ( $rc ) {
+			$rc->save();
+			if ( $rc->mAttribs['rc_patrolled'] ) {
+				PatrolLog::record( $rc, true, $rc->getPerformer() );
+			}
+		} );
 
 		return $rc;
 	}
@@ -796,29 +820,6 @@ class RecentChange {
 		return ChangesList::showCharacterDifference( $old, $new );
 	}
 
-	/**
-	 * Purge expired changes from the recentchanges table
-	 * @since 1.22
-	 */
-	public static function purgeExpiredChanges() {
-		if ( wfReadOnly() ) {
-			return;
-		}
-
-		$method = __METHOD__;
-		$dbw = wfGetDB( DB_MASTER );
-		$dbw->onTransactionIdle( function () use ( $dbw, $method ) {
-			global $wgRCMaxAge;
-
-			$cutoff = $dbw->timestamp( time() - $wgRCMaxAge );
-			$dbw->delete(
-				'recentchanges',
-				array( 'rc_timestamp < ' . $dbw->addQuotes( $cutoff ) ),
-				$method
-			);
-		} );
-	}
-
 	private static function checkIPAddress( $ip ) {
 		global $wgRequest;
 		if ( $ip ) {
@@ -849,5 +850,22 @@ class RecentChange {
 		global $wgRCMaxAge;
 
 		return wfTimestamp( TS_UNIX, $timestamp ) > time() - $tolerance - $wgRCMaxAge;
+	}
+
+	/**
+	 * Parses and returns the rc_params attribute
+	 *
+	 * @since 1.26
+	 *
+	 * @return array|null
+	 */
+	public function parseParams() {
+		$rcParams = $this->getAttribute( 'rc_params' );
+
+		MediaWiki\suppressWarnings();
+		$unserializedParams = unserialize( $rcParams );
+		MediaWiki\restoreWarnings();
+
+		return $unserializedParams;
 	}
 }

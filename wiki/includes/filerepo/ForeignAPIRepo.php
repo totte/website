@@ -21,6 +21,8 @@
  * @ingroup FileRepo
  */
 
+use MediaWiki\Logger\LoggerFactory;
+
 /**
  * A foreign repository with a remote MediaWiki with an API thingy
  *
@@ -29,7 +31,7 @@
  * $wgForeignFileRepos[] = array(
  *   'class'                  => 'ForeignAPIRepo',
  *   'name'                   => 'shared',
- *   'apibase'                => 'http://en.wikipedia.org/w/api.php',
+ *   'apibase'                => 'https://en.wikipedia.org/w/api.php',
  *   'fetchDescription'       => true, // Optional
  *   'descriptionCacheExpiry' => 3600,
  * );
@@ -72,7 +74,7 @@ class ForeignAPIRepo extends FileRepo {
 		global $wgLocalFileRepo;
 		parent::__construct( $info );
 
-		// http://commons.wikimedia.org/w/api.php
+		// https://commons.wikimedia.org/w/api.php
 		$this->mApiBase = isset( $info['apibase'] ) ? $info['apibase'] : null;
 
 		if ( isset( $info['apiThumbCacheExpiry'] ) ) {
@@ -514,13 +516,15 @@ class ForeignAPIRepo extends FileRepo {
 			$options['timeout'] = 'default';
 		}
 
-		$req = MWHttpRequest::factory( $url, $options );
+		$req = MWHttpRequest::factory( $url, $options, __METHOD__ );
 		$req->setUserAgent( ForeignAPIRepo::getUserAgent() );
 		$status = $req->execute();
 
 		if ( $status->isOK() ) {
 			return $req->getContent();
 		} else {
+			$logger = LoggerFactory::getInstance( 'http' );
+			$logger->warning( $status->getWikiText(), array( 'caller' => 'ForeignAPIRepo::httpGet' ) );
 			return false;
 		}
 	}

@@ -1434,6 +1434,7 @@ excludepage
 excludeuser
 executables
 exempt
+exiftool
 existingwiki
 exists
 exiv
@@ -1811,7 +1812,6 @@ historysubmit
 historywarning
 hit
 hitcount
-hitcounter
 hits
 hlist
 hmac
@@ -2248,7 +2248,6 @@ logextract
 loggedin
 logid
 login
-loginend
 loginerror
 loginfo
 loginlanguagelinks
@@ -2259,7 +2258,6 @@ loginreqlink
 loginreqpagetext
 loginreqtitle
 logins
-loginstart
 logitem
 loglink
 loglist
@@ -2901,7 +2899,6 @@ numberofedits
 numberoffiles
 numberofpages
 numberofusers
-numberofviews
 numberofwatchingusers
 numedits
 numentries
@@ -3004,9 +3001,6 @@ outreachwiki
 over
 overridable
 override
-oversight
-oversighted
-oversighter
 overwrite
 overwroteimage
 own
@@ -3162,7 +3156,6 @@ pnmtopng
 pointsize
 poolcounter
 popts
-popularpages
 portlet
 portlets
 posplus
@@ -4248,8 +4241,6 @@ unmakesafe
 unmark
 unmerge
 unmodified
-unoversight
-unoversighted
 unpadded
 unpatrolled
 unpatrolledletter
@@ -4517,7 +4508,7 @@ what
 whatlinkshere
 whatwg
 wheely
-wheter
+whether
 whitelist
 whitelisted
 whitelistedittext

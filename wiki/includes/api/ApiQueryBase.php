@@ -70,6 +70,10 @@ abstract class ApiQueryBase extends ApiBase {
 	/**
 	 * Override this method to request extra fields from the pageSet
 	 * using $pageSet->requestField('fieldName')
+	 *
+	 * Note this only makes sense for 'prop' modules, as 'list' and 'meta'
+	 * modules should not be using the pageset.
+	 *
 	 * @param ApiPageSet $pageSet
 	 */
 	public function requestExtraData( $pageSet ) {
@@ -88,6 +92,13 @@ abstract class ApiQueryBase extends ApiBase {
 	 */
 	public function getQuery() {
 		return $this->mQueryModule;
+	}
+
+	/**
+	 * @see ApiBase::getParent()
+	 */
+	public function getParent() {
+		return $this->getQuery();
 	}
 
 	/**
@@ -112,6 +123,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 */
 	public function selectNamedDB( $name, $db, $groups ) {
 		$this->mDb = $this->getQuery()->getNamedDB( $name, $db, $groups );
+		return $this->mDb;
 	}
 
 	/**
@@ -361,12 +373,7 @@ abstract class ApiQueryBase extends ApiBase {
 			isset( $extraQuery['join_conds'] ) ? (array)$extraQuery['join_conds'] : array()
 		);
 
-		// getDB has its own profileDBIn/Out calls
-		$db = $this->getDB();
-
-		$this->profileDBIn();
-		$res = $db->select( $tables, $fields, $where, $method, $options, $join_conds );
-		$this->profileDBOut();
+		$res = $this->getDB()->select( $tables, $fields, $where, $method, $options, $join_conds );
 
 		return $res;
 	}
@@ -450,7 +457,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 */
 	protected function addPageSubItems( $pageId, $data ) {
 		$result = $this->getResult();
-		$result->setIndexedTagName( $data, $this->getModulePrefix() );
+		ApiResult::setIndexedTagName( $data, $this->getModulePrefix() );
 
 		return $result->addValue( array( 'query', 'pages', intval( $pageId ) ),
 			$this->getModuleName(),
@@ -475,7 +482,7 @@ abstract class ApiQueryBase extends ApiBase {
 		if ( !$fit ) {
 			return false;
 		}
-		$result->setIndexedTagName_internal( array( 'query', 'pages', $pageId,
+		$result->addIndexedTagName( array( 'query', 'pages', $pageId,
 			$this->getModuleName() ), $elemname );
 
 		return true;
@@ -487,7 +494,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * @param string|array $paramValue Parameter value
 	 */
 	protected function setContinueEnumParameter( $paramName, $paramValue ) {
-		$this->getResult()->setContinueParam( $this, $paramName, $paramValue );
+		$this->getContinuationManager()->addContinueParam( $this, $paramName, $paramValue );
 	}
 
 	/**
@@ -497,12 +504,13 @@ abstract class ApiQueryBase extends ApiBase {
 	 * capitalization settings.
 	 *
 	 * @param string $titlePart Title part
-	 * @param int $defaultNamespace Namespace of the title
+	 * @param int $namespace Namespace of the title
 	 * @return string DBkey (no namespace prefix)
 	 */
 	public function titlePartToKey( $titlePart, $namespace = NS_MAIN ) {
 		$t = Title::makeTitleSafe( $namespace, $titlePart . 'x' );
-		if ( !$t ) {
+		if ( !$t || $t->hasFragment() ) {
+			// Invalid title (e.g. bad chars) or contained a '#'.
 			$this->dieUsageMsg( array( 'invalidtitle', $titlePart ) );
 		}
 		if ( $namespace != $t->getNamespace() || $t->isExternal() ) {
@@ -515,6 +523,24 @@ abstract class ApiQueryBase extends ApiBase {
 		}
 
 		return substr( $t->getDbKey(), 0, -1 );
+	}
+
+	/**
+	 * Convert an input title or title prefix into a namespace constant and dbkey.
+	 *
+	 * @since 1.26
+	 * @param string $titlePart Title part
+	 * @param int $defaultNamespace Default namespace if none is given
+	 * @return array (int, string) Namespace number and DBkey
+	 */
+	public function prefixedTitlePartToKey( $titlePart, $defaultNamespace = NS_MAIN ) {
+		$t = Title::newFromText( $titlePart . 'x', $defaultNamespace );
+		if ( !$t || $t->hasFragment() || $t->isExternal() ) {
+			// Invalid title (e.g. bad chars) or contained a '#'.
+			$this->dieUsageMsg( array( 'invalidtitle', $titlePart ) );
+		}
+
+		return array( $t->getNamespace(), substr( $t->getDbKey(), 0, -1 ) );
 	}
 
 	/**
@@ -578,7 +604,6 @@ abstract class ApiQueryBase extends ApiBase {
 	protected function checkRowCount() {
 		wfDeprecated( __METHOD__, '1.24' );
 		$db = $this->getDB();
-		$this->profileDBIn();
 		$rowcount = $db->estimateRowCount(
 			$this->tables,
 			$this->fields,
@@ -586,7 +611,6 @@ abstract class ApiQueryBase extends ApiBase {
 			__METHOD__,
 			$this->options
 		);
-		$this->profileDBOut();
 
 		if ( $rowcount > $this->getConfig()->get( 'APIMaxDBRows' ) ) {
 			return false;
@@ -705,10 +729,21 @@ abstract class ApiQueryGeneratorBase extends ApiQueryBase {
 	 */
 	protected function setContinueEnumParameter( $paramName, $paramValue ) {
 		if ( $this->mGeneratorPageSet !== null ) {
-			$this->getResult()->setGeneratorContinueParam( $this, $paramName, $paramValue );
+			$this->getContinuationManager()->addGeneratorContinueParam( $this, $paramName, $paramValue );
 		} else {
 			parent::setContinueEnumParameter( $paramName, $paramValue );
 		}
+	}
+
+	/**
+	 * @see ApiBase::getHelpFlags()
+	 *
+	 * Corresponding messages: api-help-flag-generator
+	 */
+	protected function getHelpFlags() {
+		$flags = parent::getHelpFlags();
+		$flags[] = 'generator';
+		return $flags;
 	}
 
 	/**

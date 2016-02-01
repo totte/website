@@ -384,8 +384,6 @@ class PostgresUpdater extends DatabaseUpdater {
 				'page(page_id) ON DELETE CASCADE' ),
 			array( 'changeFkeyDeferrable', 'protected_titles', 'pt_user',
 				'mwuser(user_id) ON DELETE SET NULL' ),
-			array( 'changeFkeyDeferrable', 'recentchanges', 'rc_cur_id',
-				'page(page_id) ON DELETE SET NULL' ),
 			array( 'changeFkeyDeferrable', 'recentchanges', 'rc_user',
 				'mwuser(user_id) ON DELETE SET NULL' ),
 			array( 'changeFkeyDeferrable', 'redirect', 'rd_from', 'page(page_id) ON DELETE CASCADE' ),
@@ -409,6 +407,8 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'addPgField', 'mwuser', 'user_password_expires', 'TIMESTAMPTZ NULL' ),
 			array( 'changeFieldPurgeTable', 'l10n_cache', 'lc_value', 'bytea',
 				"replace(lc_value,'\','\\\\')::bytea" ),
+			// 1.23.9
+			array( 'rebuildTextSearch' ),
 
 			// 1.24
 			array( 'addPgField', 'page_props', 'pp_sortkey', 'float NULL' ),
@@ -418,6 +418,12 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'addPgField', 'pagelinks', 'pl_from_namespace', 'INTEGER NOT NULL DEFAULT 0' ),
 			array( 'addPgField', 'templatelinks', 'tl_from_namespace', 'INTEGER NOT NULL DEFAULT 0' ),
 			array( 'addPgField', 'imagelinks', 'il_from_namespace', 'INTEGER NOT NULL DEFAULT 0' ),
+
+			// 1.25
+			array( 'dropTable', 'hitcounter' ),
+			array( 'dropField', 'site_stats', 'ss_total_views', 'patch-drop-ss_total_views.sql' ),
+			array( 'dropField', 'page', 'page_counter', 'patch-drop-page_counter.sql' ),
+			array( 'dropFkey', 'recentchanges', 'rc_cur_id' )
 		);
 	}
 
@@ -769,6 +775,24 @@ END;
 		}
 	}
 
+	protected function dropFkey( $table, $field ) {
+		$fi = $this->db->fieldInfo( $table, $field );
+		if ( is_null( $fi ) ) {
+			$this->output( "WARNING! Column '$table.$field' does not exist but it should! " .
+				"Please report this.\n" );
+			return;
+		}
+		$conname = $fi->conname();
+		if ( $fi->conname() ) {
+			$this->output( "Dropping foreign key constraint on '$table.$field'\n" );
+			$conclause = "CONSTRAINT \"$conname\"";
+			$command = "ALTER TABLE $table DROP CONSTRAINT $conname";
+			$this->db->query( $command );
+		} else {
+			$this->output( "...foreign key constraint on '$table.$field' already does not exist\n" );
+		};
+	}
+
 	protected function changeFkeyDeferrable( $table, $field, $clause ) {
 		$fi = $this->db->fieldInfo( $table, $field );
 		if ( is_null( $fi ) ) {
@@ -924,5 +948,13 @@ END;
 		if ( $this->db->getServerVersion() >= 8.3 ) {
 			$this->applyPatch( 'patch-tsearch2funcs.sql', false, "Rewriting tsearch2 triggers" );
 		}
+	}
+
+	protected function rebuildTextSearch() {
+		if ( $this->updateRowExists( 'patch-textsearch_bug66650.sql' ) ) {
+			$this->output( "...bug 66650 already fixed or not applicable.\n" );
+			return true;
+		};
+		$this->applyPatch( 'patch-textsearch_bug66650.sql', false, "Rebuilding text search for bug 66650" );
 	}
 }

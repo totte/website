@@ -39,6 +39,12 @@ class WebRequest {
 	protected $data, $headers = array();
 
 	/**
+	 * Flag to make WebRequest::getHeader return an array of values.
+	 * @since 1.26
+	 */
+	const GETHEADER_LIST = 1;
+
+	/**
 	 * Lazy-init response object
 	 * @var WebResponse
 	 */
@@ -51,15 +57,20 @@ class WebRequest {
 	private $ip;
 
 	/**
+	 * The timestamp of the start of the request, with microsecond precision.
+	 * @var float
+	 */
+	protected $requestTime;
+
+	/**
 	 * Cached URL protocol
 	 * @var string
 	 */
 	protected $protocol;
 
 	public function __construct() {
-		if ( function_exists( 'get_magic_quotes_gpc' ) && get_magic_quotes_gpc() ) {
-			throw new MWException( "MediaWiki does not function when magic quotes are enabled." );
-		}
+		$this->requestTime = isset( $_SERVER['REQUEST_TIME_FLOAT'] )
+			? $_SERVER['REQUEST_TIME_FLOAT'] : microtime( true );
 
 		// POST overrides GET data
 		// We don't use $_REQUEST here to avoid interference from cookies...
@@ -93,9 +104,9 @@ class WebRequest {
 			if ( !preg_match( '!^https?://!', $url ) ) {
 				$url = 'http://unused' . $url;
 			}
-			wfSuppressWarnings();
+			MediaWiki\suppressWarnings();
 			$a = parse_url( $url );
-			wfRestoreWarnings();
+			MediaWiki\restoreWarnings();
 			if ( $a ) {
 				$path = isset( $a['path'] ) ? $a['path'] : '';
 
@@ -138,7 +149,7 @@ class WebRequest {
 					);
 				}
 
-				wfRunHooks( 'WebRequestPathInfoRouter', array( $router ) );
+				Hooks::run( 'WebRequestPathInfoRouter', array( $router ) );
 
 				$matches = $router->parse( $path );
 			}
@@ -165,6 +176,8 @@ class WebRequest {
 	 * @return string
 	 */
 	public static function detectServer() {
+		global $wgAssumeProxiesUseDefaultProtocolPorts;
+
 		$proto = self::detectProtocol();
 		$stdPort = $proto === 'https' ? 443 : 80;
 
@@ -175,13 +188,15 @@ class WebRequest {
 			if ( !isset( $_SERVER[$varName] ) ) {
 				continue;
 			}
+
 			$parts = IP::splitHostAndPort( $_SERVER[$varName] );
 			if ( !$parts ) {
 				// Invalid, do not use
 				continue;
 			}
+
 			$host = $parts[0];
-			if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) {
+			if ( $wgAssumeProxiesUseDefaultProtocolPorts && isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) {
 				// Bug 70021: Assume that upstream proxy is running on the default
 				// port based on the protocol. We have no reliable way to determine
 				// the actual port in use upstream.
@@ -207,13 +222,24 @@ class WebRequest {
 	 * @return array
 	 */
 	public static function detectProtocol() {
-		if ( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' ) ||
+		if ( ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) ||
 			( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) &&
-			$_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ) ) {
+			$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) ) {
 			return 'https';
 		} else {
 			return 'http';
 		}
+	}
+
+	/**
+	 * Get the number of seconds to have elapsed since request start,
+	 * in fractional seconds, with microsecond resolution.
+	 *
+	 * @return float
+	 * @since 1.25
+	 */
+	public function getElapsedTime() {
+		return microtime( true ) - $this->requestTime;
 	}
 
 	/**
@@ -289,7 +315,7 @@ class WebRequest {
 			}
 		} else {
 			global $wgContLang;
-			$data = isset( $wgContLang ) ? $wgContLang->normalize( $data ) : UtfNormal::cleanUp( $data );
+			$data = isset( $wgContLang ) ? $wgContLang->normalize( $data ) : UtfNormal\Validator::cleanUp( $data );
 		}
 		return $data;
 	}
@@ -669,7 +695,7 @@ class WebRequest {
 			// This shouldn't happen!
 			throw new MWException( "Web server doesn't provide either " .
 				"REQUEST_URI, HTTP_X_ORIGINAL_URL or SCRIPT_NAME. Report details " .
-				"of your web server configuration to http://bugzilla.wikimedia.org/" );
+				"of your web server configuration to https://phabricator.wikimedia.org/" );
 		}
 		// User-agents should not send a fragment with the URI, but
 		// if they do, and the web server passes it on to us, we
@@ -705,21 +731,22 @@ class WebRequest {
 
 	/**
 	 * Take an arbitrary query and rewrite the present URL to include it
+	 * @deprecated Use appendQueryValue/appendQueryArray instead
 	 * @param string $query Query string fragment; do not include initial '?'
-	 *
 	 * @return string
 	 */
 	public function appendQuery( $query ) {
+		wfDeprecated( __METHOD__, '1.25' );
 		return $this->appendQueryArray( wfCgiToArray( $query ) );
 	}
 
 	/**
 	 * @param string $key
 	 * @param string $value
-	 * @param bool $onlyquery
+	 * @param bool $onlyquery [deprecated]
 	 * @return string
 	 */
-	public function appendQueryValue( $key, $value, $onlyquery = false ) {
+	public function appendQueryValue( $key, $value, $onlyquery = true ) {
 		return $this->appendQueryArray( array( $key => $value ), $onlyquery );
 	}
 
@@ -727,16 +754,21 @@ class WebRequest {
 	 * Appends or replaces value of query variables.
 	 *
 	 * @param array $array Array of values to replace/add to query
-	 * @param bool $onlyquery Whether to only return the query string and not the complete URL
+	 * @param bool $onlyquery Whether to only return the query string and not the complete URL [deprecated]
 	 * @return string
 	 */
-	public function appendQueryArray( $array, $onlyquery = false ) {
+	public function appendQueryArray( $array, $onlyquery = true ) {
 		global $wgTitle;
 		$newquery = $this->getQueryValues();
 		unset( $newquery['title'] );
 		$newquery = array_merge( $newquery, $array );
 		$query = wfArrayToCgi( $newquery );
-		return $onlyquery ? $query : $wgTitle->getLocalURL( $query );
+		if ( !$onlyquery ) {
+			wfDeprecated( __METHOD__, '1.25' );
+			return $wgTitle->getLocalURL( $query );
+		}
+
+		return $query;
 	}
 
 	/**
@@ -746,7 +778,7 @@ class WebRequest {
 	 *
 	 * @param int $deflimit Limit to use if no input and the user hasn't set the option.
 	 * @param string $optionname To specify an option other than rclimit to pull from.
-	 * @return array First element is limit, second is offset
+	 * @return int[] First element is limit, second is offset
 	 */
 	public function getLimitOffset( $deflimit = 50, $optionname = 'rclimit' ) {
 		global $wgUser;
@@ -839,7 +871,7 @@ class WebRequest {
 	/**
 	 * Initialise the header list
 	 */
-	private function initHeaders() {
+	protected function initHeaders() {
 		if ( count( $this->headers ) ) {
 			return;
 		}
@@ -872,19 +904,28 @@ class WebRequest {
 	}
 
 	/**
-	 * Get a request header, or false if it isn't set
-	 * @param string $name Case-insensitive header name
+	 * Get a request header, or false if it isn't set.
 	 *
-	 * @return string|bool False on failure
+	 * @param string $name Case-insensitive header name
+	 * @param int $flags Bitwise combination of:
+	 *   WebRequest::GETHEADER_LIST  Treat the header as a comma-separated list
+	 *                               of values, as described in RFC 2616 § 4.2.
+	 *                               (since 1.26).
+	 * @return string|array|bool False if header is unset; otherwise the
+	 *  header value(s) as either a string (the default) or an array, if
+	 *  WebRequest::GETHEADER_LIST flag was set.
 	 */
-	public function getHeader( $name ) {
+	public function getHeader( $name, $flags = 0 ) {
 		$this->initHeaders();
 		$name = strtoupper( $name );
-		if ( isset( $this->headers[$name] ) ) {
-			return $this->headers[$name];
-		} else {
+		if ( !isset( $this->headers[$name] ) ) {
 			return false;
 		}
+		$value = $this->headers[$name];
+		if ( $flags & self::GETHEADER_LIST ) {
+			$value = array_map( 'trim', explode( ',', $value ) );
+		}
+		return $value;
 	}
 
 	/**
@@ -1112,7 +1153,7 @@ HTML;
 		}
 
 		# Allow extensions to improve our guess
-		wfRunHooks( 'GetIP', array( &$ip ) );
+		Hooks::run( 'GetIP', array( &$ip ) );
 
 		if ( !$ip ) {
 			throw new MWException( "Unable to determine IP." );
@@ -1255,6 +1296,8 @@ class WebRequestUpload {
 class FauxRequest extends WebRequest {
 	private $wasPosted = false;
 	private $session = array();
+	private $requestUrl;
+	protected $cookies = array();
 
 	/**
 	 * @param array $data Array of *non*-urlencoded key => value pairs, the
@@ -1267,6 +1310,8 @@ class FauxRequest extends WebRequest {
 	public function __construct( $data = array(), $wasPosted = false,
 		$session = null, $protocol = 'http'
 	) {
+		$this->requestTime = microtime( true );
+
 		if ( is_array( $data ) ) {
 			$this->data = $data;
 		} else {
@@ -1280,11 +1325,10 @@ class FauxRequest extends WebRequest {
 	}
 
 	/**
-	 * @param string $method
-	 * @throws MWException
+	 * Initialise the header list
 	 */
-	private function notImplemented( $method ) {
-		throw new MWException( "{$method}() not implemented" );
+	protected function initHeaders() {
+		// Nothing to init
 	}
 
 	/**
@@ -1327,15 +1371,53 @@ class FauxRequest extends WebRequest {
 	}
 
 	public function getCookie( $key, $prefix = null, $default = null ) {
-		return $default;
+		if ( $prefix === null ) {
+			global $wgCookiePrefix;
+			$prefix = $wgCookiePrefix;
+		}
+		$name = $prefix . $key;
+		return isset( $this->cookies[$name] ) ? $this->cookies[$name] : $default;
+	}
+
+	/**
+	 * @since 1.26
+	 * @param string $name Unprefixed name of the cookie to set
+	 * @param string|null $value Value of the cookie to set
+	 * @param string|null $prefix Cookie prefix. Defaults to $wgCookiePrefix
+	 */
+	public function setCookie( $key, $value, $prefix = null ) {
+		$this->setCookies( array( $key => $value ), $prefix );
+	}
+
+	/**
+	 * @since 1.26
+	 * @param array $cookies
+	 * @param string|null $prefix Cookie prefix. Defaults to $wgCookiePrefix
+	 */
+	public function setCookies( $cookies, $prefix = null ) {
+		if ( $prefix === null ) {
+			global $wgCookiePrefix;
+			$prefix = $wgCookiePrefix;
+		}
+		foreach ( $cookies as $key => $value ) {
+			$name = $prefix . $key;
+			$this->cookies[$name] = $value;
+		}
 	}
 
 	public function checkSessionCookie() {
 		return false;
 	}
 
+	public function setRequestURL( $url ) {
+		$this->requestUrl = $url;
+	}
+
 	public function getRequestURL() {
-		$this->notImplemented( __METHOD__ );
+		if ( $this->requestUrl === null ) {
+			throw new MWException( 'Request URL not set' );
+		}
+		return $this->requestUrl;
 	}
 
 	public function getProtocol() {
@@ -1343,21 +1425,22 @@ class FauxRequest extends WebRequest {
 	}
 
 	/**
-	 * @param string $name The name of the header to get (case insensitive).
-	 * @return bool|string
-	 */
-	public function getHeader( $name ) {
-		$name = strtoupper( $name );
-		return isset( $this->headers[$name] ) ? $this->headers[$name] : false;
-	}
-
-	/**
 	 * @param string $name
 	 * @param string $val
 	 */
 	public function setHeader( $name, $val ) {
-		$name = strtoupper( $name );
-		$this->headers[$name] = $val;
+		$this->setHeaders( array( $name => $val ) );
+	}
+
+	/**
+	 * @since 1.26
+	 * @param array $headers
+	 */
+	public function setHeaders( $headers ) {
+		foreach ( $headers as $name => $val ) {
+			$name = strtoupper( $name );
+			$this->headers[$name] = $val;
+		}
 	}
 
 	/**
@@ -1456,8 +1539,8 @@ class DerivativeRequest extends FauxRequest {
 		return $this->base->checkSessionCookie();
 	}
 
-	public function getHeader( $name ) {
-		return $this->base->getHeader( $name );
+	public function getHeader( $name, $flags = 0 ) {
+		return $this->base->getHeader( $name, $flags );
 	}
 
 	public function getAllHeaders() {
@@ -1482,5 +1565,9 @@ class DerivativeRequest extends FauxRequest {
 
 	public function getProtocol() {
 		return $this->base->getProtocol();
+	}
+
+	public function getElapsedTime() {
+		return $this->base->getElapsedTime();
 	}
 }

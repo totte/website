@@ -107,6 +107,8 @@ class RevertAction extends FormAction {
 	}
 
 	public function onSubmit( $data ) {
+		$this->useTransactionalTimeLimit();
+
 		$source = $this->page->getFile()->getArchiveVirtualUrl(
 			$this->getRequest()->getText( 'oldimage' )
 		);
@@ -144,8 +146,6 @@ class RevertAction extends FormAction {
 	}
 
 	protected function getDescription() {
-		$this->getOutput()->addBacklinkSubtitle( $this->getTitle() );
-
-		return '';
+		return OutputPage::buildBacklinkSubtitle( $this->getTitle() );
 	}
 }

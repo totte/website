@@ -39,6 +39,8 @@ class ApiDelete extends ApiBase {
 	 * result object.
 	 */
 	public function execute() {
+		$this->useTransactionalTimeLimit();
+
 		$params = $this->extractRequestParams();
 
 		$pageObj = $this->getTitleOrPageId( $params, 'fromdbmaster' );
@@ -131,7 +133,7 @@ class ApiDelete extends ApiBase {
 		$error = '';
 
 		// Luckily, Article.php provides a reusable delete function that does the hard work for us
-		return $page->doDeleteArticleReal( $reason, false, 0, true, $error );
+		return $page->doDeleteArticleReal( $reason, false, 0, true, $error, $user );
 	}
 
 	/**
@@ -210,35 +212,16 @@ class ApiDelete extends ApiBase {
 		);
 	}
 
-	public function getParamDescription() {
-		$p = $this->getModulePrefix();
-
-		return array(
-			'title' => "Title of the page you want to delete. Cannot be used together with {$p}pageid",
-			'pageid' => "Page ID of the page you want to delete. Cannot be used together with {$p}title",
-			'reason'
-				=> 'Reason for the deletion. If not set, an automatically generated reason will be used',
-			'watch' => 'Add the page to your watchlist',
-			'watchlist' => 'Unconditionally add or remove the page from your ' .
-				'watchlist, use preferences or do not change watch',
-			'unwatch' => 'Remove the page from your watchlist',
-			'oldimage' => 'The name of the old image to delete as provided by iiprop=archivename'
-		);
-	}
-
-	public function getDescription() {
-		return 'Delete a page.';
-	}
-
 	public function needsToken() {
 		return 'csrf';
 	}
 
-	public function getExamples() {
+	protected function getExamplesMessages() {
 		return array(
-			'api.php?action=delete&title=Main%20Page&token=123ABC' => 'Delete the Main Page',
-			'api.php?action=delete&title=Main%20Page&token=123ABC&reason=Preparing%20for%20move'
-				=> 'Delete the Main Page with the reason "Preparing for move"',
+			'action=delete&title=Main%20Page&token=123ABC'
+				=> 'apihelp-delete-example-simple',
+			'action=delete&title=Main%20Page&token=123ABC&reason=Preparing%20for%20move'
+				=> 'apihelp-delete-example-reason',
 		);
 	}
 

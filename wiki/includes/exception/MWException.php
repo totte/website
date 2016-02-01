@@ -117,10 +117,12 @@ class MWException extends Exception {
 		$args = array_slice( func_get_args(), 2 );
 
 		if ( $this->useMessageCache() ) {
-			return wfMessage( $key, $args )->text();
-		} else {
-			return wfMsgReplaceArgs( $fallback, $args );
+			try {
+				return wfMessage( $key, $args )->text();
+			} catch ( Exception $e ) {
+			}
 		}
+		return wfMsgReplaceArgs( $fallback, $args );
 	}
 
 	/**
@@ -139,10 +141,17 @@ class MWException extends Exception {
 			nl2br( htmlspecialchars( MWExceptionHandler::getRedactedTraceAsString( $this ) ) ) .
 			"</p>\n";
 		} else {
+			$logId = MWExceptionHandler::getLogId( $this );
+			$type = get_class( $this );
 			return "<div class=\"errorbox\">" .
-			'[' . MWExceptionHandler::getLogId( $this ) . '] ' .
-			gmdate( 'Y-m-d H:i:s' ) .
-			": Fatal exception of type " . get_class( $this ) . "</div>\n" .
+			'[' . $logId . '] ' .
+			gmdate( 'Y-m-d H:i:s' ) . ": " .
+			$this->msg( "internalerror-fatal-exception",
+				"Fatal exception of type $1",
+				$type,
+				$logId,
+				MWExceptionHandler::getURL( $this )
+			) . "</div>\n" .
 			"<!-- Set \$wgShowExceptionDetails = true; " .
 			"at the bottom of LocalSettings.php to show detailed " .
 			"debugging information. -->";
@@ -222,8 +231,6 @@ class MWException extends Exception {
 	public function report() {
 		global $wgMimeType;
 
-		MWExceptionHandler::logException( $this );
-
 		if ( defined( 'MW_API' ) ) {
 			// Unhandled API exception, we can't be sure that format printer is alive
 			self::header( 'MediaWiki-API-Error: internal_api_error_' . get_class( $this ) );
@@ -231,8 +238,7 @@ class MWException extends Exception {
 		} elseif ( self::isCommandLine() ) {
 			MWExceptionHandler::printError( $this->getText() );
 		} else {
-			self::header( 'HTTP/1.1 500 MediaWiki exception' );
-			self::header( 'Status: 500 MediaWiki exception' );
+			self::statusHeader( 500 );
 			self::header( "Content-Type: $wgMimeType; charset=utf-8" );
 
 			$this->reportHTML();
@@ -257,6 +263,11 @@ class MWException extends Exception {
 	private static function header( $header ) {
 		if ( !headers_sent() ) {
 			header( $header );
+		}
+	}
+	private static function statusHeader( $code ) {
+		if ( !headers_sent() ) {
+			HttpStatus::header( $code );
 		}
 	}
 }
