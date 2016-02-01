@@ -14,7 +14,7 @@
 	},
 	"interwiki": "Interwikidaten ansehen und bearbeiten",
 	"interwiki-title-norights": "Interwikidaten ansehen",
-	"interwiki-desc": "Ergänzt eine [[Special:Interwiki|Spezialseite]] zur Pflege der Interwikitabelle",
+	"interwiki-desc": "Eine [[Special:Interwiki|Spezialseite]] zur Pflege der Interwikitabelle",
 	"interwiki_intro": "Diese Seite bietet einen Überblick des Inhalts der Interwikitabelle dieses Wikis, die die verwendeten Präfixkürzel zur schnellen Verlinkung auf unterschiedliche Wikis und andere externe Websites definiert. Zur empfohlenen Verwendung, siehe bitte [//www.mediawiki.org/wiki/Extension:Interwiki das Handbuch auf MediaWiki.org].",
 	"interwiki-legend-label": "Legende",
 	"interwiki_prefix": "Präfix",
@@ -66,5 +66,5 @@
 	"interwiki-local-description": "Diese Präfixe sind lokal vorhanden. Alle Duplikate mit der globalen Konfiguration überschreiben die globale Definition.",
 	"interwiki-links": "Interwiki-Präfixe",
 	"interwiki-language-links": "Interlanguage-Präfixe",
-	"interwiki-language-description": "Diese Präfixe stimmen mit definierten Sprachcodes überein und werden zur Erstellung der Liste „In anderen Sprachen“ beim Hinzufügen zu einer Seite verwendet."
+	"interwiki-language-description": "Diese Präfixe stimmen mit definierten Sprachcodes überein und werden zur Erstellung der Liste „{{int:otherlanguages}}“ beim Hinzufügen zu einer Seite verwendet."
 }

@@ -35,11 +35,9 @@ class SkinVector extends SkinTemplate {
 	 */
 	private $vectorConfig;
 
-	public function __construct( Config $config ) {
-		$this->vectorConfig = $config;
+	public function __construct() {
+		$this->vectorConfig = ConfigFactory::getDefaultInstance()->makeConfig( 'vector' );
 	}
-
-	protected static $bodyClasses = array( 'vector-animateLayout' );
 
 	/**
 	 * Initializes output page and sets up skin-specific parameters
@@ -47,6 +45,11 @@ class SkinVector extends SkinTemplate {
 	 */
 	public function initPage( OutputPage $out ) {
 		parent::initPage( $out );
+
+		if ( $this->vectorConfig->get( 'VectorResponsive' ) ) {
+			$out->addMeta( 'viewport', 'width=device-width, initial-scale=1' );
+			$out->addModuleStyles( 'skins.vector.styles.responsive' );
+		}
 
 		// Append CSS which includes IE only behavior fixes for hover support -
 		// this is better than including this in a CSS file since it doesn't
@@ -69,7 +72,7 @@ class SkinVector extends SkinTemplate {
 		parent::setupSkinUserCss( $out );
 
 		$styles = array( 'mediawiki.skinning.interface', 'skins.vector.styles' );
-		wfRunHooks( 'SkinVectorStyleModules', array( $this, &$styles ) );
+		Hooks::run( 'SkinVectorStyleModules', array( $this, &$styles ) );
 		$out->addModuleStyles( $styles );
 	}
 
@@ -78,19 +81,5 @@ class SkinVector extends SkinTemplate {
 	 */
 	public function setupTemplate( $classname, $repository = false, $cache_dir = false ) {
 		return new $classname( $this->vectorConfig );
-	}
-
-	/**
-	 * Adds classes to the body element.
-	 *
-	 * @param OutputPage $out
-	 * @param array &$bodyAttrs Array of attributes that will be set on the body element
-	 */
-	function addToBodyAttributes( $out, &$bodyAttrs ) {
-		if ( isset( $bodyAttrs['class'] ) && strlen( $bodyAttrs['class'] ) > 0 ) {
-			$bodyAttrs['class'] .= ' ' . implode( ' ', static::$bodyClasses );
-		} else {
-			$bodyAttrs['class'] = implode( ' ', static::$bodyClasses );
-		}
 	}
 }

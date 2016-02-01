@@ -11,9 +11,12 @@ class RenameuserHooks {
 	public static function onShowMissingArticle( $article ) {
 		$title = $article->getTitle();
 		$oldUser = User::newFromName( $title->getBaseText() );
-		if ( ($title->getNamespace() == NS_USER || $title->getNamespace() == NS_USER_TALK ) && ($oldUser && $oldUser->isAnon() )) {
+		if ( ( $title->getNamespace() === NS_USER || $title->getNamespace() === NS_USER_TALK ) &&
+			( $oldUser && $oldUser->isAnon() )
+		) {
 			// Get the title for the base userpage
-			$page = Title::makeTitle( NS_USER, str_replace( ' ', '_', $title->getBaseText() ) )->getPrefixedDBkey();
+			$page = Title::makeTitle( NS_USER, str_replace( ' ', '_', $title->getBaseText() ) )
+				->getPrefixedDBkey();
 			$out = $article->getContext()->getOutput();
 			LogEventsList::showLogExtract(
 				$out,
@@ -46,11 +49,12 @@ class RenameuserHooks {
 		if ( $wgUser->isAllowed( 'renameuser' ) && $id ) {
 			$tools[] = Linker::link(
 				SpecialPage::getTitleFor( 'Renameuser' ),
-				wfMessage( 'renameuser-linkoncontribs' )->text(),
+				wfMessage( 'renameuser-linkoncontribs' )->escaped(),
 				array( 'title' => wfMessage( 'renameuser-linkoncontribs-text' )->parse() ),
 				array( 'oldusername' => $nt->getText() )
 			);
 		}
+
 		return true;
 	}
 
@@ -61,6 +65,7 @@ class RenameuserHooks {
 	 */
 	public static function onGetLogTypesOnUser( array &$types ) {
 		$types[] = 'renameuser';
+
 		return true;
 	}
 }

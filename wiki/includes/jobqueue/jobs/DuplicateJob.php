@@ -18,7 +18,7 @@
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @ingroup Cache
+ * @ingroup JobQueue
  */
 
 /**
@@ -33,7 +33,7 @@ final class DuplicateJob extends Job {
 	 * @param Title $title
 	 * @param array $params Job parameters
 	 */
-	function __construct( $title, $params ) {
+	function __construct( Title $title, array $params ) {
 		parent::__construct( 'duplicate', $title, $params );
 	}
 

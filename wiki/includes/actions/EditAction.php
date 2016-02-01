@@ -41,6 +41,8 @@ class EditAction extends FormlessAction {
 	}
 
 	public function show() {
+		$this->useTransactionalTimeLimit();
+
 		if ( $this->getContext()->getConfig()->get( 'UseMediaWikiUIEverywhere' ) ) {
 			$out = $this->getOutput();
 			$out->addModuleStyles( array(
@@ -51,7 +53,7 @@ class EditAction extends FormlessAction {
 		$page = $this->page;
 		$user = $this->getUser();
 
-		if ( wfRunHooks( 'CustomEditor', array( $page, $user ) ) ) {
+		if ( Hooks::run( 'CustomEditor', array( $page, $user ) ) ) {
 			$editor = new EditPage( $page );
 			$editor->edit();
 		}

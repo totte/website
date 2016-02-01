@@ -57,6 +57,10 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 			return;
 		}
 
+		$this->addHelpLink(
+			'//meta.wikimedia.org/wiki/Special:MyLanguage/Help:Recent_changes',
+			true
+		);
 		parent::execute( $subpage );
 	}
 
@@ -95,7 +99,7 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 	protected function getCustomFilters() {
 		if ( $this->customFilters === null ) {
 			$this->customFilters = parent::getCustomFilters();
-			wfRunHooks( 'SpecialRecentChangesFilters', array( $this, &$this->customFilters ), '1.23' );
+			Hooks::run( 'SpecialRecentChangesFilters', array( $this, &$this->customFilters ), '1.23' );
 		}
 
 		return $this->customFilters;
@@ -233,14 +237,21 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 			return false;
 		}
 
-		// rc_new is not an ENUM, but adding a redundant rc_new IN (0,1) gives mysql enough
-		// knowledge to use an index merge if it wants (it may use some other index though).
+		// array_merge() is used intentionally here so that hooks can, should
+		// they so desire, override the ORDER BY / LIMIT condition(s); prior to
+		// MediaWiki 1.26 this used to use the plus operator instead, which meant
+		// that extensions weren't able to change these conditions
+		$query_options = array_merge( array(
+			'ORDER BY' => 'rc_timestamp DESC',
+			'LIMIT' => $opts['limit'] ), $query_options );
 		$rows = $dbr->select(
 			$tables,
 			$fields,
+			// rc_new is not an ENUM, but adding a redundant rc_new IN (0,1) gives mysql enough
+			// knowledge to use an index merge if it wants (it may use some other index though).
 			$conds + array( 'rc_new' => array( 0, 1 ) ),
 			__METHOD__,
-			array( 'ORDER BY' => 'rc_timestamp DESC', 'LIMIT' => $opts['limit'] ) + $query_options,
+			$query_options,
 			$join_conds
 		);
 
@@ -252,13 +263,19 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 		return $rows;
 	}
 
-	protected function runMainQueryHook( &$tables, &$fields, &$conds, &$query_options, &$join_conds, $opts ) {
+	protected function runMainQueryHook( &$tables, &$fields, &$conds,
+		&$query_options, &$join_conds, $opts
+	) {
 		return parent::runMainQueryHook( $tables, $fields, $conds, $query_options, $join_conds, $opts )
-			&& wfRunHooks(
+			&& Hooks::run(
 				'SpecialRecentChangesQuery',
 				array( &$conds, &$tables, &$join_conds, $opts, &$query_options, &$fields ),
 				'1.23'
 			);
+	}
+
+	protected function getDB() {
+		return wfGetDB( DB_SLAVE, 'recentchanges' );
 	}
 
 	public function outputFeedLinks() {
@@ -270,7 +287,7 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 	 *
 	 * @return array
 	 */
-	private function getFeedQuery() {
+	protected function getFeedQuery() {
 		$query = array_filter( $this->getOptions()->getAllValues(), function ( $value ) {
 			// API handles empty parameters in a different way
 			return $value !== '';
@@ -311,7 +328,9 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 			$rc = RecentChange::newFromRow( $obj );
 			$rc->counter = $counter++;
 			# Check if the page has been updated since the last visit
-			if ( $this->getConfig()->get( 'ShowUpdatedMarker' ) && !empty( $obj->wl_notificationtimestamp ) ) {
+			if ( $this->getConfig()->get( 'ShowUpdatedMarker' )
+				&& !empty( $obj->wl_notificationtimestamp )
+			) {
 				$rc->notificationtimestamp = ( $obj->rc_timestamp >= $obj->wl_notificationtimestamp );
 			} else {
 				$rc->notificationtimestamp = false; // Default
@@ -440,11 +459,11 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 		$message = $this->msg( 'recentchangestext' )->inContentLanguage();
 		if ( !$message->isDisabled() ) {
 			$this->getOutput()->addWikiText(
-				Html::rawElement( 'p',
-					array( 'lang' => $wgContLang->getCode(), 'dir' => $wgContLang->getDir() ),
+				Html::rawElement( 'div',
+					array( 'lang' => $wgContLang->getHtmlCode(), 'dir' => $wgContLang->getDir() ),
 					"\n" . $message->plain() . "\n"
 				),
-				/* $lineStart */ false,
+				/* $lineStart */ true,
 				/* $interface */ false
 			);
 		}
@@ -475,7 +494,7 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 
 		// Don't fire the hook for subclasses. (Or should we?)
 		if ( $this->getName() === 'Recentchanges' ) {
-			wfRunHooks( 'SpecialRecentChangesPanel', array( &$extraOpts, $opts ) );
+			Hooks::run( 'SpecialRecentChangesPanel', array( &$extraOpts, $opts ) );
 		}
 
 		return $extraOpts;
@@ -732,7 +751,8 @@ class SpecialRecentChanges extends ChangesListSpecialPage {
 
 			$link = $this->makeOptionsLink( $linkMessage->text(),
 				array( $key => 1 - $options[$key] ), $nondefaults );
-			$links[] = "<span class=\"$msg rcshowhideoption\">" . $this->msg( $msg )->rawParams( $link )->escaped() . '</span>';
+			$links[] = "<span class=\"$msg rcshowhideoption\">"
+				. $this->msg( $msg )->rawParams( $link )->escaped() . '</span>';
 		}
 
 		// show from this onward link

@@ -78,6 +78,7 @@ class RevisionDeleter {
 	 * @param Title $title
 	 * @param array $ids
 	 * @return RevDelList
+	 * @throws MWException
 	 */
 	public static function createList( $typeName, IContextSource $context, Title $title, array $ids ) {
 		$typeName = self::getCanonicalTypeName( $typeName );
@@ -115,7 +116,7 @@ class RevisionDeleter {
 	 * "revdelete-restricted", "revdelete-unrestricted" indicating (un)suppression
 	 * or null to indicate nothing in particular.
 	 * You can turn the keys in $arr[0] and $arr[1] into message keys by
-	 * appending -hid and and -unhid to the keys respectively.
+	 * appending -hid and -unhid to the keys respectively.
 	 *
 	 * @param int $n The new bitfield.
 	 * @param int $o The old bitfield.
@@ -232,9 +233,9 @@ class RevisionDeleter {
 	 * @since 1.22
 	 * @param array $bitPars ExtractBitParams() params
 	 * @param int $oldfield Current bitfield
-	 * @return array
+	 * @return integer
 	 */
-	public static function extractBitfield( $bitPars, $oldfield ) {
+	public static function extractBitfield( array $bitPars, $oldfield ) {
 		// Build the actual new rev_deleted bitfield
 		$newBits = 0;
 		foreach ( $bitPars as $const => $val ) {

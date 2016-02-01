@@ -200,7 +200,7 @@ class MimeMagic {
 		global $IP;
 
 		# Allow media handling extensions adding MIME-types and MIME-info
-		wfRunHooks( 'MimeMagicInit', array( $this ) );
+		Hooks::run( 'MimeMagicInit', array( $this ) );
 
 		$types = MM_WELL_KNOWN_MIME_TYPES;
 
@@ -210,7 +210,7 @@ class MimeMagic {
 		}
 
 		if ( $mimeTypeFile ) {
-			if ( is_file( $mimeTypeFile ) and is_readable( $mimeTypeFile ) ) {
+			if ( is_file( $mimeTypeFile ) && is_readable( $mimeTypeFile ) ) {
 				wfDebug( __METHOD__ . ": loading mime types from $mimeTypeFile\n" );
 				$types .= "\n";
 				$types .= file_get_contents( $mimeTypeFile );
@@ -218,7 +218,7 @@ class MimeMagic {
 				wfDebug( __METHOD__ . ": can't load mime types from $mimeTypeFile\n" );
 			}
 		} else {
-			wfDebug( __METHOD__ . ": no mime types file defined, using build-ins only.\n" );
+			wfDebug( __METHOD__ . ": no mime types file defined, using built-ins only.\n" );
 		}
 
 		$types .= "\n" . $this->mExtraTypes;
@@ -287,7 +287,7 @@ class MimeMagic {
 		$info = MM_WELL_KNOWN_MIME_INFO;
 
 		if ( $mimeInfoFile ) {
-			if ( is_file( $mimeInfoFile ) and is_readable( $mimeInfoFile ) ) {
+			if ( is_file( $mimeInfoFile ) && is_readable( $mimeInfoFile ) ) {
 				wfDebug( __METHOD__ . ": loading mime info from $mimeInfoFile\n" );
 				$info .= "\n";
 				$info .= file_get_contents( $mimeInfoFile );
@@ -295,7 +295,7 @@ class MimeMagic {
 				wfDebug( __METHOD__ . ": can't load mime info from $mimeInfoFile\n" );
 			}
 		} else {
-			wfDebug( __METHOD__ . ": no mime info file defined, using build-ins only.\n" );
+			wfDebug( __METHOD__ . ": no mime info file defined, using built-ins only.\n" );
 		}
 
 		$info .= "\n" . $this->mExtraInfo;
@@ -569,7 +569,7 @@ class MimeMagic {
 		}
 
 		# Media handling extensions can improve the MIME detected
-		wfRunHooks( 'MimeMagicImproveFromExtension', array( $this, $ext, &$mime ) );
+		Hooks::run( 'MimeMagicImproveFromExtension', array( $this, $ext, &$mime ) );
 
 		if ( isset( $this->mMimeTypeAliases[$mime] ) ) {
 			$mime = $this->mMimeTypeAliases[$mime];
@@ -617,16 +617,18 @@ class MimeMagic {
 	/**
 	 * Guess the MIME type from the file contents.
 	 *
+	 * @todo Remove $ext param
+	 *
 	 * @param string $file
 	 * @param mixed $ext
 	 * @return bool|string
 	 * @throws MWException
 	 */
-	private function doGuessMimeType( $file, $ext ) { // TODO: remove $ext param
+	private function doGuessMimeType( $file, $ext ) {
 		// Read a chunk of the file
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		$f = fopen( $file, 'rb' );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 
 		if ( !$f ) {
 			return 'unknown/unknown';
@@ -693,7 +695,7 @@ class MimeMagic {
 		}
 
 		/* Look for WebP */
-		if ( strncmp( $head, "RIFF", 4 ) == 0 && strncmp( substr( $head, 8, 8 ), "WEBPVP8 ", 8 ) == 0 ) {
+		if ( strncmp( $head, "RIFF", 4 ) == 0 && strncmp( substr( $head, 8, 7 ), "WEBPVP8", 7 ) == 0 ) {
 			wfDebug( __METHOD__ . ": recognized file as image/webp\n" );
 			return "image/webp";
 		}
@@ -780,9 +782,9 @@ class MimeMagic {
 			return $this->detectZipType( $head, $tail, $ext );
 		}
 
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		$gis = getimagesize( $file );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 
 		if ( $gis && isset( $gis['mime'] ) ) {
 			$mime = $gis['mime'];
@@ -802,7 +804,7 @@ class MimeMagic {
 		# people will hopefully nag and submit patches :)
 		$mime = false;
 		# Some strings by reference for performance - assuming well-behaved hooks
-		wfRunHooks(
+		Hooks::run(
 			'MimeMagicGuessFromContent',
 			array( $this, &$head, &$tail, $file, &$mime )
 		);

@@ -303,26 +303,46 @@ class SpecialPage {
 	 *   - `prefixSearchSubpages( "" )` should return `array( foo", "bar", "baz" )`
 	 *
 	 * @param string $search Prefix to search for
-	 * @param int $limit Maximum number of results to return
+	 * @param int $limit Maximum number of results to return (usually 10)
+	 * @param int $offset Number of results to skip (usually 0)
 	 * @return string[] Matching subpages
 	 */
-	public function prefixSearchSubpages( $search, $limit = 10 ) {
+	public function prefixSearchSubpages( $search, $limit, $offset ) {
+		$subpages = $this->getSubpagesForPrefixSearch();
+		if ( !$subpages ) {
+			return array();
+		}
+
+		return self::prefixSearchArray( $search, $limit, $subpages, $offset );
+	}
+
+	/**
+	 * Return an array of subpages that this special page will accept for prefix
+	 * searches. If this method requires a query you might instead want to implement
+	 * prefixSearchSubpages() directly so you can support $limit and $offset. This
+	 * method is better for static-ish lists of things.
+	 *
+	 * @return string[] subpages to search from
+	 */
+	protected function getSubpagesForPrefixSearch() {
 		return array();
 	}
 
 	/**
 	 * Helper function for implementations of prefixSearchSubpages() that
-	 * filter the values in memory (as oppposed to making a query).
+	 * filter the values in memory (as opposed to making a query).
 	 *
 	 * @since 1.24
 	 * @param string $search
 	 * @param int $limit
 	 * @param array $subpages
+	 * @param int $offset
 	 * @return string[]
 	 */
-	protected static function prefixSearchArray( $search, $limit, array $subpages ) {
+	protected static function prefixSearchArray( $search, $limit, array $subpages, $offset ) {
 		$escaped = preg_quote( $search, '/' );
-		return array_slice( preg_grep( "/^$escaped/i", $subpages ), 0, $limit );
+		return array_slice( preg_grep( "/^$escaped/i",
+			array_slice( $subpages, $offset ) ), 0, $limit );
 	}
 
 	/**
@@ -336,6 +356,7 @@ class SpecialPage {
 		if ( $this->getConfig()->get( 'UseMediaWikiUIEverywhere' ) ) {
 			$out->addModuleStyles( array(
 				'mediawiki.ui.input',
+				'mediawiki.ui.radio',
 				'mediawiki.ui.checkbox',
 			) );
 		}
@@ -357,7 +378,7 @@ class SpecialPage {
 		 * @param SpecialPage $this
 		 * @param string|null $subPage
 		 */
-		wfRunHooks( 'SpecialPageBeforeExecute', array( $this, $subPage ) );
+		Hooks::run( 'SpecialPageBeforeExecute', array( $this, $subPage ) );
 
 		$this->beforeExecute( $subPage );
 		$this->execute( $subPage );
@@ -371,7 +392,7 @@ class SpecialPage {
 		 * @param SpecialPage $this
 		 * @param string|null $subPage
 		 */
-		wfRunHooks( 'SpecialPageAfterExecute', array( $this, $subPage ) );
+		Hooks::run( 'SpecialPageAfterExecute', array( $this, $subPage ) );
 	}
 
 	/**
@@ -612,6 +633,26 @@ class SpecialPage {
 	}
 
 	/**
+	 * Adds help link with an icon via page indicators.
+	 * Link target can be overridden by a local message containing a wikilink:
+	 * the message key is: lowercase special page name + '-helppage'.
+	 * @param string $to Target MediaWiki.org page title or encoded URL.
+	 * @param bool $overrideBaseUrl Whether $url is a full URL, to avoid MW.o.
+	 * @since 1.25
+	 */
+	public function addHelpLink( $to, $overrideBaseUrl = false ) {
+		global $wgContLang;
+		$msg = $this->msg( $wgContLang->lc( $this->getName() ) . '-helppage' );
+
+		if ( !$msg->isDisabled() ) {
+			$helpUrl = Skin::makeUrl( $msg->plain() );
+			$this->getOutput()->addHelpLink( $helpUrl, true );
+		} else {
+			$this->getOutput()->addHelpLink( $to, $overrideBaseUrl );
+		}
+	}
+
+	/**
 	 * Get the group that the special page belongs in on Special:SpecialPage
 	 * Use this method, instead of getGroupName to allow customization
 	 * of the group name from the wiki side
@@ -621,7 +662,6 @@ class SpecialPage {
 	 */
 	public function getFinalGroupName() {
 		$name = $this->getName();
-		$specialPageGroups = $this->getConfig()->get( 'SpecialPageGroups' );
 
 		// Allow overbidding the group from the wiki side
 		$msg = $this->msg( 'specialpages-specialpagegroup-' . strtolower( $name ) )->inContentLanguage();
@@ -630,18 +670,6 @@ class SpecialPage {
 		} else {
 			// Than use the group from this object
 			$group = $this->getGroupName();
-
-			// Group '-' is used as default to have the chance to determine,
-			// if the special pages overrides this method,
-			// if not overridden, $wgSpecialPageGroups is checked for b/c
-			if ( $group === '-' && isset( $specialPageGroups[$name] ) ) {
-				$group = $specialPageGroups[$name];
-			}
-		}
-
-		// never give '-' back, change to 'other'
-		if ( $group === '-' ) {
-			$group = 'other';
 		}
 
 		return $group;
@@ -656,8 +684,16 @@ class SpecialPage {
 	 * @since 1.21
 	 */
 	protected function getGroupName() {
-		// '-' used here to determine, if this group is overridden or has a hardcoded 'other'
-		// Needed for b/c in getFinalGroupName
-		return '-';
+		return 'other';
+	}
+
+	/**
+	 * Call wfTransactionalTimeLimit() if this request was POSTed
+	 * @since 1.26
+	 */
+	protected function useTransactionalTimeLimit() {
+		if ( $this->getRequest()->wasPosted() ) {
+			wfTransactionalTimeLimit();
+		}
 	}
 }

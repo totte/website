@@ -167,14 +167,12 @@ class ChangesFeed {
 	 * @param Feed $feed
 	 */
 	public static function generateFeed( $rows, &$feed ) {
-		wfProfileIn( __METHOD__ );
 		$items = self::buildItems( $rows );
 		$feed->outHeader();
 		foreach ( $items as $item ) {
 			$feed->outItem( $item );
 		}
 		$feed->outFooter();
-		wfProfileOut( __METHOD__ );
 	}
 
 	/**
@@ -183,13 +181,16 @@ class ChangesFeed {
 	 * @return array
 	 */
 	public static function buildItems( $rows ) {
-		wfProfileIn( __METHOD__ );
 		$items = array();
 
 		# Merge adjacent edits by one user
 		$sorted = array();
 		$n = 0;
 		foreach ( $rows as $obj ) {
+			if ( $obj->rc_type == RC_EXTERNAL ) {
+				continue;
+			}
+
 			if ( $n > 0 &&
 				$obj->rc_type == RC_EDIT &&
 				$obj->rc_namespace >= 0 &&
@@ -234,7 +235,6 @@ class ChangesFeed {
 			);
 		}
 
-		wfProfileOut( __METHOD__ );
 		return $items;
 	}
 }

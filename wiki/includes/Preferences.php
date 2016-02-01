@@ -96,7 +96,7 @@ class Preferences {
 		self::searchPreferences( $user, $context, $defaultPreferences );
 		self::miscPreferences( $user, $context, $defaultPreferences );
 
-		wfRunHooks( 'GetPreferences', array( $user, &$defaultPreferences ) );
+		Hooks::run( 'GetPreferences', array( $user, &$defaultPreferences ) );
 
 		self::loadPreferenceValues( $user, $context, $defaultPreferences );
 		self::$defaultPreferences = $defaultPreferences;
@@ -124,15 +124,14 @@ class Preferences {
 
 		$disable = !$user->isAllowed( 'editmyoptions' );
 
+		$defaultOptions = User::getDefaultOptions();
 		## Prod in defaults from the user
 		foreach ( $defaultPreferences as $name => &$info ) {
 			$prefFromUser = self::getOptionFromUser( $name, $info, $user );
 			if ( $disable && !in_array( $name, self::$saveBlacklist ) ) {
 				$info['disabled'] = 'disabled';
 			}
-			$field = HTMLForm::loadInputFromParameters( $name, $info ); // For validation
-			$field->mParent = $dummyForm;
-			$defaultOptions = User::getDefaultOptions();
+			$field = HTMLForm::loadInputFromParameters( $name, $info, $dummyForm ); // For validation
 			$globalDefault = isset( $defaultOptions[$name] )
 				? $defaultOptions[$name]
 				: null;
@@ -244,10 +243,9 @@ class Preferences {
 			'type' => 'info',
 			'label' => $context->msg( 'prefs-memberingroups' )->numParams(
 				count( $userGroups ) )->params( $userName )->parse(),
-			'default' => $context->msg( 'prefs-memberingroups-type',
-				$lang->commaList( $userGroups ),
-				$lang->commaList( $userMembers )
-			)->plain(),
+			'default' => $context->msg( 'prefs-memberingroups-type' )
+				->rawParams( $lang->commaList( $userGroups ), $lang->commaList( $userMembers ) )
+				->escaped(),
 			'raw' => true,
 			'section' => 'personal/info',
 		);
@@ -339,11 +337,11 @@ class Preferences {
 			'type' => 'radio',
 			'section' => 'personal/i18n',
 			'options' => array(
-				$context->msg( 'parentheses',
-					$context->msg( 'gender-unknown' )->text()
-				)->text() => 'unknown',
-				$context->msg( 'gender-female' )->text() => 'female',
-				$context->msg( 'gender-male' )->text() => 'male',
+				$context->msg( 'parentheses' )
+					->params( $context->msg( 'gender-unknown' )->plain() )
+					->escaped() => 'unknown',
+				$context->msg( 'gender-female' )->escaped() => 'female',
+				$context->msg( 'gender-male' )->escaped() => 'male',
 			),
 			'label-message' => 'yourgender',
 			'help-message' => 'prefs-help-gender',
@@ -451,8 +449,8 @@ class Preferences {
 						array( 'returnto' => SpecialPage::getTitleFor( 'Preferences' )->getPrefixedText() ) );
 
 					$emailAddress .= $emailAddress == '' ? $link : (
-						$context->msg( 'word-separator' )->plain()
-						. $context->msg( 'parentheses' )->rawParams( $link )->plain()
+						$context->msg( 'word-separator' )->escaped()
+						. $context->msg( 'parentheses' )->rawParams( $link )->escaped()
 					);
 				}
 
@@ -659,8 +657,9 @@ class Preferences {
 		$now = wfTimestampNow();
 		$lang = $context->getLanguage();
 		$nowlocal = Xml::element( 'span', array( 'id' => 'wpLocalTime' ),
-			$lang->time( $now, true ) );
-		$nowserver = $lang->time( $now, false ) .
+			$lang->userTime( $now, $user ) );
+		$nowserver = $lang->userTime( $now, $user,
+				array( 'format' => false, 'timecorrection' => false ) ) .
 			Html::hidden( 'wpServerTime', (int)substr( $now, 8, 2 ) * 60 + (int)substr( $now, 10, 2 ) );
 
 		$defaultPreferences['nowserver'] = array(
@@ -752,7 +751,11 @@ class Preferences {
 			'type' => 'select',
 			'section' => 'rendering/advancedrendering',
 			'options' => $stubThresholdOptions,
-			'label-raw' => $context->msg( 'stub-threshold' )->text(), // Raw HTML message. Yay?
+			// This is not a raw HTML message; label-raw is needed for the manual <a></a>
+			'label-raw' => $context->msg( 'stub-threshold' )->rawParams(
+				'<a href="#" class="stub">' .
+				$context->msg( 'stub-threshold-sample-link' )->parse() .
+				'</a>' )->parse(),
 		);
 
 		$defaultPreferences['showhiddencats'] = array(
@@ -870,7 +873,7 @@ class Preferences {
 			'min' => 1,
 			'max' => ceil( $rcMaxAge / ( 3600 * 24 ) ),
 			'help' => $context->msg( 'recentchangesdays-max' )->numParams(
-				ceil( $rcMaxAge / ( 3600 * 24 ) ) )->text()
+				ceil( $rcMaxAge / ( 3600 * 24 ) ) )->escaped()
 		);
 		$defaultPreferences['rclimit'] = array(
 			'type' => 'int',
@@ -895,6 +898,9 @@ class Preferences {
 				'section' => 'rc/advancedrc',
 				'label-message' => 'tog-hidepatrolled',
 			);
+		}
+
+		if ( $user->useNPPatrol() ) {
 			$defaultPreferences['newpageshidepatrolled'] = array(
 				'type' => 'toggle',
 				'section' => 'rc/advancedrc',
@@ -921,13 +927,37 @@ class Preferences {
 		$watchlistdaysMax = ceil( $config->get( 'RCMaxAge' ) / ( 3600 * 24 ) );
 
 		## Watchlist #####################################
+		if ( $user->isAllowed( 'editmywatchlist' ) ) {
+			$editWatchlistLinks = array();
+			$editWatchlistModes = array(
+				'edit' => array( 'EditWatchlist', false ),
+				'raw' => array( 'EditWatchlist', 'raw' ),
+				'clear' => array( 'EditWatchlist', 'clear' ),
+			);
+			foreach ( $editWatchlistModes as $editWatchlistMode => $mode ) {
+				// Messages: prefs-editwatchlist-edit, prefs-editwatchlist-raw, prefs-editwatchlist-clear
+				$editWatchlistLinks[] = Linker::linkKnown(
+					SpecialPage::getTitleFor( $mode[0], $mode[1] ),
+					$context->msg( "prefs-editwatchlist-{$editWatchlistMode}" )->parse()
+				);
+			}
+
+			$defaultPreferences['editwatchlist'] = array(
+				'type' => 'info',
+				'raw' => true,
+				'default' => $context->getLanguage()->pipeList( $editWatchlistLinks ),
+				'label-message' => 'prefs-editwatchlist-label',
+				'section' => 'watchlist/editwatchlist',
+			);
+		}
+
 		$defaultPreferences['watchlistdays'] = array(
 			'type' => 'float',
 			'min' => 0,
 			'max' => $watchlistdaysMax,
 			'section' => 'watchlist/displaywatchlist',
 			'help' => $context->msg( 'prefs-watchlist-days-max' )->numParams(
-				$watchlistdaysMax )->text(),
+				$watchlistdaysMax )->escaped(),
 			'label-message' => 'prefs-watchlist-days',
 		);
 		$defaultPreferences['wllimit'] = array(
@@ -969,7 +999,7 @@ class Preferences {
 			'label-message' => 'tog-watchlisthideliu',
 		);
 
-		if ( $context->getConfig()->get( 'UseRCPatrol' ) ) {
+		if ( $user->useRCPatrol() ) {
 			$defaultPreferences['watchlisthidepatrolled'] = array(
 				'type' => 'toggle',
 				'section' => 'watchlist/advancedwatchlist',
@@ -1047,7 +1077,7 @@ class Preferences {
 		$ret = array();
 
 		$mptitle = Title::newMainPage();
-		$previewtext = $context->msg( 'skin-preview' )->text();
+		$previewtext = $context->msg( 'skin-preview' )->escaped();
 
 		# Only show skins that aren't disabled in $wgSkipSkins
 		$validSkinNames = Skin::getAllowedSkins();
@@ -1072,7 +1102,7 @@ class Preferences {
 			$linkTools = array();
 
 			# Mark the default skin
-			if ( $skinkey == $defaultSkin ) {
+			if ( strcasecmp( $skinkey, $defaultSkin ) === 0 ) {
 				$linkTools[] = $context->msg( 'default' )->escaped();
 				$foundDefault = true;
 			}
@@ -1092,10 +1122,9 @@ class Preferences {
 				$linkTools[] = Linker::link( $jsPage, $context->msg( 'prefs-custom-js' )->escaped() );
 			}
 
-			$display = $sn . ' ' . $context->msg(
-				'parentheses',
-				$context->getLanguage()->pipeList( $linkTools )
-			)->text();
+			$display = $sn . ' ' . $context->msg( 'parentheses' )
+				->rawParams( $context->getLanguage()->pipeList( $linkTools ) )
+				->escaped();
 			$ret[$display] = $skinkey;
 		}
 
@@ -1269,12 +1298,19 @@ class Preferences {
 		$opt = array();
 
 		$localTZoffset = $context->getConfig()->get( 'LocalTZoffset' );
+		$timeZoneList = self::getTimeZoneList( $context->getLanguage() );
+
 		$timestamp = MWTimestamp::getLocalInstance();
 		// Check that the LocalTZoffset is the same as the local time zone offset
 		if ( $localTZoffset == $timestamp->format( 'Z' ) / 60 ) {
+			$timezoneName = $timestamp->getTimezone()->getName();
+			// Localize timezone
+			if ( isset( $timeZoneList[$timezoneName] ) ) {
+				$timezoneName = $timeZoneList[$timezoneName]['name'];
+			}
 			$server_tz_msg = $context->msg(
 				'timezoneuseserverdefault',
-				$timestamp->getTimezone()->getName()
+				$timezoneName
 			)->text();
 		} else {
 			$tzstring = sprintf(
@@ -1288,49 +1324,12 @@ class Preferences {
 		$opt[$context->msg( 'timezoneuseoffset' )->text()] = 'other';
 		$opt[$context->msg( 'guesstimezone' )->text()] = 'guess';
 
-		if ( function_exists( 'timezone_identifiers_list' ) ) {
-			# Read timezone list
-			$tzs = timezone_identifiers_list();
-			sort( $tzs );
-
-			$tzRegions = array();
-			$tzRegions['Africa'] = $context->msg( 'timezoneregion-africa' )->text();
-			$tzRegions['America'] = $context->msg( 'timezoneregion-america' )->text();
-			$tzRegions['Antarctica'] = $context->msg( 'timezoneregion-antarctica' )->text();
-			$tzRegions['Arctic'] = $context->msg( 'timezoneregion-arctic' )->text();
-			$tzRegions['Asia'] = $context->msg( 'timezoneregion-asia' )->text();
-			$tzRegions['Atlantic'] = $context->msg( 'timezoneregion-atlantic' )->text();
-			$tzRegions['Australia'] = $context->msg( 'timezoneregion-australia' )->text();
-			$tzRegions['Europe'] = $context->msg( 'timezoneregion-europe' )->text();
-			$tzRegions['Indian'] = $context->msg( 'timezoneregion-indian' )->text();
-			$tzRegions['Pacific'] = $context->msg( 'timezoneregion-pacific' )->text();
-			asort( $tzRegions );
-
-			$prefill = array_fill_keys( array_values( $tzRegions ), array() );
-			$opt = array_merge( $opt, $prefill );
-
-			$now = date_create( 'now' );
-
-			foreach ( $tzs as $tz ) {
-				$z = explode( '/', $tz, 2 );
-
-				# timezone_identifiers_list() returns a number of
-				# backwards-compatibility entries. This filters them out of the
-				# list presented to the user.
-				if ( count( $z ) != 2 || !array_key_exists( $z[0], $tzRegions ) ) {
-					continue;
-				}
-
-				# Localize region
-				$z[0] = $tzRegions[$z[0]];
-
-				$minDiff = floor( timezone_offset_get( timezone_open( $tz ), $now ) / 60 );
-
-				$display = str_replace( '_', ' ', $z[0] . '/' . $z[1] );
-				$value = "ZoneInfo|$minDiff|$tz";
-
-				$opt[$z[0]][$display] = $value;
+		foreach ( $timeZoneList as $timeZoneInfo ) {
+			$region = $timeZoneInfo['region'];
+			if ( !isset( $opt[$region] ) ) {
+				$opt[$region] = array();
 			}
+			$opt[$region][$timeZoneInfo['name']] = $timeZoneInfo['timecorrection'];
 		}
 		return $opt;
 	}
@@ -1369,7 +1368,7 @@ class Preferences {
 				}
 
 				# Max is +14:00 and min is -12:00, see:
-				# http://en.wikipedia.org/wiki/Timezone
+				# https://en.wikipedia.org/wiki/Timezone
 				$minDiff = min( $minDiff, 840 );  # 14:00
 				$minDiff = max( $minDiff, - 720 ); # -12:00
 				return 'Offset|' . $minDiff;
@@ -1433,11 +1432,11 @@ class Preferences {
 				$user->setOption( $key, $value );
 			}
 
-			wfRunHooks( 'PreferencesFormPreSave', array( $formData, $form, $user, &$result ) );
-			$user->saveSettings();
+			Hooks::run( 'PreferencesFormPreSave', array( $formData, $form, $user, &$result ) );
 		}
 
 		$wgAuth->updateExternalDB( $user );
+		$user->saveSettings();
 
 		return $result;
 	}
@@ -1468,25 +1467,65 @@ class Preferences {
 	}
 
 	/**
-	 * Try to set a user's email address.
-	 * This does *not* try to validate the address.
-	 * Caller is responsible for checking $wgAuth and 'editmyprivateinfo'
-	 * right.
-	 *
-	 * @deprecated since 1.20; use User::setEmailWithConfirmation() instead.
-	 * @param User $user
-	 * @param string $newaddr New email address
-	 * @return array (true on success or Status on failure, info string)
+	 * Get a list of all time zones
+	 * @param Language $language Language used for the localized names
+	 * @return array A list of all time zones. The system name of the time zone is used as key and
+	 *  the value is an array which contains localized name, the timecorrection value used for
+	 *  preferences and the region
+	 * @since 1.26
 	 */
-	public static function trySetUserEmail( User $user, $newaddr ) {
-		wfDeprecated( __METHOD__, '1.20' );
-
-		$result = $user->setEmailWithConfirmation( $newaddr );
-		if ( $result->isGood() ) {
-			return array( true, $result->value );
-		} else {
-			return array( $result, 'mailerror' );
+	public static function getTimeZoneList( Language $language ) {
+		$identifiers = DateTimeZone::listIdentifiers();
+		if ( $identifiers === false ) {
+			return array();
 		}
+		sort( $identifiers );
+
+		$tzRegions = array(
+			'Africa' => wfMessage( 'timezoneregion-africa' )->inLanguage( $language )->text(),
+			'America' => wfMessage( 'timezoneregion-america' )->inLanguage( $language )->text(),
+			'Antarctica' => wfMessage( 'timezoneregion-antarctica' )->inLanguage( $language )->text(),
+			'Arctic' => wfMessage( 'timezoneregion-arctic' )->inLanguage( $language )->text(),
+			'Asia' => wfMessage( 'timezoneregion-asia' )->inLanguage( $language )->text(),
+			'Atlantic' => wfMessage( 'timezoneregion-atlantic' )->inLanguage( $language )->text(),
+			'Australia' => wfMessage( 'timezoneregion-australia' )->inLanguage( $language )->text(),
+			'Europe' => wfMessage( 'timezoneregion-europe' )->inLanguage( $language )->text(),
+			'Indian' => wfMessage( 'timezoneregion-indian' )->inLanguage( $language )->text(),
+			'Pacific' => wfMessage( 'timezoneregion-pacific' )->inLanguage( $language )->text(),
+		);
+		asort( $tzRegions );
+
+		$timeZoneList = array();
+
+		$now = new DateTime();
+
+		foreach ( $identifiers as $identifier ) {
+			$parts = explode( '/', $identifier, 2 );
+
+			// DateTimeZone::listIdentifiers() returns a number of
+			// backwards-compatibility entries. This filters them out of the
+			// list presented to the user.
+			if ( count( $parts ) !== 2 || !array_key_exists( $parts[0], $tzRegions ) ) {
+				continue;
+			}
+
+			// Localize region
+			$parts[0] = $tzRegions[$parts[0]];
+
+			$dateTimeZone = new DateTimeZone( $identifier );
+			$minDiff = floor( $dateTimeZone->getOffset( $now ) / 60 );
+
+			$display = str_replace( '_', ' ', $parts[0] . '/' . $parts[1] );
+			$value = "ZoneInfo|$minDiff|$identifier";
+
+			$timeZoneList[$identifier] = array(
+				'name' => $display,
+				'timecorrection' => $value,
+				'region' => $parts[0],
+			);
+		}
+
+		return $timeZoneList;
 	}
 }
 
@@ -1539,12 +1578,8 @@ class PreferencesForm extends HTMLForm {
 	 * @return string
 	 */
 	function getButtons() {
-		global $wgUseMediaWikiUIEverywhere;
 
 		$attrs = array( 'id' => 'mw-prefs-restoreprefs' );
-		if ( $wgUseMediaWikiUIEverywhere ) {
-			$attrs['class'] = 'mw-ui-button mw-ui-quiet';
-		}
 
 		if ( !$this->getModifiedUser()->isAllowedAny( 'editmyprivateinfo', 'editmyoptions' ) ) {
 			return '';
@@ -1556,7 +1591,7 @@ class PreferencesForm extends HTMLForm {
 			$t = SpecialPage::getTitleFor( 'Preferences', 'reset' );
 
 			$html .= "\n" . Linker::link( $t, $this->msg( 'restoreprefs' )->escaped(),
-				$attrs );
+				Html::buttonAttributes( $attrs, array( 'mw-ui-quiet' ) ) );
 
 			$html = Xml::tags( 'div', array( 'class' => 'mw-prefs-buttons' ), $html );
 		}
@@ -1601,7 +1636,7 @@ class PreferencesForm extends HTMLForm {
 	 */
 	function getLegend( $key ) {
 		$legend = parent::getLegend( $key );
-		wfRunHooks( 'PreferencesGetLegend', array( $this, $key, &$legend ) );
+		Hooks::run( 'PreferencesGetLegend', array( $this, $key, &$legend ) );
 		return $legend;
 	}
 }

@@ -56,8 +56,6 @@ class AjaxDispatcher {
 	 * Load up our object with user supplied data
 	 */
 	function __construct( Config $config ) {
-		wfProfileIn( __METHOD__ );
-
 		$this->config = $config;
 
 		$this->mode = "";
@@ -88,13 +86,11 @@ class AjaxDispatcher {
 				}
 				break;
 			default:
-				wfProfileOut( __METHOD__ );
 				return;
 				# Or we could throw an exception:
 				# throw new MWException( __METHOD__ . ' called without any data (mode empty).' );
 		}
 
-		wfProfileOut( __METHOD__ );
 	}
 
 	/**
@@ -110,11 +106,8 @@ class AjaxDispatcher {
 			return;
 		}
 
-		wfProfileIn( __METHOD__ );
-
 		if ( !in_array( $this->func_name, $this->config->get( 'AjaxExportList' ) ) ) {
 			wfDebug( __METHOD__ . ' Bad Request for unknown function ' . $this->func_name . "\n" );
-
 			wfHttpError(
 				400,
 				'Bad Request',
@@ -127,14 +120,13 @@ class AjaxDispatcher {
 				'You are not allowed to view pages.' );
 		} else {
 			wfDebug( __METHOD__ . ' dispatching ' . $this->func_name . "\n" );
-
 			try {
 				$result = call_user_func_array( $this->func_name, $this->args );
 
 				if ( $result === false || $result === null ) {
-					wfDebug( __METHOD__ . ' ERROR while dispatching '
-							. $this->func_name . "(" . var_export( $this->args, true ) . "): "
-							. "no data returned\n" );
+					wfDebug( __METHOD__ . ' ERROR while dispatching ' .
+						$this->func_name . "(" . var_export( $this->args, true ) . "): " .
+						"no data returned\n" );
 
 					wfHttpError( 500, 'Internal Error',
 						"{$this->func_name} returned no data" );
@@ -149,9 +141,9 @@ class AjaxDispatcher {
 					wfDebug( __METHOD__ . ' dispatch complete for ' . $this->func_name . "\n" );
 				}
 			} catch ( Exception $e ) {
-				wfDebug( __METHOD__ . ' ERROR while dispatching '
-						. $this->func_name . "(" . var_export( $this->args, true ) . "): "
-						. get_class( $e ) . ": " . $e->getMessage() . "\n" );
+				wfDebug( __METHOD__ . ' ERROR while dispatching ' .
+					$this->func_name . "(" . var_export( $this->args, true ) . "): " .
+					get_class( $e ) . ": " . $e->getMessage() . "\n" );
 
 				if ( !headers_sent() ) {
 					wfHttpError( 500, 'Internal Error',
@@ -162,6 +154,5 @@ class AjaxDispatcher {
 			}
 		}
 
-		wfProfileOut( __METHOD__ );
 	}
 }

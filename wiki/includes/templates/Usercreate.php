@@ -38,8 +38,6 @@ class UsercreateTemplate extends BaseTemplate {
 	}
 
 	function execute() {
-		global $wgCookieExpiration;
-		$expirationDays = ceil( $wgCookieExpiration / ( 3600 * 24 ) );
 ?>
 <div class="mw-ui-container">
 	<?php if ( $this->haveData( 'languages' ) ) { ?>
@@ -53,7 +51,7 @@ class UsercreateTemplate extends BaseTemplate {
 	<div id="userloginForm">
 		<form name="userlogin2" id="userlogin2" class="mw-ui-vform" method="post" action="<?php $this->text( 'action' ); ?>">
 			<section class="mw-form-header">
-				<?php $this->html( 'header' ); /* extensions such as ConfirmEdit add form HTML here */ ?>
+				<?php $this->html( 'header' ); ?>
 			</section>
 			<!-- This element is used by the mediawiki.special.userlogin.signup.js module. -->
 			<div
@@ -72,6 +70,12 @@ class UsercreateTemplate extends BaseTemplate {
 					<?php $this->html( 'message' ); ?>
 			<?php } ?>
 			</div>
+
+			<?php if ( $this->data['formheader'] ) { ?>
+				<div class="mw-form-formheader">
+					<?php $this->html( 'formheader' ); /* extensions such as MobileFrontend add html here */ ?>
+				</div>
+			<?php } ?>
 
 			<div class="mw-ui-vform-field">
 				<label for='wpName2'>
@@ -217,8 +221,10 @@ class UsercreateTemplate extends BaseTemplate {
 									<?php if ( !empty( $inputItem['value'] ) ) {
 										echo 'checked="checked"';
 									} ?>
-								><label for="<?php echo htmlspecialchars( $inputItem['name'] ); ?>"></label>
-							</div><?php $this->msgHtml( $inputItem['msg'] ); ?>
+								><label for="<?php echo htmlspecialchars( $inputItem['name'] ); ?>">
+									<?php $this->msg( $inputItem['msg'] ); ?>
+								</label>
+							</div>
 						<?php
 						} else {
 							// Not a checkbox.
@@ -248,20 +254,25 @@ class UsercreateTemplate extends BaseTemplate {
 				}
 			}
 
-			// JS attempts to move the image CAPTCHA below this part of the form,
-			// so skip one index.
+			// A separate placeholder for any inserting any extrafields, e.g used by ConfirmEdit extension
+			if ( $this->haveData( 'extrafields' ) ) {
+				echo $this->data['extrafields'];
+			}
+			// skip one index.
 			$tabIndex++;
 			?>
 			<div class="mw-ui-vform-field mw-submit">
 				<?php
-				echo Html::input(
-					'wpCreateaccount',
+				echo Html::submitButton(
 					$this->getMsg( $this->data['loggedin'] ? 'createacct-another-submit' : 'createacct-submit' ),
-					'submit',
 					array(
-						'class' => "mw-ui-button mw-ui-big mw-ui-block mw-ui-constructive",
 						'id' => 'wpCreateaccount',
+						'name' => 'wpCreateaccount',
 						'tabindex' => $tabIndex++
+					),
+					array(
+						'mw-ui-block',
+						'mw-ui-constructive',
 					)
 				);
 				?>

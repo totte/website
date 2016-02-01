@@ -25,6 +25,7 @@
  * Let users reset tokens like the watchlist token.
  *
  * @ingroup SpecialPage
+ * @deprecated 1.26
  */
 class SpecialResetTokens extends FormSpecialPage {
 	private $tokensList;
@@ -44,7 +45,7 @@ class SpecialResetTokens extends FormSpecialPage {
 			$tokens = array(
 				array( 'preference' => 'watchlisttoken', 'label-message' => 'resettokens-watchlist-token' ),
 			);
-			wfRunHooks( 'SpecialResetTokensTokens', array( &$tokens ) );
+			Hooks::run( 'SpecialResetTokensTokens', array( &$tokens ) );
 
 			$hiddenPrefs = $this->getConfig()->get( 'HiddenPrefs' );
 			$tokens = array_filter( $tokens, function ( $tok ) use ( $hiddenPrefs ) {
@@ -121,6 +122,10 @@ class SpecialResetTokens extends FormSpecialPage {
 		} else {
 			$form->suppressDefaultSubmit();
 		}
+	}
+
+	protected function getDisplayFormat() {
+		return 'ooui';
 	}
 
 	public function onSubmit( array $formData ) {

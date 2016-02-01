@@ -36,7 +36,7 @@ class MediaStatisticsPage extends QueryPage {
 		$this->shownavigation = false;
 	}
 
-	function isExpensive() {
+	public function isExpensive() {
 		return true;
 	}
 
@@ -73,6 +73,10 @@ class MediaStatisticsPage extends QueryPage {
 				'namespace' => NS_MEDIA, /* needs to be something */
 				'value' => '1'
 			),
+			'conds' => array(
+				// WMF has a random null row in the db
+				'img_media_type IS NOT NULL'
+			),
 			'options' => array(
 				'GROUP BY' => array(
 					'img_media_type',
@@ -99,7 +103,7 @@ class MediaStatisticsPage extends QueryPage {
 	 *
 	 * @param $out OutputPage
 	 * @param $skin Skin (deprecated presumably)
-	 * @param $dbr DatabaseBase
+	 * @param $dbr IDatabase
 	 * @param $res ResultWrapper Results from query
 	 * @param $num integer Number of results
 	 * @param $offset integer Paging offset (Should always be 0 in our case)
@@ -107,7 +111,11 @@ class MediaStatisticsPage extends QueryPage {
 	protected function outputResults( $out, $skin, $dbr, $res, $num, $offset ) {
 		$prevMediaType = null;
 		foreach ( $res as $row ) {
-			list( $mediaType, $mime, $totalCount, $totalBytes ) = $this->splitFakeTitle( $row->title );
+			$mediaStats = $this->splitFakeTitle( $row->title );
+			if ( count( $mediaStats ) < 4 ) {
+				continue;
+			}
+			list( $mediaType, $mime, $totalCount, $totalBytes ) = $mediaStats;
 			if ( $prevMediaType !== $mediaType ) {
 				if ( $prevMediaType !== null ) {
 					// We're not at beginning, so we have to
@@ -153,7 +161,8 @@ class MediaStatisticsPage extends QueryPage {
 		);
 		$row .= Html::rawElement(
 			'td',
-			array(),
+			// Make sure js sorts it in numeric order
+			array( 'data-sort-value' => $count ),
 			$this->msg( 'mediastatistics-nfiles' )
 				->numParams( $count )
 				/** @todo Check to be sure this really should have number formatting */
@@ -184,6 +193,9 @@ class MediaStatisticsPage extends QueryPage {
 		// Always show three useful digits
 		if ( $decimal == 0 ) {
 			return '0';
+		}
+		if ( $decimal >= 100 ) {
+			return '100';
 		}
 		$percent = sprintf( "%." . max( 0, 2 - floor( log10( $decimal ) ) ) . "f", $decimal );
 		// Then remove any trailing 0's
@@ -224,7 +236,7 @@ class MediaStatisticsPage extends QueryPage {
 					'mw-mediastats-table-' . strtolower( $mediaType ),
 					'sortable',
 					'wikitable'
-				))
+				) )
 			)
 		);
 		$this->getOutput()->addHTML( $this->getTableHeaderRow() );
@@ -263,7 +275,7 @@ class MediaStatisticsPage extends QueryPage {
 				array( 'class' => array(
 					'mw-mediastats-mediatype',
 					'mw-mediastats-mediatype-' . strtolower( $mediaType )
-				)),
+				) ),
 				// for grep
 				// mediastatistics-header-unknown, mediastatistics-header-bitmap,
 				// mediastatistics-header-drawing, mediastatistics-header-audio,
@@ -302,6 +314,8 @@ class MediaStatisticsPage extends QueryPage {
 	 *
 	 * @param $skin Skin
 	 * @param $result stdObject Result row
+	 * @return bool|string|void
+	 * @throws MWException
 	 */
 	public function formatResult( $skin, $result ) {
 		throw new MWException( "unimplemented" );
@@ -310,15 +324,15 @@ class MediaStatisticsPage extends QueryPage {
 	/**
 	 * Initialize total values so we can figure out percentages later.
 	 *
-	 * @param $dbr DatabaseBase
+	 * @param $dbr IDatabase
 	 * @param $res ResultWrapper
 	 */
 	public function preprocessResults( $dbr, $res ) {
 		$this->totalCount = $this->totalBytes = 0;
 		foreach ( $res as $row ) {
-			list( , , $count, $bytes ) = $this->splitFakeTitle( $row->title );
-			$this->totalCount += $count;
-			$this->totalBytes += $bytes;
+			$mediaStats = $this->splitFakeTitle( $row->title );
+			$this->totalCount += isset( $mediaStats[2] ) ? $mediaStats[2] : 0;
+			$this->totalBytes += isset( $mediaStats[3] ) ? $mediaStats[3] : 0;
 		}
 		$res->seek( 0 );
 	}

@@ -12,7 +12,7 @@
 	/**
 	 * A Notification object for 1 message.
 	 *
-	 * The "_" in the name is to avoid a bug (http://github.com/senchalabs/jsduck/issues/304).
+	 * The underscore in the name is to avoid a bug <https://github.com/senchalabs/jsduck/issues/304>.
 	 * It is not part of the actual class name.
 	 *
 	 * @class mw.Notification_
@@ -37,6 +37,12 @@
 			} else {
 				delete options.tag;
 			}
+		}
+
+		if ( options.type ) {
+			// Sanitize options.type
+			options.type = options.type.replace( /[ _\-]+/g, '-' ).replace( /[^\-a-z0-9]+/ig, '' );
+			$notification.addClass( 'mw-notification-type-' + options.type );
 		}
 
 		if ( options.title ) {
@@ -356,7 +362,7 @@
 		$notifications.each( function () {
 			var notif = $( this ).data( 'mw.notification' );
 			if ( notif ) {
-				notif[fn]();
+				notif[ fn ]();
 			}
 		} );
 	}
@@ -364,6 +370,7 @@
 	/**
 	 * Initialisation.
 	 * Must only be called once, and not before the document is ready.
+	 *
 	 * @ignore
 	 */
 	function init() {
@@ -386,12 +393,12 @@
 			// on links from hiding a notification.
 			.on( 'click', 'a', function ( e ) {
 				e.stopPropagation();
-			} )
-			.hide();
+			} );
 
 		// Prepend the notification area to the content area and save it's object.
 		mw.util.$content.prepend( $area );
 		offset = $area.offset();
+		$area.hide();
 
 		function updateAreaMode() {
 			var isFloating = $window.scrollTop() > offset.top;
@@ -414,6 +421,7 @@
 		/**
 		 * Pause auto-hide timers for all notifications.
 		 * Notifications will not auto-hide until resume is called.
+		 *
 		 * @see mw.Notification#pause
 		 */
 		pause: function () {
@@ -479,11 +487,16 @@
 		 * - title:
 		 *   An optional title for the notification. Will be displayed above the
 		 *   content. Usually in bold.
+		 *
+		 * - type:
+		 *   An optional string for the type of the message used for styling:
+		 *   Examples: 'info', 'warn', 'error'.
 		 */
 		defaults: {
 			autoHide: true,
 			tag: false,
-			title: undefined
+			title: undefined,
+			type: false
 		},
 
 		/**

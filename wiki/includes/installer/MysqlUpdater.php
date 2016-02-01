@@ -37,7 +37,6 @@ class MysqlUpdater extends DatabaseUpdater {
 			array( 'addField', 'ipblocks', 'ipb_expiry', 'patch-ipb_expiry.sql' ),
 			array( 'doInterwikiUpdate' ),
 			array( 'doIndexUpdate' ),
-			array( 'addTable', 'hitcounter', 'patch-hitcounter.sql' ),
 			array( 'addField', 'recentchanges', 'rc_type', 'patch-rc_type.sql' ),
 			array( 'addIndex', 'recentchanges', 'new_name_timestamp', 'patch-rc-newindex.sql' ),
 
@@ -266,6 +265,16 @@ class MysqlUpdater extends DatabaseUpdater {
 				'patch-oi_major_mime-chemical.sql' ),
 			array( 'modifyField', 'filearchive', 'fa_major_mime',
 				'patch-fa_major_mime-chemical.sql' ),
+
+			// 1.25
+			array( 'doUserNewTalkUseridUnsigned' ),
+			// note this patch covers other _comment and _description fields too
+			array( 'modifyField', 'recentchanges', 'rc_comment', 'patch-editsummary-length.sql' ),
+
+			// 1.26
+			array( 'dropTable', 'hitcounter' ),
+			array( 'dropField', 'site_stats', 'ss_total_views', 'patch-drop-ss_total_views.sql' ),
+			array( 'dropField', 'page', 'page_counter', 'patch-drop-page_counter.sql' ),
 		);
 	}
 
@@ -516,7 +525,6 @@ class MysqlUpdater extends DatabaseUpdater {
 			page_namespace int NOT NULL,
 			page_title varchar(255) binary NOT NULL,
 			page_restrictions tinyblob NOT NULL,
-			page_counter bigint(20) unsigned NOT NULL default '0',
 			page_is_redirect tinyint(1) unsigned NOT NULL default '0',
 			page_is_new tinyint(1) unsigned NOT NULL default '0',
 			page_random real unsigned NOT NULL,
@@ -598,9 +606,9 @@ class MysqlUpdater extends DatabaseUpdater {
 		$this->output( "......Setting up page table.\n" );
 		$this->db->query(
 			"INSERT INTO $page (page_id, page_namespace, page_title,
-				page_restrictions, page_counter, page_is_redirect, page_is_new, page_random,
+				page_restrictions, page_is_redirect, page_is_new, page_random,
 				page_touched, page_latest, page_len)
-			SELECT cur_id, cur_namespace, cur_title, cur_restrictions, cur_counter,
+			SELECT cur_id, cur_namespace, cur_title, cur_restrictions,
 				cur_is_redirect, cur_is_new, cur_random, cur_touched, rev_id, LENGTH(cur_text)
 			FROM $cur,$revision
 			WHERE cur_id=rev_page AND rev_timestamp=cur_timestamp AND rev_id > {$maxold}",
@@ -924,18 +932,6 @@ class MysqlUpdater extends DatabaseUpdater {
 		}
 	}
 
-	protected function doEnableProfiling() {
-		global $wgProfileToDatabase;
-
-		if ( !$this->doTable( 'profiling' ) ) {
-			return true;
-		}
-
-		if ( $wgProfileToDatabase === true && !$this->db->tableExists( 'profiling', __METHOD__ ) ) {
-			$this->applyPatch( 'patch-profiling.sql', false, 'Add profiling table' );
-		}
-	}
-
 	protected function doMaybeProfilingMemoryUpdate() {
 		if ( !$this->doTable( 'profiling' ) ) {
 			return true;
@@ -1069,6 +1065,28 @@ class MysqlUpdater extends DatabaseUpdater {
 			'patch-iwl_prefix_title_from-non-unique.sql',
 			false,
 			'Making iwl_prefix_title_from index non-UNIQUE'
+		);
+	}
+
+	protected function doUserNewTalkUseridUnsigned() {
+		if ( !$this->doTable( 'user_newtalk' ) ) {
+			return true;
+		}
+
+		$info = $this->db->fieldInfo( 'user_newtalk', 'user_id' );
+		if ( $info === false ) {
+			return true;
+		}
+		if ( $info->isUnsigned() ) {
+			$this->output( "...user_id is already unsigned int.\n" );
+
+			return true;
+		}
+
+		return $this->applyPatch(
+			'patch-user-newtalk-userid-unsigned.sql',
+			false,
+			'Making user_id unsigned int'
 		);
 	}
 }

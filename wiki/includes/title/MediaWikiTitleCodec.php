@@ -31,6 +31,7 @@
  * via parseTitle() or from a (semi)trusted source, such as the database.
  *
  * @see https://www.mediawiki.org/wiki/Requests_for_comment/TitleValue
+ * @since 1.23
  */
 class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 	/**
@@ -136,12 +137,12 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 
 		// Interwiki links are not supported by TitleValue
 		if ( $parts['interwiki'] !== '' ) {
-			throw new MalformedTitleException( 'Title must not contain an interwiki prefix: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-interwiki', $text );
 		}
 
 		// Relative fragment links are not supported by TitleValue
 		if ( $parts['dbkey'] === '' ) {
-			throw new MalformedTitleException( 'Title must not be empty: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-empty', $text );
 		}
 
 		return new TitleValue( $parts['namespace'], $parts['dbkey'], $parts['fragment'] );
@@ -229,9 +230,9 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 		);
 		$dbkey = trim( $dbkey, '_' );
 
-		if ( strpos( $dbkey, UTF8_REPLACEMENT ) !== false ) {
+		if ( strpos( $dbkey, UtfNormal\Constants::UTF8_REPLACEMENT ) !== false ) {
 			# Contained illegal UTF-8 sequences or forbidden Unicode chars.
-			throw new MalformedTitleException( 'Bad UTF-8 sequences found in title: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-utf8', $text );
 		}
 
 		$parts['dbkey'] = $dbkey;
@@ -245,7 +246,7 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 		}
 
 		if ( $dbkey == '' ) {
-			throw new MalformedTitleException( 'Empty title: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-empty', $text );
 		}
 
 		# Namespace or interwiki prefix
@@ -262,11 +263,11 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 					if ( $ns == NS_TALK && preg_match( $prefixRegexp, $dbkey, $x ) ) {
 						if ( $this->language->getNsIndex( $x[1] ) ) {
 							# Disallow Talk:File:x type titles...
-							throw new MalformedTitleException( 'Bad namespace prefix: ' . $text );
+							throw new MalformedTitleException( 'title-invalid-talk-namespace', $text );
 						} elseif ( Interwiki::isValidInterwiki( $x[1] ) ) {
 							//TODO: get rid of global state!
 							# Disallow Talk:Interwiki:x type titles...
-							throw new MalformedTitleException( 'Interwiki prefix found in title: ' . $text );
+							throw new MalformedTitleException( 'title-invalid-talk-namespace', $text );
 						}
 					}
 				} elseif ( Interwiki::isValidInterwiki( $p ) ) {
@@ -322,9 +323,10 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 		}
 
 		# Reject illegal characters.
-		$rxTc = Title::getTitleInvalidRegex();
-		if ( preg_match( $rxTc, $dbkey ) ) {
-			throw new MalformedTitleException( 'Illegal characters found in title: ' . $text );
+		$rxTc = self::getTitleInvalidRegex();
+		$matches = array();
+		if ( preg_match( $rxTc, $dbkey, $matches ) ) {
+			throw new MalformedTitleException( 'title-invalid-characters', $text, array( $matches[0] ) );
 		}
 
 		# Pages with "/./" or "/../" appearing in the URLs will often be un-
@@ -342,23 +344,22 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 				substr( $dbkey, -3 ) == '/..'
 			)
 		) {
-			throw new MalformedTitleException( 'Bad title: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-relative', $text );
 		}
 
 		# Magic tilde sequences? Nu-uh!
 		if ( strpos( $dbkey, '~~~' ) !== false ) {
-			throw new MalformedTitleException( 'Bad title: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-magic-tilde', $text );
 		}
 
 		# Limit the size of titles to 255 bytes. This is typically the size of the
 		# underlying database field. We make an exception for special pages, which
 		# don't need to be stored in the database, and may edge over 255 bytes due
 		# to subpage syntax for long titles, e.g. [[Special:Block/Long name]]
-		if (
-			( $parts['namespace'] != NS_SPECIAL && strlen( $dbkey ) > 255 )
-			|| strlen( $dbkey ) > 512
-		) {
-			throw new MalformedTitleException( 'Title too long: ' . substr( $dbkey, 0, 255 ) . '...' );
+		$maxLength = ( $parts['namespace'] != NS_SPECIAL ) ? 255 : 512;
+		if ( strlen( $dbkey ) > $maxLength ) {
+			throw new MalformedTitleException( 'title-invalid-too-long', $text,
+				array( Message::numParam( $maxLength ) ) );
 		}
 
 		# Normally, all wiki links are forced to have an initial capital letter so [[foo]]
@@ -373,7 +374,7 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 		# self-links with a fragment identifier.
 		if ( $dbkey == '' && $parts['interwiki'] === '' ) {
 			if ( $parts['namespace'] != NS_MAIN ) {
-				throw new MalformedTitleException( 'Empty title: ' . $text );
+				throw new MalformedTitleException( 'title-invalid-empty', $text );
 			}
 		}
 
@@ -389,12 +390,41 @@ class MediaWikiTitleCodec implements TitleFormatter, TitleParser {
 
 		// Any remaining initial :s are illegal.
 		if ( $dbkey !== '' && ':' == $dbkey[0] ) {
-			throw new MalformedTitleException( 'Title must not start with a colon: ' . $text );
+			throw new MalformedTitleException( 'title-invalid-leading-colon', $text );
 		}
 
 		# Fill fields
 		$parts['dbkey'] = $dbkey;
 
 		return $parts;
+	}
+
+	/**
+	 * Returns a simple regex that will match on characters and sequences invalid in titles.
+	 * Note that this doesn't pick up many things that could be wrong with titles, but that
+	 * replacing this regex with something valid will make many titles valid.
+	 * Previously Title::getTitleInvalidRegex()
+	 *
+	 * @return string Regex string
+	 * @since 1.25
+	 */
+	public static function getTitleInvalidRegex() {
+		static $rxTc = false;
+		if ( !$rxTc ) {
+			# Matching titles will be held as illegal.
+			$rxTc = '/' .
+				# Any character not allowed is forbidden...
+				'[^' . Title::legalChars() . ']' .
+				# URL percent encoding sequences interfere with the ability
+				# to round-trip titles -- you can't link to them consistently.
+				'|%[0-9A-Fa-f]{2}' .
+				# XML/HTML character references produce similar issues.
+				'|&[A-Za-z0-9\x80-\xff]+;' .
+				'|&#[0-9]+;' .
+				'|&#x[0-9A-Fa-f]+;' .
+				'/S';
+		}
+
+		return $rxTc;
 	}
 }

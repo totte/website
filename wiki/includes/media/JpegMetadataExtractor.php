@@ -48,7 +48,7 @@ class JpegMetadataExtractor {
 	 * @throws MWException If given invalid file.
 	 */
 	static function segmentSplitter( $filename ) {
-		$showXMP = function_exists( 'xml_parser_create_ns' );
+		$showXMP = XMPReader::isSupported();
 
 		$segmentCount = 0;
 
@@ -98,17 +98,17 @@ class JpegMetadataExtractor {
 				// First see if valid utf-8,
 				// if not try to convert it to windows-1252.
 				$com = $oldCom = trim( self::jpegExtractMarker( $fh ) );
-				UtfNormal::quickIsNFCVerify( $com );
+				UtfNormal\Validator::quickIsNFCVerify( $com );
 				// turns $com to valid utf-8.
 				// thus if no change, its utf-8, otherwise its something else.
 				if ( $com !== $oldCom ) {
-					wfSuppressWarnings();
+					MediaWiki\suppressWarnings();
 					$com = $oldCom = iconv( 'windows-1252', 'UTF-8//IGNORE', $oldCom );
-					wfRestoreWarnings();
+					MediaWiki\restoreWarnings();
 				}
 				// Try it again, if its still not a valid string, then probably
 				// binary junk or some really weird encoding, so don't extract.
-				UtfNormal::quickIsNFCVerify( $com );
+				UtfNormal\Validator::quickIsNFCVerify( $com );
 				if ( $com === $oldCom ) {
 					$segments["COM"][] = $oldCom;
 				} else {

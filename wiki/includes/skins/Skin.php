@@ -168,11 +168,9 @@ abstract class Skin extends ContextSource {
 	 * @param OutputPage $out
 	 */
 	function initPage( OutputPage $out ) {
-		wfProfileIn( __METHOD__ );
 
 		$this->preloadExistence();
 
-		wfProfileOut( __METHOD__ );
 	}
 
 	/**
@@ -182,8 +180,7 @@ abstract class Skin extends ContextSource {
 	 * @return array Array of modules with helper keys for easy overriding
 	 */
 	public function getDefaultModules() {
-		global $wgIncludeLegacyJavaScript, $wgPreloadJavaScriptMwUtil, $wgUseAjax,
-			$wgAjaxWatch, $wgEnableAPI, $wgEnableWriteAPI;
+		global $wgUseAjax, $wgAjaxWatch, $wgEnableAPI, $wgEnableWriteAPI;
 
 		$out = $this->getOutput();
 		$user = $out->getUser();
@@ -193,7 +190,7 @@ abstract class Skin extends ContextSource {
 				'mediawiki.page.ready',
 			),
 			// modules that exist for legacy reasons
-			'legacy' => array(),
+			'legacy' => ResourceLoaderStartUpModule::getLegacyModules(),
 			// modules relating to search functionality
 			'search' => array(),
 			// modules relating to functionality relating to watching an article
@@ -201,27 +198,17 @@ abstract class Skin extends ContextSource {
 			// modules which relate to the current users preferences
 			'user' => array(),
 		);
-		if ( $wgIncludeLegacyJavaScript ) {
-			$modules['legacy'][] = 'mediawiki.legacy.wikibits';
-		}
-
-		if ( $wgPreloadJavaScriptMwUtil ) {
-			$modules['legacy'][] = 'mediawiki.util';
-		}
 
 		// Add various resources if required
-		if ( $wgUseAjax ) {
-			$modules['legacy'][] = 'mediawiki.legacy.ajax';
-
-			if ( $wgEnableAPI ) {
-				if ( $wgEnableWriteAPI && $wgAjaxWatch && $user->isLoggedIn()
-					&& $user->isAllowed( 'writeapi' )
-				) {
-					$modules['watch'][] = 'mediawiki.page.watch.ajax';
-				}
-
-				$modules['search'][] = 'mediawiki.searchSuggest';
+		if ( $wgUseAjax && $wgEnableAPI ) {
+			if ( $wgEnableWriteAPI && $wgAjaxWatch && $user->isLoggedIn()
+				&& $user->isAllowedAll( 'writeapi', 'viewmywatchlist', 'editmywatchlist' )
+				&& $this->getRelevantTitle()->canExist()
+			) {
+				$modules['watch'][] = 'mediawiki.page.watch.ajax';
 			}
+
+			$modules['search'][] = 'mediawiki.searchSuggest';
 		}
 
 		if ( $user->getBoolOption( 'editsectiononrightclick' ) ) {
@@ -239,25 +226,33 @@ abstract class Skin extends ContextSource {
 	 * Preload the existence of three commonly-requested pages in a single query
 	 */
 	function preloadExistence() {
+		$titles = array();
+
 		$user = $this->getUser();
+		$title = $this->getRelevantTitle();
 
 		// User/talk link
-		$titles = array( $user->getUserPage(), $user->getTalkPage() );
-
-		// Other tab link
-		if ( $this->getTitle()->isSpecialPage() ) {
-			// nothing
-		} elseif ( $this->getTitle()->isTalkPage() ) {
-			$titles[] = $this->getTitle()->getSubjectPage();
-		} else {
-			$titles[] = $this->getTitle()->getTalkPage();
+		if ( $user->isLoggedIn() || $this->showIPinHeader() ) {
+			$titles[] = $user->getUserPage();
+			$titles[] = $user->getTalkPage();
 		}
 
-		wfRunHooks( 'SkinPreloadExistence', array( &$titles, $this ) );
+		// Check, if the page can hold some kind of content, otherwise do nothing
+		if ( !$title->canExist() ) {
+			// nothing
+		} elseif ( $title->isTalkPage() ) {
+			$titles[] = $title->getSubjectPage();
+		} else {
+			$titles[] = $title->getTalkPage();
+		}
 
-		$lb = new LinkBatch( $titles );
-		$lb->setCaller( __METHOD__ );
-		$lb->execute();
+		Hooks::run( 'SkinPreloadExistence', array( &$titles, $this ) );
+
+		if ( count( $titles ) ) {
+			$lb = new LinkBatch( $titles );
+			$lb->setCaller( __METHOD__ );
+			$lb->execute();
+		}
 	}
 
 	/**
@@ -333,8 +328,13 @@ abstract class Skin extends ContextSource {
 				$this->mRelevantUser = User::newFromName( $rootUser, false );
 			} else {
 				$user = User::newFromName( $rootUser, false );
-				if ( $user && $user->isLoggedIn() ) {
-					$this->mRelevantUser = $user;
+
+				if ( $user ) {
+					$user->load( User::READ_NORMAL );
+
+					if ( $user->isLoggedIn() ) {
+						$this->mRelevantUser = $user;
+					}
 				}
 			}
 			return $this->mRelevantUser;
@@ -354,8 +354,8 @@ abstract class Skin extends ContextSource {
 	 */
 	static function makeVariablesScript( $data ) {
 		if ( $data ) {
-			return Html::inlineScript(
-				ResourceLoader::makeLoaderConditionalScript( ResourceLoader::makeConfigSetScript( $data ) )
+			return ResourceLoader::makeInlineScript(
+				ResourceLoader::makeConfigSetScript( $data )
 			);
 		} else {
 			return '';
@@ -474,9 +474,10 @@ abstract class Skin extends ContextSource {
 
 			$msg = $this->msg( 'pagecategories' )->numParams( count( $allCats['normal'] ) )->escaped();
 			$linkPage = wfMessage( 'pagecategorieslink' )->inContentLanguage()->text();
+			$title = Title::newFromText( $linkPage );
+			$link = $title ? Linker::link( $title, $msg ) : $msg;
 			$s .= '<div id="mw-normal-catlinks" class="mw-normal-catlinks">' .
-				Linker::link( Title::newFromText( $linkPage ), $msg )
-				. $colon . '<ul>' . $t . '</ul>' . '</div>';
+				$link . $colon . '<ul>' . $t . '</ul>' . '</div>';
 		}
 
 		# Hidden categories
@@ -579,7 +580,7 @@ abstract class Skin extends ContextSource {
 	protected function afterContentHook() {
 		$data = '';
 
-		if ( wfRunHooks( 'SkinAfterContent', array( &$data, $this ) ) ) {
+		if ( Hooks::run( 'SkinAfterContent', array( &$data, $this ) ) ) {
 			// adding just some spaces shouldn't toggle the output
 			// of the whole <div/>, so we use trim() here
 			if ( trim( $data ) != '' ) {
@@ -616,7 +617,7 @@ abstract class Skin extends ContextSource {
 		// OutputPage::getBottomScripts() which takes a Skin param. This should be cleaned
 		// up at some point
 		$bottomScriptText = $this->getOutput()->getBottomScripts();
-		wfRunHooks( 'SkinAfterBottomScripts', array( $this, &$bottomScriptText ) );
+		Hooks::run( 'SkinAfterBottomScripts', array( $this, &$bottomScriptText ) );
 
 		return $bottomScriptText;
 	}
@@ -637,22 +638,23 @@ abstract class Skin extends ContextSource {
 			$url = htmlspecialchars( wfExpandIRI( $this->getTitle()->getCanonicalURL() ) );
 		}
 
-		return $this->msg( 'retrievedfrom', '<a dir="ltr" href="' . $url
-			. '">' . $url . '</a>' )->text();
+		return $this->msg( 'retrievedfrom' )
+			->rawParams( '<a dir="ltr" href="' . $url . '">' . $url . '</a>' )
+			->parse();
 	}
 
 	/**
-	 * @return string
+	 * @return string HTML
 	 */
 	function getUndeleteLink() {
 		$action = $this->getRequest()->getVal( 'action', 'view' );
 
-		if ( $this->getUser()->isAllowed( 'deletedhistory' ) &&
-			( $this->getTitle()->getArticleID() == 0 || $action == 'history' ) ) {
+		if ( $this->getTitle()->userCan( 'deletedhistory', $this->getUser() ) &&
+			( !$this->getTitle()->exists() || $action == 'history' ) ) {
 			$n = $this->getTitle()->isDeleted();
 
 			if ( $n ) {
-				if ( $this->getUser()->isAllowed( 'undelete' ) ) {
+				if ( $this->getTitle()->quickUserCan( 'undelete', $this->getUser() ) ) {
 					$msg = 'thisisdeleted';
 				} else {
 					$msg = 'viewdeleted';
@@ -662,7 +664,7 @@ abstract class Skin extends ContextSource {
 					Linker::linkKnown(
 						SpecialPage::getTitleFor( 'Undelete', $this->getTitle()->getPrefixedDBkey() ),
 						$this->msg( 'restorelink' )->numParams( $n )->escaped() )
-					)->text();
+					)->escaped();
 			}
 		}
 
@@ -676,7 +678,7 @@ abstract class Skin extends ContextSource {
 		$out = $this->getOutput();
 		$subpages = '';
 
-		if ( !wfRunHooks( 'SkinSubPageSubtitle', array( &$subpages, $this, $out ) ) ) {
+		if ( !Hooks::run( 'SkinSubPageSubtitle', array( &$subpages, $this, $out ) ) ) {
 			return $subpages;
 		}
 
@@ -785,7 +787,7 @@ abstract class Skin extends ContextSource {
 		// @todo Remove deprecated $forContent param from hook handlers and then remove here.
 		$forContent = true;
 
-		wfRunHooks(
+		Hooks::run(
 			'SkinCopyrightFooter',
 			array( $this->getTitle(), $type, &$msg, &$link, &$forContent )
 		);
@@ -829,10 +831,19 @@ abstract class Skin extends ContextSource {
 	function getPoweredBy() {
 		global $wgResourceBasePath;
 
-		$url = htmlspecialchars( "$wgResourceBasePath/resources/assets/poweredby_mediawiki_88x31.png" );
-		$text = '<a href="//www.mediawiki.org/"><img src="' . $url
-			. '" height="31" width="88" alt="Powered by MediaWiki" /></a>';
-		wfRunHooks( 'SkinGetPoweredBy', array( &$text, $this ) );
+		$url1 = htmlspecialchars(
+			"$wgResourceBasePath/resources/assets/poweredby_mediawiki_88x31.png"
+		);
+		$url1_5 = htmlspecialchars(
+			"$wgResourceBasePath/resources/assets/poweredby_mediawiki_132x47.png"
+		);
+		$url2 = htmlspecialchars(
+			"$wgResourceBasePath/resources/assets/poweredby_mediawiki_176x62.png"
+		);
+		$text = '<a href="//www.mediawiki.org/"><img src="' . $url1
+			. '" srcset="' . $url1_5 . ' 1.5x, ' . $url2 . ' 2x" '
+			. 'height="31" width="88" alt="Powered by MediaWiki" /></a>';
+		Hooks::run( 'SkinGetPoweredBy', array( &$text, $this ) );
 		return $text;
 	}
 
@@ -852,13 +863,13 @@ abstract class Skin extends ContextSource {
 		if ( $timestamp ) {
 			$d = $this->getLanguage()->userDate( $timestamp, $this->getUser() );
 			$t = $this->getLanguage()->userTime( $timestamp, $this->getUser() );
-			$s = ' ' . $this->msg( 'lastmodifiedat', $d, $t )->text();
+			$s = ' ' . $this->msg( 'lastmodifiedat', $d, $t )->parse();
 		} else {
 			$s = '';
 		}
 
 		if ( wfGetLB()->getLaggedSlaveMode() ) {
-			$s .= ' <strong>' . $this->msg( 'laggedslavemode' )->text() . '</strong>';
+			$s .= ' <strong>' . $this->msg( 'laggedslavemode' )->parse() . '</strong>';
 		}
 
 		return $s;
@@ -941,6 +952,10 @@ abstract class Skin extends ContextSource {
 			// language (which may or may not be the same as the default language),
 			// but we make the link target be the one site-wide page.
 			$title = Title::newFromText( $this->msg( $page )->inContentLanguage()->text() );
+
+			if ( !$title ) {
+				return '';
+			}
 
 			return Linker::linkKnown(
 				$title,
@@ -1031,6 +1046,7 @@ abstract class Skin extends ContextSource {
 	 *
 	 * @param string $name The name or path of a skin resource file
 	 * @return string The fully resolved style path url including styleversion
+	 * @throws MWException
 	 */
 	function getSkinStylePath( $name ) {
 		global $wgStylePath, $wgStyleVersion;
@@ -1150,7 +1166,7 @@ abstract class Skin extends ContextSource {
 
 		return array(
 			'href' => $title->getLocalURL( $urlaction ),
-			'exists' => $title->getArticleID() != 0,
+			'exists' => $title->isKnown(),
 		);
 	}
 
@@ -1207,17 +1223,16 @@ abstract class Skin extends ContextSource {
 	 * @return array
 	 */
 	function buildSidebar() {
-		global $wgMemc, $wgEnableSidebarCache, $wgSidebarCacheExpiry;
-		wfProfileIn( __METHOD__ );
+		global $wgEnableSidebarCache, $wgSidebarCacheExpiry;
 
+		$cache = ObjectCache::getMainWANInstance();
 		$key = wfMemcKey( 'sidebar', $this->getLanguage()->getCode() );
 
 		if ( $wgEnableSidebarCache ) {
-			$cachedsidebar = $wgMemc->get( $key );
+			$cachedsidebar = $cache->get( $key );
 			if ( $cachedsidebar ) {
-				wfRunHooks( 'SidebarBeforeOutput', array( $this, &$cachedsidebar ) );
+				Hooks::run( 'SidebarBeforeOutput', array( $this, &$cachedsidebar ) );
 
-				wfProfileOut( __METHOD__ );
 				return $cachedsidebar;
 			}
 		}
@@ -1225,14 +1240,13 @@ abstract class Skin extends ContextSource {
 		$bar = array();
 		$this->addToSidebar( $bar, 'sidebar' );
 
-		wfRunHooks( 'SkinBuildSidebar', array( $this, &$bar ) );
+		Hooks::run( 'SkinBuildSidebar', array( $this, &$bar ) );
 		if ( $wgEnableSidebarCache ) {
-			$wgMemc->set( $key, $bar, $wgSidebarCacheExpiry );
+			$cache->set( $key, $bar, $wgSidebarCacheExpiry );
 		}
 
-		wfRunHooks( 'SidebarBeforeOutput', array( $this, &$bar ) );
+		Hooks::run( 'SidebarBeforeOutput', array( $this, &$bar ) );
 
-		wfProfileOut( __METHOD__ );
 		return $bar;
 	}
 
@@ -1370,7 +1384,7 @@ abstract class Skin extends ContextSource {
 		$out = $this->getOutput();
 
 		// Allow extensions to disable or modify the new messages alert
-		if ( !wfRunHooks( 'GetNewMessagesAlert', array( &$newMessagesAlert, $newtalks, $user, $out ) ) ) {
+		if ( !Hooks::run( 'GetNewMessagesAlert', array( &$newMessagesAlert, $newtalks, $user, $out ) ) ) {
 			return '';
 		}
 		if ( $newMessagesAlert ) {
@@ -1453,12 +1467,11 @@ abstract class Skin extends ContextSource {
 	 * Get a cached notice
 	 *
 	 * @param string $name Message name, or 'default' for $wgSiteNotice
-	 * @return string HTML fragment
+	 * @return string|bool HTML fragment, or false to indicate that the caller
+	 *   should fall back to the next notice in its sequence
 	 */
 	private function getCachedNotice( $name ) {
 		global $wgRenderHashAppend, $parserMemc, $wgContLang;
-
-		wfProfileIn( __METHOD__ );
 
 		$needParse = false;
 
@@ -1467,13 +1480,13 @@ abstract class Skin extends ContextSource {
 			global $wgSiteNotice;
 			$notice = $wgSiteNotice;
 			if ( empty( $notice ) ) {
-				wfProfileOut( __METHOD__ );
 				return false;
 			}
 		} else {
 			$msg = $this->msg( $name )->inContentLanguage();
-			if ( $msg->isDisabled() ) {
-				wfProfileOut( __METHOD__ );
+			if ( $msg->isBlank() ) {
+				return '';
+			} elseif ( $msg->isDisabled() ) {
 				return false;
 			}
 			$notice = $msg->plain();
@@ -1500,7 +1513,6 @@ abstract class Skin extends ContextSource {
 
 		$notice = Html::rawElement( 'div', array( 'id' => 'localNotice',
 			'lang' => $wgContLang->getHtmlCode(), 'dir' => $wgContLang->getDir() ), $notice );
-		wfProfileOut( __METHOD__ );
 		return $notice;
 	}
 
@@ -1510,7 +1522,6 @@ abstract class Skin extends ContextSource {
 	 * @return string HTML fragment
 	 */
 	function getNamespaceNotice() {
-		wfProfileIn( __METHOD__ );
 
 		$key = 'namespacenotice-' . $this->getTitle()->getNsText();
 		$namespaceNotice = $this->getCachedNotice( $key );
@@ -1520,7 +1531,6 @@ abstract class Skin extends ContextSource {
 			$namespaceNotice = '';
 		}
 
-		wfProfileOut( __METHOD__ );
 		return $namespaceNotice;
 	}
 
@@ -1530,27 +1540,25 @@ abstract class Skin extends ContextSource {
 	 * @return string HTML fragment
 	 */
 	function getSiteNotice() {
-		wfProfileIn( __METHOD__ );
 		$siteNotice = '';
 
-		if ( wfRunHooks( 'SiteNoticeBefore', array( &$siteNotice, $this ) ) ) {
+		if ( Hooks::run( 'SiteNoticeBefore', array( &$siteNotice, $this ) ) ) {
 			if ( is_object( $this->getUser() ) && $this->getUser()->isLoggedIn() ) {
 				$siteNotice = $this->getCachedNotice( 'sitenotice' );
 			} else {
 				$anonNotice = $this->getCachedNotice( 'anonnotice' );
-				if ( !$anonNotice ) {
+				if ( $anonNotice === false ) {
 					$siteNotice = $this->getCachedNotice( 'sitenotice' );
 				} else {
 					$siteNotice = $anonNotice;
 				}
 			}
-			if ( !$siteNotice ) {
+			if ( $siteNotice === false ) {
 				$siteNotice = $this->getCachedNotice( 'default' );
 			}
 		}
 
-		wfRunHooks( 'SiteNoticeAfter', array( &$siteNotice, $this ) );
-		wfProfileOut( __METHOD__ );
+		Hooks::run( 'SiteNoticeAfter', array( &$siteNotice, $this ) );
 		return $siteNotice;
 	}
 
@@ -1580,20 +1588,46 @@ abstract class Skin extends ContextSource {
 			$attribs['title'] = wfMessage( 'editsectionhint' )->rawParams( $tooltip )
 				->inLanguage( $lang )->text();
 		}
-		$link = Linker::link( $nt, wfMessage( 'editsection' )->inLanguage( $lang )->text(),
-			$attribs,
-			array( 'action' => 'edit', 'section' => $section ),
-			array( 'noclasses', 'known' )
+
+		$links = array(
+			'editsection' => array(
+				'text' => wfMessage( 'editsection' )->inLanguage( $lang )->escaped(),
+				'targetTitle' => $nt,
+				'attribs' => $attribs,
+				'query' => array( 'action' => 'edit', 'section' => $section ),
+				'options' => array( 'noclasses', 'known' )
+			)
 		);
 
-		# Add the brackets and the span and run the hook.
-		$result = '<span class="mw-editsection">'
-			. '<span class="mw-editsection-bracket">[</span>'
-			. $link
-			. '<span class="mw-editsection-bracket">]</span>'
-			. '</span>';
+		Hooks::run( 'SkinEditSectionLinks', array( $this, $nt, $section, $tooltip, &$links, $lang ) );
 
-		wfRunHooks( 'DoEditSectionLink', array( $this, $nt, $section, $tooltip, &$result, $lang ) );
+		$result = '<span class="mw-editsection"><span class="mw-editsection-bracket">[</span>';
+
+		$linksHtml = array();
+		foreach ( $links as $k => $linkDetails ) {
+			$linksHtml[] = Linker::link(
+				$linkDetails['targetTitle'],
+				$linkDetails['text'],
+				$linkDetails['attribs'],
+				$linkDetails['query'],
+				$linkDetails['options']
+			);
+		}
+
+		$result .= implode(
+			'<span class="mw-editsection-divider">'
+				. wfMessage( 'pipe-separator' )->inLanguage( $lang )->text()
+				. '</span>',
+			$linksHtml
+		);
+
+		$result .= '<span class="mw-editsection-bracket">]</span></span>';
+		// Deprecated, use SkinEditSectionLinks hook instead
+		Hooks::run(
+			'DoEditSectionLink',
+			array( $this, $nt, $section, $tooltip, &$result, $lang ),
+			'1.25'
+		);
 		return $result;
 	}
 

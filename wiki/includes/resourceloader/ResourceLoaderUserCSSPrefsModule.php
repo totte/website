@@ -27,26 +27,13 @@
  */
 class ResourceLoaderUserCSSPrefsModule extends ResourceLoaderModule {
 
-	/* Protected Members */
-
-	protected $modifiedTime = array();
-
 	protected $origin = self::ORIGIN_CORE_INDIVIDUAL;
 
-	/* Methods */
-
 	/**
-	 * @param ResourceLoaderContext $context
-	 * @return array|int|mixed
+	 * @return bool
 	 */
-	public function getModifiedTime( ResourceLoaderContext $context ) {
-		$hash = $context->getHash();
-		if ( !isset( $this->modifiedTime[$hash] ) ) {
-			global $wgUser;
-			$this->modifiedTime[$hash] = wfTimestamp( TS_UNIX, $wgUser->getTouched() );
-		}
-
-		return $this->modifiedTime[$hash];
+	public function enableModuleContentVersion() {
+		return true;
 	}
 
 	/**
@@ -54,13 +41,11 @@ class ResourceLoaderUserCSSPrefsModule extends ResourceLoaderModule {
 	 * @return array
 	 */
 	public function getStyles( ResourceLoaderContext $context ) {
-		global $wgUser;
-
 		if ( !$this->getConfig()->get( 'AllowUserCssPrefs' ) ) {
 			return array();
 		}
 
-		$options = $wgUser->getOptions();
+		$options = $context->getUserObj()->getOptions();
 
 		// Build CSS rules
 		$rules = array();
@@ -92,12 +77,5 @@ class ResourceLoaderUserCSSPrefsModule extends ResourceLoaderModule {
 	 */
 	public function getGroup() {
 		return 'private';
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getDependencies() {
-		return array( 'mediawiki.user' );
 	}
 }

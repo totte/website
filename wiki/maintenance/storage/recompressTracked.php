@@ -22,6 +22,8 @@
  * @ingroup Maintenance ExternalStorage
  */
 
+use MediaWiki\Logger\LegacyLogger;
+
 $optionsWithArgs = RecompressTracked::getOptionsWithArgs();
 require __DIR__ . '/../commandLine.inc';
 
@@ -141,7 +143,7 @@ class RecompressTracked {
 			$header .= "({$this->slaveId})";
 		}
 		$header .= ' ' . wfWikiID();
-		wfErrorLog( sprintf( "%-50s %s\n", $header, $msg ), $file );
+		LegacyLogger::emit( sprintf( "%-50s %s\n", $header, $msg ), $file );
 	}
 
 	/**
@@ -232,9 +234,9 @@ class RecompressTracked {
 				array( 'file', 'php://stdout', 'w' ),
 				array( 'file', 'php://stderr', 'w' )
 			);
-			wfSuppressWarnings();
+			MediaWiki\suppressWarnings();
 			$proc = proc_open( "$cmd --slave-id $i", $spec, $pipes );
-			wfRestoreWarnings();
+			MediaWiki\restoreWarnings();
 			if ( !$proc ) {
 				$this->critical( "Error opening slave process: $cmd" );
 				exit( 1 );
@@ -471,7 +473,7 @@ class RecompressTracked {
 	 * @param int $pageId
 	 */
 	function doPage( $pageId ) {
-		$title = Title::newFromId( $pageId );
+		$title = Title::newFromID( $pageId );
 		if ( $title ) {
 			$titleText = $title->getPrefixedText();
 		} else {

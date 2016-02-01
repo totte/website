@@ -7,7 +7,7 @@
 		// it works only comparing to window.self or window.window (http://stackoverflow.com/q/4850978/319266)
 		if ( window.top !== window.self ) {
 			// Un-trap us from framesets
-			window.top.location = window.location;
+			window.top.location.href = location.href;
 		}
 	}
 
@@ -58,6 +58,17 @@
 			$nodes = $( '#column-one a, #mw-head a, #mw-panel a, #p-logo a, input, label, button' );
 		}
 		$nodes.updateTooltipAccessKeys();
+
+		// Infuse OOUI widgets, if any are present
+		$nodes = $( '[data-ooui]' );
+		if ( $nodes.length ) {
+			// FIXME: We should only load the widgets that are being infused
+			mw.loader.using( [ 'mediawiki.widgets', 'mediawiki.widgets.UserInputWidget' ] ).done( function () {
+				$nodes.each( function () {
+					OO.ui.infuse( this );
+				} );
+			} );
+		}
 
 	} );
 

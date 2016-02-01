@@ -29,28 +29,48 @@
  * @ingroup Cache
  */
 class MultiWriteBagOStuff extends BagOStuff {
-	/** @var array BagOStuff[] */
+	/** @var BagOStuff[] */
 	protected $caches;
+	/** @var bool Use async secondary writes */
+	protected $asyncWrites = false;
 
 	/**
-	 * Constructor. Parameters are:
-	 *
-	 *   - caches:   This should have a numbered array of cache parameter
-	 *               structures, in the style required by $wgObjectCaches. See
-	 *               the documentation of $wgObjectCaches for more detail.
+	 * $params include:
+	 *   - caches:      This should have a numbered array of cache parameter
+	 *                  structures, in the style required by $wgObjectCaches. See
+	 *                  the documentation of $wgObjectCaches for more detail.
+	 *                  BagOStuff objects can also be used as values.
+	 *                  The first cache is the primary one, being the first to
+	 *                  be read in the fallback chain. Writes happen to all stores
+	 *                  in the order they are defined. However, lock()/unlock() calls
+	 *                  only use the primary store.
+	 *   - replication: Either 'sync' or 'async'. This controls whether writes to
+	 *                  secondary stores are deferred when possible. Async writes
+	 *                  require the HHVM register_postsend_function() function.
+	 *                  Async writes can increase the chance of some race conditions
+	 *                  or cause keys to expire seconds later than expected. It is
+	 *                  safe to use for modules when cached values: are immutable,
+	 *                  invalidation uses logical TTLs, invalidation uses etag/timestamp
+	 *                  validation against the DB, or merge() is used to handle races.
 	 *
 	 * @param array $params
-	 * @throws MWException
+	 * @throws InvalidArgumentException
 	 */
 	public function __construct( $params ) {
-		if ( !isset( $params['caches'] ) ) {
-			throw new MWException( __METHOD__ . ': the caches parameter is required' );
+		parent::__construct( $params );
+
+		if ( empty( $params['caches'] ) || !is_array( $params['caches'] ) ) {
+			throw new InvalidArgumentException( __METHOD__ . ': "caches" parameter must be an array of caches' );
 		}
 
 		$this->caches = array();
 		foreach ( $params['caches'] as $cacheInfo ) {
-			$this->caches[] = ObjectCache::newFromParams( $cacheInfo );
+			$this->caches[] = ( $cacheInfo instanceof BagOStuff )
+				? $cacheInfo
+				: ObjectCache::newFromParams( $cacheInfo );
 		}
+
+		$this->asyncWrites = isset( $params['replication'] ) && $params['replication'] === 'async';
 	}
 
 	/**
@@ -60,30 +80,14 @@ class MultiWriteBagOStuff extends BagOStuff {
 		$this->doWrite( 'setDebug', $debug );
 	}
 
-	/**
-	 * @param string $key
-	 * @param mixed $casToken [optional]
-	 * @return bool|mixed
-	 */
-	public function get( $key, &$casToken = null ) {
+	public function get( $key, &$casToken = null, $flags = 0 ) {
 		foreach ( $this->caches as $cache ) {
-			$value = $cache->get( $key );
+			$value = $cache->get( $key, $casToken, $flags );
 			if ( $value !== false ) {
 				return $value;
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * @param mixed $casToken
-	 * @param string $key
-	 * @param mixed $value
-	 * @param mixed $exptime
-	 * @return bool
-	 */
-	public function cas( $casToken, $key, $value, $exptime = 0 ) {
-		throw new MWException( "CAS is not implemented in " . __CLASS__ );
 	}
 
 	/**
@@ -98,11 +102,10 @@ class MultiWriteBagOStuff extends BagOStuff {
 
 	/**
 	 * @param string $key
-	 * @param int $time
 	 * @return bool
 	 */
-	public function delete( $key, $time = 0 ) {
-		return $this->doWrite( 'delete', $key, $time );
+	public function delete( $key ) {
+		return $this->doWrite( 'delete', $key );
 	}
 
 	/**
@@ -136,15 +139,13 @@ class MultiWriteBagOStuff extends BagOStuff {
 	/**
 	 * @param string $key
 	 * @param int $timeout
+	 * @param int $expiry
+	 * @param string $rclass
 	 * @return bool
 	 */
-	public function lock( $key, $timeout = 0 ) {
+	public function lock( $key, $timeout = 6, $expiry = 6, $rclass = '' ) {
 		// Lock only the first cache, to avoid deadlocks
-		if ( isset( $this->caches[0] ) ) {
-			return $this->caches[0]->lock( $key, $timeout );
-		} else {
-			return true;
-		}
+		return $this->caches[0]->lock( $key, $timeout, $expiry, $rclass );
 	}
 
 	/**
@@ -152,32 +153,26 @@ class MultiWriteBagOStuff extends BagOStuff {
 	 * @return bool
 	 */
 	public function unlock( $key ) {
-		if ( isset( $this->caches[0] ) ) {
-			return $this->caches[0]->unlock( $key );
-		} else {
-			return true;
-		}
+		return $this->caches[0]->unlock( $key );
 	}
 
 	/**
 	 * @param string $key
-	 * @param Closure $callback Callback method to be executed
+	 * @param callable $callback Callback method to be executed
 	 * @param int $exptime Either an interval in seconds or a unix timestamp for expiry
 	 * @param int $attempts The amount of times to attempt a merge in case of failure
 	 * @return bool Success
 	 */
-	public function merge( $key, Closure $callback, $exptime = 0, $attempts = 10 ) {
+	public function merge( $key, $callback, $exptime = 0, $attempts = 10 ) {
 		return $this->doWrite( 'merge', $key, $callback, $exptime );
 	}
 
 	public function getLastError() {
-		return isset( $this->caches[0] ) ? $this->caches[0]->getLastError() : self::ERR_NONE;
+		return $this->caches[0]->getLastError();
 	}
 
 	public function clearLastError() {
-		if ( isset( $this->caches[0] ) ) {
-			$this->caches[0]->clearLastError();
-		}
+		$this->caches[0]->clearLastError();
 	}
 
 	/**
@@ -189,11 +184,25 @@ class MultiWriteBagOStuff extends BagOStuff {
 		$args = func_get_args();
 		array_shift( $args );
 
-		foreach ( $this->caches as $cache ) {
-			if ( !call_user_func_array( array( $cache, $method ), $args ) ) {
-				$ret = false;
+		foreach ( $this->caches as $i => $cache ) {
+			if ( $i == 0 || !$this->asyncWrites ) {
+				// First store or in sync mode: write now and get result
+				if ( !call_user_func_array( array( $cache, $method ), $args ) ) {
+					$ret = false;
+				}
+			} else {
+				// Secondary write in async mode: do not block this HTTP request
+				$logger = $this->logger;
+				DeferredUpdates::addCallableUpdate(
+					function () use ( $cache, $method, $args, $logger ) {
+						if ( !call_user_func_array( array( $cache, $method ), $args ) ) {
+							$logger->warning( "Async $method op failed" );
+						}
+					}
+				);
 			}
 		}
+
 		return $ret;
 	}
 
@@ -212,6 +221,7 @@ class MultiWriteBagOStuff extends BagOStuff {
 				$ret = true;
 			}
 		}
+
 		return $ret;
 	}
 }

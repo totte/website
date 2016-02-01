@@ -68,6 +68,8 @@ class SiteStats {
 	 * @return bool|ResultWrapper
 	 */
 	static function loadAndLazyInit() {
+		global $wgMiserMode;
+
 		wfDebug( __METHOD__ . ": reading site_stats from slave\n" );
 		$row = self::doLoad( wfGetDB( DB_SLAVE ) );
 
@@ -77,7 +79,7 @@ class SiteStats {
 			$row = self::doLoad( wfGetDB( DB_MASTER ) );
 		}
 
-		if ( !self::isSane( $row ) ) {
+		if ( !$wgMiserMode && !self::isSane( $row ) ) {
 			// Normally the site_stats table is initialized at install time.
 			// Some manual construction scenarios may leave the table empty or
 			// broken, however, for instance when importing from a dump into a
@@ -102,7 +104,6 @@ class SiteStats {
 	static function doLoad( $db ) {
 		return $db->selectRow( 'site_stats', array(
 				'ss_row_id',
-				'ss_total_views',
 				'ss_total_edits',
 				'ss_good_articles',
 				'ss_total_pages',
@@ -113,11 +114,16 @@ class SiteStats {
 	}
 
 	/**
+	 * Return the total number of page views. Except we don't track those anymore.
+	 * Stop calling this function, it will be removed some time in the future. It's
+	 * kept here simply to prevent fatal errors.
+	 *
+	 * @deprecated since 1.25
 	 * @return int
 	 */
 	static function views() {
-		self::load();
-		return self::$row->ss_total_views;
+		wfDeprecated( __METHOD__, '1.25' );
+		return 0;
 	}
 
 	/**
@@ -217,7 +223,6 @@ class SiteStats {
 	 * @return int
 	 */
 	static function pagesInNs( $ns ) {
-		wfProfileIn( __METHOD__ );
 		if ( !isset( self::$pageCount[$ns] ) ) {
 			$dbr = wfGetDB( DB_SLAVE );
 			self::$pageCount[$ns] = (int)$dbr->selectField(
@@ -227,7 +232,6 @@ class SiteStats {
 				__METHOD__
 			);
 		}
-		wfProfileOut( __METHOD__ );
 		return self::$pageCount[$ns];
 	}
 
@@ -249,7 +253,6 @@ class SiteStats {
 		}
 		// Now check for underflow/overflow
 		foreach ( array(
-			'ss_total_views',
 			'ss_total_edits',
 			'ss_good_articles',
 			'ss_total_pages',
@@ -274,7 +277,7 @@ class SiteStatsInit {
 
 	// Various stats
 	private $mEdits = null, $mArticles = null, $mPages = null;
-	private $mUsers = null, $mViews = null, $mFiles = null;
+	private $mUsers = null, $mFiles = null;
 
 	/**
 	 * Constructor
@@ -349,15 +352,6 @@ class SiteStatsInit {
 	}
 
 	/**
-	 * Count views
-	 * @return int
-	 */
-	public function views() {
-		$this->mViews = $this->db->selectField( 'page', 'SUM(page_counter)', '', __METHOD__ );
-		return $this->mViews;
-	}
-
-	/**
 	 * Count total files
 	 * @return int
 	 */
@@ -374,11 +368,10 @@ class SiteStatsInit {
 	 * - Boolean: whether to use the master DB
 	 * - DatabaseBase: database connection to use
 	 * @param array $options Array of options, may contain the following values
-	 * - views Boolean: when true, do not update the number of page views (default: true)
 	 * - activeUsers Boolean: whether to update the number of active users (default: false)
 	 */
 	public static function doAllAndCommit( $database, array $options = array() ) {
-		$options += array( 'update' => false, 'views' => true, 'activeUsers' => false );
+		$options += array( 'update' => false, 'activeUsers' => false );
 
 		// Grab the object and count everything
 		$counter = new SiteStatsInit( $database );
@@ -389,11 +382,6 @@ class SiteStatsInit {
 		$counter->users();
 		$counter->files();
 
-		// Only do views if we don't want to not count them
-		if ( $options['views'] ) {
-			$counter->views();
-		}
-
 		$counter->refresh();
 
 		// Count active users if need be
@@ -403,8 +391,7 @@ class SiteStatsInit {
 	}
 
 	/**
-	 * Refresh site_stats. If you want ss_total_views to be updated, be sure to
-	 * call views() first.
+	 * Refresh site_stats
 	 */
 	public function refresh() {
 		$values = array(
@@ -414,8 +401,6 @@ class SiteStatsInit {
 			'ss_total_pages' => ( $this->mPages === null ? $this->pages() : $this->mPages ),
 			'ss_users' => ( $this->mUsers === null ? $this->users() : $this->mUsers ),
 			'ss_images' => ( $this->mFiles === null ? $this->files() : $this->mFiles ),
-		) + (
-			$this->mViews ? array( 'ss_total_views' => $this->mViews ) : array()
 		);
 
 		$dbw = wfGetDB( DB_MASTER );

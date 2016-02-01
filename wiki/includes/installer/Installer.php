@@ -146,7 +146,6 @@ abstract class Installer {
 	 * @var array
 	 */
 	protected $envPreps = array(
-		'envPrepExtension',
 		'envPrepServer',
 		'envPrepPath',
 	);
@@ -177,7 +176,6 @@ abstract class Installer {
 		'wgGitBin',
 		'IP',
 		'wgScriptPath',
-		'wgScriptExtension',
 		'wgMetaNamespace',
 		'wgDeletedDirectory',
 		'wgEnableUploads',
@@ -186,7 +184,6 @@ abstract class Installer {
 		'wgUseInstantCommons',
 		'wgUpgradeKey',
 		'wgDefaultSkin',
-		'wgResourceLoaderMaxQueryLength',
 	);
 
 	/**
@@ -225,7 +222,7 @@ abstract class Installer {
 
 		// $wgLogo is probably wrong (bug 48084); set something that will work.
 		// Single quotes work fine here, as LocalSettingsGenerator outputs this unescaped.
-		'wgLogo' => '$wgScriptPath/resources/assets/wiki.png',
+		'wgLogo' => '$wgResourceBasePath/resources/assets/wiki.png',
 	);
 
 	/**
@@ -285,28 +282,28 @@ abstract class Installer {
 	 */
 	public $licenses = array(
 		'cc-by' => array(
-			'url' => 'http://creativecommons.org/licenses/by/3.0/',
-			'icon' => '{$wgResourceBasePath}/resources/assets/licenses/cc-by.png',
+			'url' => 'https://creativecommons.org/licenses/by/3.0/',
+			'icon' => '$wgResourceBasePath/resources/assets/licenses/cc-by.png',
 		),
 		'cc-by-sa' => array(
-			'url' => 'http://creativecommons.org/licenses/by-sa/3.0/',
-			'icon' => '{$wgResourceBasePath}/resources/assets/licenses/cc-by-sa.png',
+			'url' => 'https://creativecommons.org/licenses/by-sa/3.0/',
+			'icon' => '$wgResourceBasePath/resources/assets/licenses/cc-by-sa.png',
 		),
 		'cc-by-nc-sa' => array(
-			'url' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/',
-			'icon' => '{$wgResourceBasePath}/resources/assets/licenses/cc-by-nc-sa.png',
+			'url' => 'https://creativecommons.org/licenses/by-nc-sa/3.0/',
+			'icon' => '$wgResourceBasePath/resources/assets/licenses/cc-by-nc-sa.png',
 		),
 		'cc-0' => array(
 			'url' => 'https://creativecommons.org/publicdomain/zero/1.0/',
-			'icon' => '{$wgResourceBasePath}/resources/assets/licenses/cc-0.png',
+			'icon' => '$wgResourceBasePath/resources/assets/licenses/cc-0.png',
 		),
 		'pd' => array(
 			'url' => '',
-			'icon' => '{$wgResourceBasePath}/resources/assets/licenses/public-domain.png',
+			'icon' => '$wgResourceBasePath/resources/assets/licenses/public-domain.png',
 		),
 		'gfdl' => array(
-			'url' => 'http://www.gnu.org/copyleft/fdl.html',
-			'icon' => '{$wgResourceBasePath}/resources/assets/licenses/gnu-fdl.png',
+			'url' => 'https://www.gnu.org/copyleft/fdl.html',
+			'icon' => '$wgResourceBasePath/resources/assets/licenses/gnu-fdl.png',
 		),
 		'none' => array(
 			'url' => '',
@@ -541,9 +538,13 @@ abstract class Installer {
 		global $wgAutoloadClasses;
 		$wgAutoloadClasses = array();
 
-		wfSuppressWarnings();
+		// LocalSettings.php should not call functions, except wfLoadSkin/wfLoadExtensions
+		// Define the required globals here, to ensure, the functions can do it work correctly.
+		global $wgExtensionDirectory, $wgStyleDirectory;
+
+		MediaWiki\suppressWarnings();
 		$_lsExists = file_exists( "$IP/LocalSettings.php" );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 
 		if ( !$_lsExists ) {
 			return false;
@@ -674,7 +675,6 @@ abstract class Installer {
 			'site_stats',
 			array(
 				'ss_row_id' => 1,
-				'ss_total_views' => 0,
 				'ss_total_edits' => 0,
 				'ss_good_articles' => 0,
 				'ss_total_pages' => 0,
@@ -728,7 +728,7 @@ abstract class Installer {
 		}
 		$databases = array_flip( $databases );
 		if ( !$databases ) {
-			$this->showError( 'config-no-db', $wgLang->commaList( $allNames ) );
+			$this->showError( 'config-no-db', $wgLang->commaList( $allNames ), count( $allNames ) );
 
 			// @todo FIXME: This only works for the web installer!
 			return false;
@@ -832,14 +832,14 @@ abstract class Installer {
 	 * @return bool
 	 */
 	protected function envCheckPCRE() {
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		$regexd = preg_replace( '/[\x{0430}-\x{04FF}]/iu', '', '-АБВГД-' );
 		// Need to check for \p support too, as PCRE can be compiled
 		// with utf8 support, but not unicode property support.
 		// check that \p{Zs} (space separators) matches
 		// U+3000 (Ideographic space)
 		$regexprop = preg_replace( '/\p{Zs}/u', '', "-\xE3\x80\x80-" );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 		if ( $regexd != '--' || $regexprop != '--' ) {
 			$this->showError( 'config-pcre-no-utf8' );
 
@@ -898,11 +898,12 @@ abstract class Installer {
 	}
 
 	/**
-	 * Scare user to death if they have mod_security
+	 * Scare user to death if they have mod_security or mod_security2
 	 * @return bool
 	 */
 	protected function envCheckModSecurity() {
-		if ( self::apacheModulePresent( 'mod_security' ) ) {
+		if ( self::apacheModulePresent( 'mod_security' )
+			|| self::apacheModulePresent( 'mod_security2' ) ) {
 			$this->showMessage( 'config-mod-security' );
 		}
 
@@ -1126,12 +1127,12 @@ abstract class Installer {
 		} elseif ( $c <= 0x7FF ) {
 			return chr( 0xC0 | $c >> 6 ) . chr( 0x80 | $c & 0x3F );
 		} elseif ( $c <= 0xFFFF ) {
-			return chr( 0xE0 | $c >> 12 ) . chr( 0x80 | $c >> 6 & 0x3F )
-			. chr( 0x80 | $c & 0x3F );
+			return chr( 0xE0 | $c >> 12 ) . chr( 0x80 | $c >> 6 & 0x3F ) .
+				chr( 0x80 | $c & 0x3F );
 		} elseif ( $c <= 0x10FFFF ) {
-			return chr( 0xF0 | $c >> 18 ) . chr( 0x80 | $c >> 12 & 0x3F )
-			. chr( 0x80 | $c >> 6 & 0x3F )
-			. chr( 0x80 | $c & 0x3F );
+			return chr( 0xF0 | $c >> 18 ) . chr( 0x80 | $c >> 12 & 0x3F ) .
+				chr( 0x80 | $c >> 6 & 0x3F ) .
+				chr( 0x80 | $c & 0x3F );
 		} else {
 			return false;
 		}
@@ -1141,9 +1142,6 @@ abstract class Installer {
 	 * Check the libicu version
 	 */
 	protected function envCheckLibicu() {
-		$utf8 = function_exists( 'utf8_normalize' );
-		$intl = function_exists( 'normalizer_normalize' );
-
 		/**
 		 * This needs to be updated something that the latest libicu
 		 * will properly normalize.  This normalization was found at
@@ -1157,18 +1155,7 @@ abstract class Installer {
 		$useNormalizer = 'php';
 		$needsUpdate = false;
 
-		/**
-		 * We're going to prefer the pecl extension here unless
-		 * utf8_normalize is more up to date.
-		 */
-		if ( $utf8 ) {
-			$useNormalizer = 'utf8';
-			$utf8 = utf8_normalize( $not_normal_c, UtfNormal::UNORM_NFC );
-			if ( $utf8 !== $normal_c ) {
-				$needsUpdate = true;
-			}
-		}
-		if ( $intl ) {
+		if ( function_exists( 'normalizer_normalize' ) ) {
 			$useNormalizer = 'intl';
 			$intl = normalizer_normalize( $not_normal_c, Normalizer::FORM_C );
 			if ( $intl !== $normal_c ) {
@@ -1176,8 +1163,7 @@ abstract class Installer {
 			}
 		}
 
-		// Uses messages 'config-unicode-using-php', 'config-unicode-using-utf8',
-		// 'config-unicode-using-intl'
+		// Uses messages 'config-unicode-using-php' and 'config-unicode-using-intl'
 		if ( $useNormalizer === 'php' ) {
 			$this->showMessage( 'config-unicode-pure-php-warning' );
 		} else {
@@ -1244,19 +1230,6 @@ abstract class Installer {
 	abstract protected function envGetDefaultServer();
 
 	/**
-	 * Environment prep for setting the preferred PHP file extension.
-	 */
-	protected function envPrepExtension() {
-		// @todo FIXME: Detect this properly
-		if ( defined( 'MW_INSTALL_PHP5_EXT' ) ) {
-			$ext = '.php5';
-		} else {
-			$ext = '.php';
-		}
-		$this->setVar( 'wgScriptExtension', $ext );
-	}
-
-	/**
 	 * Environment prep for setting $IP and $wgScriptPath.
 	 */
 	protected function envPrepPath() {
@@ -1305,9 +1278,9 @@ abstract class Installer {
 		foreach ( $names as $name ) {
 			$command = $path . DIRECTORY_SEPARATOR . $name;
 
-			wfSuppressWarnings();
+			MediaWiki\suppressWarnings();
 			$file_exists = file_exists( $command );
-			wfRestoreWarnings();
+			MediaWiki\restoreWarnings();
 
 			if ( $file_exists ) {
 				if ( !$versionInfo ) {
@@ -1365,7 +1338,7 @@ abstract class Installer {
 
 		// it would be good to check other popular languages here, but it'll be slow.
 
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 
 		foreach ( $scriptTypes as $ext => $contents ) {
 			foreach ( $contents as $source ) {
@@ -1376,22 +1349,22 @@ abstract class Installer {
 				}
 
 				try {
-					$text = Http::get( $url . $file, array( 'timeout' => 3 ) );
-				} catch ( MWException $e ) {
+					$text = Http::get( $url . $file, array( 'timeout' => 3 ), __METHOD__ );
+				} catch ( Exception $e ) {
 					// Http::get throws with allow_url_fopen = false and no curl extension.
 					$text = null;
 				}
 				unlink( $dir . $file );
 
 				if ( $text == 'exec' ) {
-					wfRestoreWarnings();
+					MediaWiki\restoreWarnings();
 
 					return $ext;
 				}
 			}
 		}
 
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 
 		return false;
 	}
@@ -1452,13 +1425,16 @@ abstract class Installer {
 			return array();
 		}
 
+		// extensions -> extension.json, skins -> skin.json
+		$jsonFile = substr( $directory, 0, strlen( $directory ) -1 ) . '.json';
+
 		$dh = opendir( $extDir );
 		$exts = array();
 		while ( ( $file = readdir( $dh ) ) !== false ) {
 			if ( !is_dir( "$extDir/$file" ) ) {
 				continue;
 			}
-			if ( file_exists( "$extDir/$file/$file.php" ) ) {
+			if ( file_exists( "$extDir/$file/$jsonFile" ) || file_exists( "$extDir/$file/$file.php" ) ) {
 				$exts[] = $file;
 			}
 		}
@@ -1469,15 +1445,16 @@ abstract class Installer {
 	}
 
 	/**
-	 * Returns a default value to be used for $wgDefaultSkin: the preferred skin, if available among
-	 * the installed skins, or any other one otherwise.
+	 * Returns a default value to be used for $wgDefaultSkin: normally the one set in DefaultSettings,
+	 * but will fall back to another if the default skin is missing and some other one is present
+	 * instead.
 	 *
 	 * @param string[] $skinNames Names of installed skins.
 	 * @return string
 	 */
 	public function getDefaultSkin( array $skinNames ) {
 		$defaultSkin = $GLOBALS['wgDefaultSkin'];
-		if ( in_array( $defaultSkin, $skinNames ) ) {
+		if ( !$skinNames || in_array( $defaultSkin, $skinNames ) ) {
 			return $defaultSkin;
 		} else {
 			return $skinNames[0];
@@ -1504,16 +1481,31 @@ abstract class Installer {
 		 */
 		global $wgAutoloadClasses;
 		$wgAutoloadClasses = array();
+		$queue = array();
 
 		require "$IP/includes/DefaultSettings.php";
 
 		foreach ( $exts as $e ) {
-			require_once "$IP/extensions/$e/$e.php";
+			if ( file_exists( "$IP/extensions/$e/extension.json" ) ) {
+				$queue["$IP/extensions/$e/extension.json"] = 1;
+			} else {
+				require_once "$IP/extensions/$e/$e.php";
+			}
 		}
+
+		$registry = new ExtensionRegistry();
+		$data = $registry->readFromQueue( $queue );
+		$wgAutoloadClasses += $data['autoload'];
 
 		$hooksWeWant = isset( $wgHooks['LoadExtensionSchemaUpdates'] ) ?
 			$wgHooks['LoadExtensionSchemaUpdates'] : array();
 
+		if ( isset( $data['globals']['wgHooks']['LoadExtensionSchemaUpdates'] ) ) {
+			$hooksWeWant = array_merge_recursive(
+				$hooksWeWant,
+				$data['globals']['wgHooks']['LoadExtensionSchemaUpdates']
+			);
+		}
 		// Unset everyone else's hooks. Lord knows what someone might be doing
 		// in ParserFirstCallInit (see bug 27171)
 		$GLOBALS['wgHooks'] = array( 'LoadExtensionSchemaUpdates' => $hooksWeWant );
@@ -1723,7 +1715,7 @@ abstract class Installer {
 
 		if ( MWHttpRequest::canMakeRequests() ) {
 			$res = MWHttpRequest::factory( $this->mediaWikiAnnounceUrl,
-				array( 'method' => 'POST', 'postData' => $params ) )->execute();
+				array( 'method' => 'POST', 'postData' => $params ), __METHOD__ )->execute();
 			if ( !$res->isOK() ) {
 				$s->warning( 'config-install-subscribe-fail', $res->getMessage() );
 			}
@@ -1753,7 +1745,7 @@ abstract class Installer {
 				false,
 				User::newFromName( 'MediaWiki default' )
 			);
-		} catch ( MWException $e ) {
+		} catch ( Exception $e ) {
 			//using raw, because $wgShowExceptionDetails can not be set yet
 			$status->fatal( 'config-install-mainpage-failed', $e->getMessage() );
 		}
@@ -1806,8 +1798,8 @@ abstract class Installer {
 	 * Some long-running pages (Install, Upgrade) will want to do this
 	 */
 	protected function disableTimeLimit() {
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		set_time_limit( 0 );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 	}
 }

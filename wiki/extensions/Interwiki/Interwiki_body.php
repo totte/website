@@ -38,7 +38,7 @@ class SpecialInterwiki extends SpecialPage {
 		$action = $par ? $par : $request->getVal( 'action', $par );
 		$return = $this->getPageTitle();
 
-		switch( $action ) {
+		switch ( $action ) {
 		case 'delete':
 		case 'edit':
 		case 'add':
@@ -212,7 +212,7 @@ class SpecialInterwiki extends SpecialPage {
 	}
 
 	function doSubmit() {
-		global $wgMemc, $wgContLang;
+		global $wgContLang;
 
 		$request = $this->getRequest();
 		$prefix = $request->getVal( 'wpInterwikiPrefix' );
@@ -231,7 +231,7 @@ class SpecialInterwiki extends SpecialPage {
 		$reason = $request->getText( 'wpInterwikiReason' );
 		$selfTitle = $this->getPageTitle();
 		$dbw = wfGetDB( DB_MASTER );
-		switch( $do ) {
+		switch ( $do ) {
 		case 'delete':
 			$dbw->delete( 'interwiki', array( 'iw_prefix' => $prefix ), __METHOD__ );
 
@@ -242,7 +242,7 @@ class SpecialInterwiki extends SpecialPage {
 				$this->getOutput()->addWikiMsg( 'interwiki_deleted', $prefix );
 				$log = new LogPage( 'interwiki' );
 				$log->addEntry( 'iw_delete', $selfTitle, $reason, array( $prefix ) );
-				$wgMemc->delete( wfMemcKey( 'interwiki', $prefix ) );
+				Interwiki::invalidateCache( $prefix );
 			}
 			break;
 		case 'add':
@@ -288,14 +288,14 @@ class SpecialInterwiki extends SpecialPage {
 				$this->getOutput()->addWikiMsg( "interwiki_{$do}ed", $prefix );
 				$log = new LogPage( 'interwiki' );
 				$log->addEntry( 'iw_' . $do, $selfTitle, $reason, array( $prefix, $theurl, $trans, $local ) );
-				$wgMemc->delete( wfMemcKey( 'interwiki', $prefix ) );
+				Interwiki::invalidateCache( $prefix );
 			}
 			break;
 		}
 	}
 
 	function showList() {
-		global $wgInterwikiCentralDB;
+		global $wgInterwikiCentralDB, $wgInterwikiViewOnly;
 		$canModify = $this->canModify();
 
 		// Build lists
@@ -333,11 +333,15 @@ class SpecialInterwiki extends SpecialPage {
 
 		// Page intro content
 		$this->getOutput()->addWikiMsg( 'interwiki_intro' );
-		$logLink = Linker::link(
-			SpecialPage::getTitleFor( 'log', 'interwiki' ),
-			$this->msg( 'interwiki-logtext' )->escaped()
-		);
-		$this->getOutput()->addHTML( '<p class="mw-interwiki-log">' . $logLink . '</p>' );
+
+		// Add 'view log' link when possible
+		if ( $wgInterwikiViewOnly === false ) {
+			$logLink = Linker::link(
+				SpecialPage::getTitleFor( 'Log', 'interwiki' ),
+				$this->msg( 'interwiki-logtext' )->escaped()
+			);
+			$this->getOutput()->addHTML( '<p class="mw-interwiki-log">' . $logLink . '</p>' );
+		}
 
 		// Add 'add' link
 		if ( $canModify ) {
@@ -353,7 +357,7 @@ class SpecialInterwiki extends SpecialPage {
 		$this->getOutput()->addWikiMsg( 'interwiki-legend' );
 
 		if ( !is_array( $iwPrefixes ) || count( $iwPrefixes ) === 0 ) {
-			if (  !is_array( $iwGlobalPrefixes ) || count( $iwGlobalPrefixes ) === 0 ) {
+			if ( !is_array( $iwGlobalPrefixes ) || count( $iwGlobalPrefixes ) === 0 ) {
 				// If the interwiki table(s) are empty, display an error message
 				$this->error( 'interwiki_error' );
 				return;
@@ -442,7 +446,7 @@ class SpecialInterwiki extends SpecialPage {
 			);
 			$attribs = array( 'class' => 'mw-interwikitable-local' );
 			// Green background for cells with "yes".
-			if( $iwPrefix['iw_local'] ) {
+			if ( isset( $iwPrefix['iw_local'] ) && $iwPrefix['iw_local'] ) {
 				$attribs['class'] .= ' mw-interwikitable-local-yes';
 			}
 			// The messages interwiki_0 and interwiki_1 are used here.
@@ -452,7 +456,7 @@ class SpecialInterwiki extends SpecialPage {
 			$out .= Html::element( 'td', $attribs, $contents );
 			$attribs = array( 'class' => 'mw-interwikitable-trans' );
 			// Green background for cells with "yes".
-			if( $iwPrefix['iw_trans'] ) {
+			if ( isset( $iwPrefix['iw_trans'] ) && $iwPrefix['iw_trans'] ) {
 				$attribs['class'] .= ' mw-interwikitable-trans-yes';
 			}
 			// The messages interwiki_0 and interwiki_1 are used here.
@@ -481,6 +485,10 @@ class SpecialInterwiki extends SpecialPage {
 	function error() {
 		$args = func_get_args();
 		$this->getOutput()->wrapWikiMsg( "<p class='error'>$1</p>", $args );
+	}
+
+	protected function getGroupName() {
+		return 'wiki';
 	}
 }
 

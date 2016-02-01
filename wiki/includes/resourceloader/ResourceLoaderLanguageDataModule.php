@@ -52,32 +52,28 @@ class ResourceLoaderLanguageDataModule extends ResourceLoaderModule {
 	 * @return string JavaScript code
 	 */
 	public function getScript( ResourceLoaderContext $context ) {
-		return Xml::encodeJsCall( 'mw.language.setData', array(
-			$context->getLanguage(),
-			$this->getData( $context )
-		) );
+		return Xml::encodeJsCall(
+			'mw.language.setData',
+			array(
+				$context->getLanguage(),
+				$this->getData( $context )
+			),
+			ResourceLoader::inDebugMode()
+		);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function enableModuleContentVersion() {
+		return true;
 	}
 
 	/**
 	 * @param ResourceLoaderContext $context
-	 * @return int UNIX timestamp
-	 */
-	public function getModifiedTime( ResourceLoaderContext $context ) {
-		return max( 1, $this->getHashMtime( $context ) );
-	}
-
-	/**
-	 * @param ResourceLoaderContext $context
-	 * @return string Hash
-	 */
-	public function getModifiedHash( ResourceLoaderContext $context ) {
-		return md5( serialize( $this->getData( $context ) ) );
-	}
-
-	/**
 	 * @return array
 	 */
-	public function getDependencies() {
+	public function getDependencies( ResourceLoaderContext $context = null ) {
 		return array( 'mediawiki.language.init' );
 	}
 }

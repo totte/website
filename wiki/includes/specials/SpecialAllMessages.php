@@ -29,7 +29,7 @@
  */
 class SpecialAllMessages extends SpecialPage {
 	/**
-	 * @var AllmessagesTablePager
+	 * @var AllMessagesTablePager
 	 */
 	protected $table;
 
@@ -59,8 +59,9 @@ class SpecialAllMessages extends SpecialPage {
 
 		$this->outputHeader( 'allmessagestext' );
 		$out->addModuleStyles( 'mediawiki.special' );
+		$this->addHelpLink( 'Help:System message' );
 
-		$this->table = new AllmessagesTablePager(
+		$this->table = new AllMessagesTablePager(
 			$this,
 			array(),
 			wfGetLangObj( $request->getVal( 'lang', $par ) )
@@ -129,7 +130,7 @@ class AllMessagesTablePager extends TablePager {
 
 		if ( $prefix !== null ) {
 			$this->displayPrefix = $prefix->getDBkey();
-			$this->prefix = '/^' . preg_quote( $this->displayPrefix ) . '/i';
+			$this->prefix = '/^' . preg_quote( $this->displayPrefix, '/' ) . '/i';
 		} else {
 			$this->displayPrefix = false;
 			$this->prefix = false;
@@ -205,7 +206,7 @@ class AllMessagesTablePager extends TablePager {
 			Xml::label( $this->msg( 'table_pager_limit_label' )->text(), 'mw-table_pager_limit_label' ) .
 			'</td>
 			<td class="mw-input">' .
-			$this->getLimitSelect() .
+			$this->getLimitSelect( array( 'id' => 'mw-table_pager_limit_label' ) ) .
 			'</td>
 			<tr>
 				<td></td>
@@ -223,18 +224,16 @@ class AllMessagesTablePager extends TablePager {
 	}
 
 	function getAllMessages( $descending ) {
-		wfProfileIn( __METHOD__ );
 		$messageNames = Language::getLocalisationCache()->getSubitemList( 'en', 'messages' );
+
+		// Normalise message names so they look like page titles and sort correctly - T86139
+		$messageNames = array_map( array( $this->lang, 'ucfirst' ), $messageNames );
+
 		if ( $descending ) {
 			rsort( $messageNames );
 		} else {
 			asort( $messageNames );
 		}
-
-		// Normalise message names so they look like page titles
-		$messageNames = array_map( array( $this->lang, 'ucfirst' ), $messageNames );
-
-		wfProfileOut( __METHOD__ );
 
 		return $messageNames;
 	}
@@ -252,7 +251,6 @@ class AllMessagesTablePager extends TablePager {
 	 */
 	public static function getCustomisedStatuses( $messageNames, $langcode = 'en', $foreign = false ) {
 		// FIXME: This function should be moved to Language:: or something.
-		wfProfileIn( __METHOD__ . '-db' );
 
 		$dbr = wfGetDB( DB_SLAVE );
 		$res = $dbr->select( 'page',
@@ -287,8 +285,6 @@ class AllMessagesTablePager extends TablePager {
 				$talkFlags[$exists] = true;
 			}
 		}
-
-		wfProfileOut( __METHOD__ . '-db' );
 
 		return array( 'pages' => $pageFlags, 'talks' => $talkFlags );
 	}
@@ -396,10 +392,10 @@ class AllMessagesTablePager extends TablePager {
 					);
 				}
 
-				return $title . ' '
-				. $this->msg( 'parentheses' )->rawParams( $talk )->escaped()
-				. ' '
-				. $this->msg( 'parentheses' )->rawParams( $translation )->escaped();
+				return $title . ' ' .
+					$this->msg( 'parentheses' )->rawParams( $talk )->escaped() .
+					' ' .
+					$this->msg( 'parentheses' )->rawParams( $translation )->escaped();
 
 			case 'am_default' :
 			case 'am_actual' :
@@ -449,7 +445,7 @@ class AllMessagesTablePager extends TablePager {
 		} elseif ( $field === 'am_title' ) {
 			return array( 'class' => $field );
 		} else {
-			return array( 'lang' => $this->langcode, 'dir' => $this->lang->getDir(), 'class' => $field );
+			return array( 'lang' => wfBCP47( $this->langcode ), 'dir' => $this->lang->getDir(), 'class' => $field );
 		}
 	}
 

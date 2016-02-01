@@ -54,9 +54,9 @@ class SearchMySQL extends SearchDatabase {
 		if ( preg_match_all( '/([-+<>~]?)(([' . $lc . ']+)(\*?)|"[^"]*")/',
 				$filteredText, $m, PREG_SET_ORDER ) ) {
 			foreach ( $m as $bits ) {
-				wfSuppressWarnings();
+				MediaWiki\suppressWarnings();
 				list( /* all */, $modifier, $term, $nonQuoted, $wildcard ) = $bits;
-				wfRestoreWarnings();
+				MediaWiki\restoreWarnings();
 
 				if ( $nonQuoted != '' ) {
 					$term = $nonQuoted;
@@ -382,8 +382,6 @@ class SearchMySQL extends SearchDatabase {
 	function normalizeText( $string ) {
 		global $wgContLang;
 
-		wfProfileIn( __METHOD__ );
-
 		$out = parent::normalizeText( $string );
 
 		// MySQL fulltext index doesn't grok utf-8, so we
@@ -416,8 +414,6 @@ class SearchMySQL extends SearchDatabase {
 			"$1u82e$2",
 			$out );
 
-		wfProfileOut( __METHOD__ );
-
 		return $out;
 	}
 
@@ -443,7 +439,7 @@ class SearchMySQL extends SearchDatabase {
 			$sql = "SHOW GLOBAL VARIABLES LIKE 'ft\\_min\\_word\\_len'";
 
 			$dbr = wfGetDB( DB_SLAVE );
-			$result = $dbr->query( $sql );
+			$result = $dbr->query( $sql, __METHOD__ );
 			$row = $result->fetchObject();
 			$result->free();
 

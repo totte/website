@@ -41,7 +41,12 @@ class MssqlUpdater extends DatabaseUpdater {
 			array( 'addField', 'mwuser', 'user_password_expires', 'patch-user_password_expires.sql' ),
 
 			// 1.24
-			array( 'addField', 'page', 'page_lang', 'patch-page-page_lang.sql'),
+			array( 'addField', 'page', 'page_lang', 'patch-page-page_lang.sql' ),
+
+			// 1.25
+			array( 'dropTable', 'hitcounter' ),
+			array( 'dropField', 'site_stats', 'ss_total_views', 'patch-drop-ss_total_views.sql' ),
+			array( 'dropField', 'page', 'page_counter', 'patch-drop-page_counter.sql' ),
 			// Constraint updates
 			array( 'updateConstraints', 'category_types', 'categorylinks', 'cl_type' ),
 			array( 'updateConstraints', 'major_mime', 'filearchive', 'fa_major_mime' ),

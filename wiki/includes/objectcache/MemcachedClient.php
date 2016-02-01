@@ -64,6 +64,9 @@
  * @version 0.1.2
  */
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+
 // {{{ requirements
 // }}}
 
@@ -90,6 +93,11 @@ class MWMemcached {
 	 * Flag: indicates data is compressed
 	 */
 	const COMPRESSED = 2;
+
+	/**
+	 * Flag: indicates data is an integer
+	 */
+	const INTVAL = 4;
 
 	// }}}
 
@@ -233,6 +241,11 @@ class MWMemcached {
 	 */
 	public $_connect_attempts;
 
+	/**
+	 * @var LoggerInterface
+	 */
+	private $_logger;
+
 	// }}}
 	// }}}
 	// {{{ methods
@@ -263,6 +276,8 @@ class MWMemcached {
 
 		$this->_connect_timeout = isset( $args['connect_timeout'] ) ? $args['connect_timeout'] : 0.1;
 		$this->_connect_attempts = 2;
+
+		$this->_logger = isset( $args['logger'] ) ? $args['logger'] : new NullLogger();
 	}
 
 	// }}}
@@ -413,7 +428,6 @@ class MWMemcached {
 	 * @return mixed
 	 */
 	public function get( $key, &$casToken = null ) {
-		wfProfileIn( __METHOD__ );
 
 		if ( $this->_debug ) {
 			$this->_debugprint( "get($key)\n" );
@@ -421,19 +435,16 @@ class MWMemcached {
 
 		if ( !is_array( $key ) && strval( $key ) === '' ) {
 			$this->_debugprint( "Skipping key which equals to an empty string" );
-			wfProfileOut( __METHOD__ );
 			return false;
 		}
 
 		if ( !$this->_active ) {
-			wfProfileOut( __METHOD__ );
 			return false;
 		}
 
 		$sock = $this->get_sock( $key );
 
 		if ( !is_resource( $sock ) ) {
-			wfProfileOut( __METHOD__ );
 			return false;
 		}
 
@@ -446,7 +457,6 @@ class MWMemcached {
 
 		$cmd = "gets $key\r\n";
 		if ( !$this->_fwrite( $sock, $cmd ) ) {
-			wfProfileOut( __METHOD__ );
 			return false;
 		}
 
@@ -463,7 +473,6 @@ class MWMemcached {
 		if ( isset( $val[$key] ) ) {
 			$value = $val[$key];
 		}
-		wfProfileOut( __METHOD__ );
 		return $value;
 	}
 
@@ -741,13 +750,13 @@ class MWMemcached {
 		$timeout = $this->_connect_timeout;
 		$errno = $errstr = null;
 		for ( $i = 0; !$sock && $i < $this->_connect_attempts; $i++ ) {
-			wfSuppressWarnings();
+			MediaWiki\suppressWarnings();
 			if ( $this->_persistent == 1 ) {
 				$sock = pfsockopen( $ip, $port, $errno, $errstr, $timeout );
 			} else {
 				$sock = fsockopen( $ip, $port, $errno, $errstr, $timeout );
 			}
-			wfRestoreWarnings();
+			MediaWiki\restoreWarnings();
 		}
 		if ( !$sock ) {
 			$this->_error_log( "Error connecting to $host: $errstr\n" );
@@ -975,6 +984,8 @@ class MWMemcached {
 					 */
 					if ( $flags & self::SERIALIZED ) {
 						$ret[$rkey] = unserialize( $ret[$rkey] );
+					} elseif ( $flags & self::INTVAL ) {
+						$ret[$rkey] = intval( $ret[$rkey] );
 					}
 				}
 
@@ -1023,7 +1034,9 @@ class MWMemcached {
 
 		$flags = 0;
 
-		if ( !is_scalar( $val ) ) {
+		if ( is_int( $val ) ) {
+			$flags |= self::INTVAL;
+		} elseif ( !is_scalar( $val ) ) {
 			$val = serialize( $val );
 			$flags |= self::SERIALIZED;
 			if ( $this->_debug ) {
@@ -1110,14 +1123,14 @@ class MWMemcached {
 	 * @param string $text
 	 */
 	function _debugprint( $text ) {
-		wfDebugLog( 'memcached', $text );
+		$this->_logger->debug( $text );
 	}
 
 	/**
 	 * @param string $text
 	 */
 	function _error_log( $text ) {
-		wfDebugLog( 'memcached-serious', "Memcached error: $text" );
+		$this->_logger->error( "Memcached error: $text" );
 	}
 
 	/**

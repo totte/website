@@ -75,9 +75,9 @@ class FSFile {
 	 * @return string|bool TS_MW timestamp or false on failure
 	 */
 	public function getTimestamp() {
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		$timestamp = filemtime( $this->path );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 		if ( $timestamp !== false ) {
 			$timestamp = wfTimestamp( TS_MW, $timestamp );
 		}
@@ -104,7 +104,6 @@ class FSFile {
 	 * @return array
 	 */
 	public function getProps( $ext = true ) {
-		wfProfileIn( __METHOD__ );
 		wfDebug( __METHOD__ . ": Getting file info for $this->path\n" );
 
 		$info = self::placeholderProps();
@@ -145,8 +144,6 @@ class FSFile {
 		} else {
 			wfDebug( __METHOD__ . ": $this->path NOT FOUND!\n" );
 		}
-
-		wfProfileOut( __METHOD__ );
 
 		return $info;
 	}
@@ -201,23 +198,18 @@ class FSFile {
 	 * @return bool|string False on failure
 	 */
 	public function getSha1Base36( $recache = false ) {
-		wfProfileIn( __METHOD__ );
 
 		if ( $this->sha1Base36 !== null && !$recache ) {
-			wfProfileOut( __METHOD__ );
-
 			return $this->sha1Base36;
 		}
 
-		wfSuppressWarnings();
+		MediaWiki\suppressWarnings();
 		$this->sha1Base36 = sha1_file( $this->path );
-		wfRestoreWarnings();
+		MediaWiki\restoreWarnings();
 
 		if ( $this->sha1Base36 !== false ) {
 			$this->sha1Base36 = wfBaseConvert( $this->sha1Base36, 16, 36, 31 );
 		}
-
-		wfProfileOut( __METHOD__ );
 
 		return $this->sha1Base36;
 	}

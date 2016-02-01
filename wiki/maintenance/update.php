@@ -4,7 +4,6 @@
  * Run all updaters.
  *
  * This is used when the database schema is modified and we need to apply patches.
- * It is kept compatible with php 4 parsing so that it can give out a meaningful error.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +24,6 @@
  * @todo document
  * @ingroup Maintenance
  */
-
-if ( !function_exists( 'version_compare' ) || ( version_compare( PHP_VERSION, '5.3.2' ) < 0 ) ) {
-	require dirname( __FILE__ ) . '/../includes/PHPVersionError.php';
-	wfPHPVersionError( 'cli' );
-}
 
 $wgUseMasterForMaintenance = true;
 require_once __DIR__ . '/Maintenance.php';
@@ -56,16 +50,18 @@ class UpdateMediaWiki extends Maintenance {
 			true
 		);
 		$this->addOption( 'force', 'Override when $wgAllowSchemaUpdates disables this script' );
+		$this->addOption(
+			'skip-external-dependencies',
+			'Skips checking whether external dependencies are up to date, mostly for developers'
+		);
 	}
 
 	function getDbType() {
-		/* If we used the class constant PHP4 would give a parser error here */
-		return 2; /* Maintenance::DB_ADMIN */
+		return Maintenance::DB_ADMIN;
 	}
 
 	function compatChecks() {
-		// Avoid syntax error in PHP4
-		$minimumPcreVersion = constant( 'Installer::MINIMUM_PCRE_VERSION' );
+		$minimumPcreVersion = Installer::MINIMUM_PCRE_VERSION;
 
 		list( $pcreVersion ) = explode( ' ', PCRE_VERSION, 2 );
 		if ( version_compare( $pcreVersion, $minimumPcreVersion, '<' ) ) {
@@ -122,7 +118,7 @@ class UpdateMediaWiki extends Maintenance {
 
 		$this->output( "MediaWiki {$wgVersion} Updater\n\n" );
 
-		wfWaitForSlaves( 5 ); // let's not kill databases, shall we? ;) --tor
+		wfWaitForSlaves();
 
 		if ( !$this->hasOption( 'skip-compat-checks' ) ) {
 			$this->compatChecks();
@@ -131,13 +127,23 @@ class UpdateMediaWiki extends Maintenance {
 			wfCountdown( 5 );
 		}
 
+		// Check external dependencies are up to date
+		if ( !$this->hasOption( 'skip-external-dependencies' ) ) {
+			$composerLockUpToDate = $this->runChild( 'CheckComposerLockUpToDate' );
+			$composerLockUpToDate->execute();
+		} else {
+			$this->output(
+				"Skipping checking whether external dependencies are up to date, proceed at your own risk\n"
+			);
+		}
+
 		# Attempt to connect to the database as a privileged user
 		# This will vomit up an error if there are permissions problems
 		$db = wfGetDB( DB_MASTER );
 
 		$this->output( "Going to run database updates for " . wfWikiID() . "\n" );
 		if ( $db->getType() === 'sqlite' ) {
-			$this->output( "Using SQLite file: '{$db->mDatabaseFile}'\n" );
+			$this->output( "Using SQLite file: '{$db->getDbFilePath()}'\n" );
 		}
 		$this->output( "Depending on the size of your database this may take a while!\n" );
 
@@ -147,7 +153,7 @@ class UpdateMediaWiki extends Maintenance {
 			wfCountDown( 5 );
 		}
 
-		$time1 = new MWTimestamp();
+		$time1 = microtime( true );
 
 		$shared = $this->hasOption( 'doshared' );
 
@@ -166,7 +172,7 @@ class UpdateMediaWiki extends Maintenance {
 			$child = $this->runChild( $maint );
 
 			// LoggedUpdateMaintenance is checking the updatelog itself
-			$isLoggedUpdate = is_a( $child, 'LoggedUpdateMaintenance' );
+			$isLoggedUpdate = $child instanceof LoggedUpdateMaintenance;
 
 			if ( !$isLoggedUpdate && $updater->updateRowExists( $maint ) ) {
 				continue;
@@ -178,13 +184,15 @@ class UpdateMediaWiki extends Maintenance {
 			}
 		}
 
+		$updater->setFileAccess();
 		if ( !$this->hasOption( 'nopurge' ) ) {
 			$updater->purgeCache();
 		}
-		$time2 = new MWTimestamp();
 
-		$timeDiff = $time2->diff( $time1 );
-		$this->output( "\nDone in " . $timeDiff->format( "%i:%S" ) . ".\n" );
+		$time2 = microtime( true );
+
+		$timeDiff = $wgLang->formatTimePeriod( $time2 - $time1 );
+		$this->output( "\nDone in $timeDiff.\n" );
 	}
 
 	function afterFinalSetup() {

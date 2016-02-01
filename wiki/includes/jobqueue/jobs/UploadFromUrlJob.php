@@ -39,7 +39,7 @@ class UploadFromUrlJob extends Job {
 	/** @var User */
 	protected $user;
 
-	public function __construct( $title, $params ) {
+	public function __construct( Title $title, array $params ) {
 		parent::__construct( 'uploadFromUrl', $title, $params );
 	}
 
@@ -81,7 +81,7 @@ class UploadFromUrlJob extends Job {
 			if ( $warnings ) {
 
 				# Stash the upload
-				$key = $this->upload->stashFile();
+				$key = $this->upload->stashFile( $this->user );
 
 				// @todo FIXME: This has been broken for a while.
 				// User::leaveUserMessage() does not exist.
@@ -166,11 +166,11 @@ class UploadFromUrlJob extends Job {
 	}
 
 	/**
-	 * Initialize the session data. Sets the intial result to queued.
+	 * Initialize the session data. Sets the initial result to queued.
 	 */
 	public function initializeSessionData() {
 		$session =& self::getSessionData( $this->params['sessionKey'] );
-		$$session['result'] = 'Queued';
+		$session['result'] = 'Queued';
 	}
 
 	/**

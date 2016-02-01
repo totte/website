@@ -102,39 +102,99 @@ class Html {
 	);
 
 	/**
+	 * Modifies a set of attributes meant for button elements
+	 * and apply a set of default attributes when $wgUseMediaWikiUIEverywhere enabled.
+	 * @param array $attrs HTML attributes in an associative array
+	 * @param string[] $modifiers classes to add to the button
+	 * @see https://tools.wmflabs.org/styleguide/desktop/index.html for guidance on available modifiers
+	 * @return array $attrs A modified attribute array
+	 */
+	public static function buttonAttributes( array $attrs, array $modifiers = array() ) {
+		global $wgUseMediaWikiUIEverywhere;
+		if ( $wgUseMediaWikiUIEverywhere ) {
+			if ( isset( $attrs['class'] ) ) {
+				if ( is_array( $attrs['class'] ) ) {
+					$attrs['class'][] = 'mw-ui-button';
+					$attrs['class'] = array_merge( $attrs['class'], $modifiers );
+					// ensure compatibility with Xml
+					$attrs['class'] = implode( ' ', $attrs['class'] );
+				} else {
+					$attrs['class'] .= ' mw-ui-button ' . implode( ' ', $modifiers );
+				}
+			} else {
+				// ensure compatibility with Xml
+				$attrs['class'] = 'mw-ui-button ' . implode( ' ', $modifiers );
+			}
+		}
+		return $attrs;
+	}
+
+	/**
 	 * Modifies a set of attributes meant for text input elements
 	 * and apply a set of default attributes.
 	 * Removes size attribute when $wgUseMediaWikiUIEverywhere enabled.
 	 * @param array $attrs An attribute array.
 	 * @return array $attrs A modified attribute array
 	 */
-	public static function getTextInputAttributes( $attrs ) {
+	public static function getTextInputAttributes( array $attrs ) {
 		global $wgUseMediaWikiUIEverywhere;
-		if ( !$attrs ) {
-			$attrs = array();
-		}
-		if ( isset( $attrs['class'] ) ) {
-			if ( is_array( $attrs['class'] ) ) {
-				$attrs['class'][] = 'mw-ui-input';
-			} else {
-				$attrs['class'] .= ' mw-ui-input';
-			}
-		} else {
-			$attrs['class'] = 'mw-ui-input';
-		}
 		if ( $wgUseMediaWikiUIEverywhere ) {
-			// Note that size can effect the desired width rendering of mw-ui-input elements
-			// so it is removed. Left intact when mediawiki ui not enabled.
-			unset( $attrs['size'] );
+			if ( isset( $attrs['class'] ) ) {
+				if ( is_array( $attrs['class'] ) ) {
+					$attrs['class'][] = 'mw-ui-input';
+				} else {
+					$attrs['class'] .= ' mw-ui-input';
+				}
+			} else {
+				$attrs['class'] = 'mw-ui-input';
+			}
 		}
 		return $attrs;
 	}
 
 	/**
+	 * Returns an HTML link element in a string styled as a button
+	 * (when $wgUseMediaWikiUIEverywhere is enabled).
+	 *
+	 * @param string $contents The raw HTML contents of the element: *not*
+	 *   escaped!
+	 * @param array $attrs Associative array of attributes, e.g., array(
+	 *   'href' => 'http://www.mediawiki.org/' ). See expandAttributes() for
+	 *   further documentation.
+	 * @param string[] $modifiers classes to add to the button
+	 * @see http://tools.wmflabs.org/styleguide/desktop/index.html for guidance on available modifiers
+	 * @return string Raw HTML
+	 */
+	public static function linkButton( $contents, array $attrs, array $modifiers = array() ) {
+		return self::element( 'a',
+			self::buttonAttributes( $attrs, $modifiers ),
+			$contents
+		);
+	}
+
+	/**
+	 * Returns an HTML link element in a string styled as a button
+	 * (when $wgUseMediaWikiUIEverywhere is enabled).
+	 *
+	 * @param string $contents The raw HTML contents of the element: *not*
+	 *   escaped!
+	 * @param array $attrs Associative array of attributes, e.g., array(
+	 *   'href' => 'http://www.mediawiki.org/' ). See expandAttributes() for
+	 *   further documentation.
+	 * @param string[] $modifiers classes to add to the button
+	 * @see http://tools.wmflabs.org/styleguide/desktop/index.html for guidance on available modifiers
+	 * @return string Raw HTML
+	 */
+	public static function submitButton( $contents, array $attrs, array $modifiers = array() ) {
+		$attrs['type'] = 'submit';
+		$attrs['value'] = $contents;
+		return self::element( 'input', self::buttonAttributes( $attrs, $modifiers ) );
+	}
+
+	/**
 	 * Returns an HTML element in a string.  The major advantage here over
 	 * manually typing out the HTML is that it will escape all attribute
-	 * values.  If you're hardcoding all the attributes, or there are none, you
-	 * should probably just type out the html element yourself.
+	 * values.
 	 *
 	 * This is quite similar to Xml::tags(), but it implements some useful
 	 * HTML-specific logic.  For instance, there is no $allowShortTag
@@ -193,19 +253,10 @@ class Html {
 	 * @return string
 	 */
 	public static function openElement( $element, $attribs = array() ) {
-		global $wgWellFormedXml;
 		$attribs = (array)$attribs;
 		// This is not required in HTML5, but let's do it anyway, for
 		// consistency and better compression.
 		$element = strtolower( $element );
-
-		// In text/html, initial <html> and <head> tags can be omitted under
-		// pretty much any sane circumstances, if they have no attributes.  See:
-		// <http://www.whatwg.org/html/syntax.html#optional-tags>
-		if ( !$wgWellFormedXml && !$attribs
-		&& in_array( $element, array( 'html', 'head' ) ) ) {
-			return '';
-		}
 
 		// Remove invalid input types
 		if ( $element == 'input' ) {
@@ -236,8 +287,7 @@ class Html {
 				'tel',
 				'color',
 			);
-			if ( isset( $attribs['type'] )
-			&& !in_array( $attribs['type'], $validTypes ) ) {
+			if ( isset( $attribs['type'] ) && !in_array( $attribs['type'], $validTypes ) ) {
 				unset( $attribs['type'] );
 			}
 		}
@@ -283,8 +333,7 @@ class Html {
 	 *   further documentation.
 	 * @return array An array of attributes functionally identical to $attribs
 	 */
-	private static function dropDefaults( $element, $attribs ) {
-
+	private static function dropDefaults( $element, array $attribs ) {
 		// Whenever altering this array, please provide a covering test case
 		// in HtmlTest::provideElementsWithAttributesHavingDefaultValues
 		static $attribDefaults = array(
@@ -331,8 +380,9 @@ class Html {
 			}
 
 			// Simple checks using $attribDefaults
-			if ( isset( $attribDefaults[$element][$lcattrib] ) &&
-			$attribDefaults[$element][$lcattrib] == $value ) {
+			if ( isset( $attribDefaults[$element][$lcattrib] )
+				&& $attribDefaults[$element][$lcattrib] == $value
+			) {
 				unset( $attribs[$attrib] );
 			}
 
@@ -342,8 +392,9 @@ class Html {
 		}
 
 		// More subtle checks
-		if ( $element === 'link' && isset( $attribs['type'] )
-		&& strval( $attribs['type'] ) == 'text/css' ) {
+		if ( $element === 'link'
+			&& isset( $attribs['type'] ) && strval( $attribs['type'] ) == 'text/css'
+		) {
 			unset( $attribs['type'] );
 		}
 		if ( $element === 'input' ) {
@@ -429,11 +480,10 @@ class Html {
 	 * @return string HTML fragment that goes between element name and '>'
 	 *   (starting with a space if at least one attribute is output)
 	 */
-	public static function expandAttributes( $attribs ) {
+	public static function expandAttributes( array $attribs ) {
 		global $wgWellFormedXml;
 
 		$ret = '';
-		$attribs = (array)$attribs;
 		foreach ( $attribs as $key => $value ) {
 			// Support intuitive array( 'checked' => true/false ) form
 			if ( $value === false || is_null( $value ) ) {
@@ -442,8 +492,7 @@ class Html {
 
 			// For boolean attributes, support array( 'foo' ) instead of
 			// requiring array( 'foo' => 'meaningless' ).
-			if ( is_int( $key )
-			&& in_array( strtolower( $value ), self::$boolAttribs ) ) {
+			if ( is_int( $key ) && in_array( strtolower( $value ), self::$boolAttribs ) ) {
 				$key = $value;
 			}
 
@@ -522,14 +571,13 @@ class Html {
 			// marks omitted, but not all.  (Although a literal " is not
 			// permitted, we don't check for that, since it will be escaped
 			// anyway.)
-			#
+
 			// See also research done on further characters that need to be
 			// escaped: http://code.google.com/p/html5lib/issues/detail?id=93
 			$badChars = "\\x00- '=<>`/\x{00a0}\x{1680}\x{180e}\x{180F}\x{2000}\x{2001}"
 				. "\x{2002}\x{2003}\x{2004}\x{2005}\x{2006}\x{2007}\x{2008}\x{2009}"
 				. "\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}\x{3000}";
-			if ( $wgWellFormedXml || $value === ''
-			|| preg_match( "![$badChars]!u", $value ) ) {
+			if ( $wgWellFormedXml || $value === '' || preg_match( "![$badChars]!u", $value ) ) {
 				$quote = '"';
 			} else {
 				$quote = '';
@@ -546,17 +594,20 @@ class Html {
 			} else {
 				// Apparently we need to entity-encode \n, \r, \t, although the
 				// spec doesn't mention that.  Since we're doing strtr() anyway,
-				// and we don't need <> escaped here, we may as well not call
-				// htmlspecialchars().
+				// we may as well not call htmlspecialchars().
 				// @todo FIXME: Verify that we actually need to
 				// escape \n\r\t here, and explain why, exactly.
 				#
 				// We could call Sanitizer::encodeAttribute() for this, but we
 				// don't because we're stubborn and like our marginal savings on
 				// byte size from not having to encode unnecessary quotes.
+				// The only difference between this transform and the one by
+				// Sanitizer::encodeAttribute() is '<' is only encoded here if
+				// $wgWellFormedXml is set, and ' is not encoded.
 				$map = array(
 					'&' => '&amp;',
 					'"' => '&quot;',
+					'>' => '&gt;',
 					"\n" => '&#10;',
 					"\r" => '&#13;',
 					"\t" => '&#9;'
@@ -651,18 +702,21 @@ class Html {
 	 * new HTML5 input types and attributes.
 	 *
 	 * @param string $name Name attribute
-	 * @param array $value Value attribute
+	 * @param string $value Value attribute
 	 * @param string $type Type attribute
 	 * @param array $attribs Associative array of miscellaneous extra
 	 *   attributes, passed to Html::element()
 	 * @return string Raw HTML
 	 */
-	public static function input( $name, $value = '', $type = 'text', $attribs = array() ) {
+	public static function input( $name, $value = '', $type = 'text', array $attribs = array() ) {
 		$attribs['type'] = $type;
 		$attribs['value'] = $value;
 		$attribs['name'] = $name;
 		if ( in_array( $type, array( 'text', 'search', 'email', 'password', 'number' ) ) ) {
-			$attribs = Html::getTextInputAttributes( $attribs );
+			$attribs = self::getTextInputAttributes( $attribs );
+		}
+		if ( in_array( $type, array( 'button', 'reset', 'submit' ) ) ) {
+			$attribs = self::buttonAttributes( $attribs );
 		}
 		return self::element( 'input', $attribs );
 	}
@@ -673,7 +727,7 @@ class Html {
 	 * @param string $name Name attribute
 	 * @param bool $checked Whether the checkbox is checked or not
 	 * @param array $attribs Array of additional attributes
-	 * @return string
+	 * @return string Raw HTML
 	 */
 	public static function check( $name, $checked = false, array $attribs = array() ) {
 		if ( isset( $attribs['value'] ) ) {
@@ -696,7 +750,7 @@ class Html {
 	 * @param string $name Name attribute
 	 * @param bool $checked Whether the checkbox is checked or not
 	 * @param array $attribs Array of additional attributes
-	 * @return string
+	 * @return string Raw HTML
 	 */
 	public static function radio( $name, $checked = false, array $attribs = array() ) {
 		if ( isset( $attribs['value'] ) ) {
@@ -719,7 +773,7 @@ class Html {
 	 * @param string $label Contents of the label
 	 * @param string $id ID of the element being labeled
 	 * @param array $attribs Additional attributes
-	 * @return string
+	 * @return string Raw HTML
 	 */
 	public static function label( $label, $id, array $attribs = array() ) {
 		$attribs += array(
@@ -737,7 +791,7 @@ class Html {
 	 *   attributes, passed to Html::element()
 	 * @return string Raw HTML
 	 */
-	public static function hidden( $name, $value, $attribs = array() ) {
+	public static function hidden( $name, $value, array $attribs = array() ) {
 		return self::input( $name, $value, 'hidden', $attribs );
 	}
 
@@ -753,7 +807,7 @@ class Html {
 	 *   attributes, passed to Html::element()
 	 * @return string Raw HTML
 	 */
-	public static function textarea( $name, $value = '', $attribs = array() ) {
+	public static function textarea( $name, $value = '', array $attribs = array() ) {
 		$attribs['name'] = $name;
 
 		if ( substr( $value, 0, 1 ) == "\n" ) {
@@ -765,7 +819,48 @@ class Html {
 		} else {
 			$spacedValue = $value;
 		}
-		return self::element( 'textarea', Html::getTextInputAttributes( $attribs ), $spacedValue );
+		return self::element( 'textarea', self::getTextInputAttributes( $attribs ), $spacedValue );
+	}
+
+	/**
+	 * Helper for Html::namespaceSelector().
+	 * @param array $params See Html::namespaceSelector()
+	 * @return array
+	 */
+	public static function namespaceSelectorOptions( array $params = array() ) {
+		global $wgContLang;
+
+		$options = array();
+
+		if ( !isset( $params['exclude'] ) || !is_array( $params['exclude'] ) ) {
+			$params['exclude'] = array();
+		}
+
+		if ( isset( $params['all'] ) ) {
+			// add an option that would let the user select all namespaces.
+			// Value is provided by user, the name shown is localized for the user.
+			$options[$params['all']] = wfMessage( 'namespacesall' )->text();
+		}
+		// Add all namespaces as options (in the content language)
+		$options += $wgContLang->getFormattedNamespaces();
+
+		$optionsOut = array();
+		// Filter out namespaces below 0 and massage labels
+		foreach ( $options as $nsId => $nsName ) {
+			if ( $nsId < NS_MAIN || in_array( $nsId, $params['exclude'] ) ) {
+				continue;
+			}
+			if ( $nsId === NS_MAIN ) {
+				// For other namespaces use the namespace prefix as label, but for
+				// main we don't use "" but the user message describing it (e.g. "(Main)" or "(Article)")
+				$nsName = wfMessage( 'blanknamespace' )->text();
+			} elseif ( is_int( $nsId ) ) {
+				$nsName = $wgContLang->convertNamespace( $nsId );
+			}
+			$optionsOut[ $nsId ] = $nsName;
+		}
+
+		return $optionsOut;
 	}
 
 	/**
@@ -787,8 +882,6 @@ class Html {
 	public static function namespaceSelector( array $params = array(),
 		array $selectAttribs = array()
 	) {
-		global $wgContLang;
-
 		ksort( $selectAttribs );
 
 		// Is a namespace selected?
@@ -805,38 +898,17 @@ class Html {
 			$params['selected'] = '';
 		}
 
-		if ( !isset( $params['exclude'] ) || !is_array( $params['exclude'] ) ) {
-			$params['exclude'] = array();
-		}
 		if ( !isset( $params['disable'] ) || !is_array( $params['disable'] ) ) {
 			$params['disable'] = array();
 		}
 
 		// Associative array between option-values and option-labels
-		$options = array();
+		$options = self::namespaceSelectorOptions( $params );
 
-		if ( isset( $params['all'] ) ) {
-			// add an option that would let the user select all namespaces.
-			// Value is provided by user, the name shown is localized for the user.
-			$options[$params['all']] = wfMessage( 'namespacesall' )->text();
-		}
-		// Add all namespaces as options (in the content language)
-		$options += $wgContLang->getFormattedNamespaces();
-
-		// Convert $options to HTML and filter out namespaces below 0
+		// Convert $options to HTML
 		$optionsHtml = array();
 		foreach ( $options as $nsId => $nsName ) {
-			if ( $nsId < NS_MAIN || in_array( $nsId, $params['exclude'] ) ) {
-				continue;
-			}
-			if ( $nsId === NS_MAIN ) {
-				// For other namespaces use use the namespace prefix as label, but for
-				// main we don't use "" but the user message describing it (e.g. "(Main)" or "(Article)")
-				$nsName = wfMessage( 'blanknamespace' )->text();
-			} elseif ( is_int( $nsId ) ) {
-				$nsName = $wgContLang->convertNamespace( $nsId );
-			}
-			$optionsHtml[] = Html::element(
+			$optionsHtml[] = self::element(
 				'option', array(
 					'disabled' => in_array( $nsId, $params['disable'] ),
 					'value' => $nsId,
@@ -855,7 +927,7 @@ class Html {
 
 		$ret = '';
 		if ( isset( $params['label'] ) ) {
-			$ret .= Html::element(
+			$ret .= self::element(
 				'label', array(
 					'for' => isset( $selectAttribs['id'] ) ? $selectAttribs['id'] : null,
 				), $params['label']
@@ -863,11 +935,11 @@ class Html {
 		}
 
 		// Wrap options in a <select>
-		$ret .= Html::openElement( 'select', $selectAttribs )
+		$ret .= self::openElement( 'select', $selectAttribs )
 			. "\n"
 			. implode( "\n", $optionsHtml )
 			. "\n"
-			. Html::closeElement( 'select' );
+			. self::closeElement( 'select' );
 
 		return $ret;
 	}
@@ -880,7 +952,7 @@ class Html {
 	 *   attributes, passed to Html::element() of html tag.
 	 * @return string Raw HTML
 	 */
-	public static function htmlHeader( $attribs = array() ) {
+	public static function htmlHeader( array $attribs = array() ) {
 		$ret = '';
 
 		global $wgHtml5Version, $wgMimeType, $wgXhtmlNamespaces;
@@ -908,7 +980,7 @@ class Html {
 			$attribs['version'] = $wgHtml5Version;
 		}
 
-		$html = Html::openElement( 'html', $attribs );
+		$html = self::openElement( 'html', $attribs );
 
 		if ( $html ) {
 			$html .= "\n";
@@ -943,44 +1015,58 @@ class Html {
 	 *
 	 * @return string
 	 */
-	static function infoBox( $text, $icon, $alt, $class = false ) {
-		$s = Html::openElement( 'div', array( 'class' => "mw-infobox $class" ) );
+	static function infoBox( $text, $icon, $alt, $class = '' ) {
+		$s = self::openElement( 'div', array( 'class' => "mw-infobox $class" ) );
 
-		$s .= Html::openElement( 'div', array( 'class' => 'mw-infobox-left' ) ) .
-				Html::element( 'img',
+		$s .= self::openElement( 'div', array( 'class' => 'mw-infobox-left' ) ) .
+				self::element( 'img',
 					array(
 						'src' => $icon,
 						'alt' => $alt,
 					)
 				) .
-				Html::closeElement( 'div' );
+				self::closeElement( 'div' );
 
-		$s .= Html::openElement( 'div', array( 'class' => 'mw-infobox-right' ) ) .
+		$s .= self::openElement( 'div', array( 'class' => 'mw-infobox-right' ) ) .
 				$text .
-				Html::closeElement( 'div' );
-		$s .= Html::element( 'div', array( 'style' => 'clear: left;' ), ' ' );
+				self::closeElement( 'div' );
+		$s .= self::element( 'div', array( 'style' => 'clear: left;' ), ' ' );
 
-		$s .= Html::closeElement( 'div' );
+		$s .= self::closeElement( 'div' );
 
-		$s .= Html::element( 'div', array( 'style' => 'clear: left;' ), ' ' );
+		$s .= self::element( 'div', array( 'style' => 'clear: left;' ), ' ' );
 
 		return $s;
 	}
 
 	/**
-	 * Generate a srcset attribute value from an array mapping pixel densities
-	 * to URLs. Note that srcset supports width and height values as well, which
-	 * are not used here.
+	 * Generate a srcset attribute value.
 	 *
-	 * @param array $urls
+	 * Generates a srcset attribute value from an array mapping pixel densities
+	 * to URLs. A trailing 'x' in pixel density values is optional.
+	 *
+	 * @note srcset width and height values are not supported.
+	 *
+	 * @see http://www.whatwg.org/html/embedded-content-1.html#attr-img-srcset
+	 *
+	 * @par Example:
+	 * @code
+	 *     Html::srcSet( array(
+	 *         '1x'   => 'standard.jpeg',
+	 *         '1.5x' => 'large.jpeg',
+	 *         '3x'   => 'extra-large.jpeg',
+	 *     ) );
+	 *     // gives 'standard.jpeg 1x, large.jpeg 1.5x, extra-large.jpeg 2x'
+	 * @endcode
+	 *
+	 * @param string[] $urls
 	 * @return string
 	 */
-	static function srcSet( $urls ) {
+	static function srcSet( array $urls ) {
 		$candidates = array();
 		foreach ( $urls as $density => $url ) {
-			// Image candidate syntax per current whatwg live spec, 2012-09-23:
-			// http://www.whatwg.org/html/embedded-content-1.html#attr-img-srcset
-			$candidates[] = "{$url} {$density}x";
+			// Cast density to float to strip 'x'.
+			$candidates[] = $url . ' ' . (float)$density . 'x';
 		}
 		return implode( ", ", $candidates );
 	}

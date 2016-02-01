@@ -336,20 +336,17 @@ class LanguageConverter {
 	 * @return string The converted text
 	 */
 	public function autoConvert( $text, $toVariant = false ) {
-		wfProfileIn( __METHOD__ );
 
 		$this->loadTables();
 
 		if ( !$toVariant ) {
 			$toVariant = $this->getPreferredVariant();
 			if ( !$toVariant ) {
-				wfProfileOut( __METHOD__ );
 				return $text;
 			}
 		}
 
 		if ( $this->guessVariant( $text, $toVariant ) ) {
-			wfProfileOut( __METHOD__ );
 			return $text;
 		}
 
@@ -358,12 +355,7 @@ class LanguageConverter {
 		   2. HTML entities
 		   3. placeholders created by the parser
 		*/
-		global $wgParser;
-		if ( isset( $wgParser ) && $wgParser->UniqPrefix() != '' ) {
-			$marker = '|' . $wgParser->UniqPrefix() . '[\-a-zA-Z0-9]+';
-		} else {
-			$marker = '';
-		}
+		$marker = '|' . Parser::MARKER_PREFIX . '[\-a-zA-Z0-9]+';
 
 		// this one is needed when the text is inside an HTML markup
 		$htmlfix = '|<[^>]+$|^[^<>]*>';
@@ -446,7 +438,6 @@ class LanguageConverter {
 			$literalIter->next();
 		}
 
-		wfProfileOut( __METHOD__ );
 		return $output;
 	}
 
@@ -460,14 +451,12 @@ class LanguageConverter {
 	 * @return string Translated text
 	 */
 	public function translate( $text, $variant ) {
-		wfProfileIn( __METHOD__ );
 		// If $text is empty or only includes spaces, do nothing
 		// Otherwise translate it
 		if ( trim( $text ) ) {
 			$this->loadTables();
 			$text = $this->mTables[$variant]->replace( $text );
 		}
-		wfProfileOut( __METHOD__ );
 		return $text;
 	}
 
@@ -478,7 +467,6 @@ class LanguageConverter {
 	 * @return array Variant => converted text
 	 */
 	public function autoConvertToAllVariants( $text ) {
-		wfProfileIn( __METHOD__ );
 		$this->loadTables();
 
 		$ret = array();
@@ -486,7 +474,6 @@ class LanguageConverter {
 			$ret[$variant] = $this->translate( $text, $variant );
 		}
 
-		wfProfileOut( __METHOD__ );
 		return $ret;
 	}
 
@@ -515,13 +502,9 @@ class LanguageConverter {
 			}
 
 			if ( $action == 'add' ) {
+				// More efficient than array_merge(), about 2.5 times.
 				foreach ( $pair as $from => $to ) {
-					// to ensure that $from and $to not be left blank
-					// so $this->translate() could always return a string
-					if ( $from || $to ) {
-						// more efficient than array_merge(), about 2.5 times.
-						$this->mTables[$variant]->setPair( $from, $to );
-					}
+					$this->mTables[$variant]->setPair( $from, $to );
 				}
 			} elseif ( $action == 'remove' ) {
 				$this->mTables[$variant]->removeArray( $pair );
@@ -850,18 +833,18 @@ class LanguageConverter {
 	 * @param bool $fromCache Load from memcached? Defaults to true.
 	 */
 	function loadTables( $fromCache = true ) {
-		global $wgLangConvMemc;
+		global $wgLanguageConverterCacheType;
 
 		if ( $this->mTablesLoaded ) {
 			return;
 		}
 
-		wfProfileIn( __METHOD__ );
 		$this->mTablesLoaded = true;
 		$this->mTables = false;
+		$cache = ObjectCache::getInstance( $wgLanguageConverterCacheType );
 		if ( $fromCache ) {
 			wfProfileIn( __METHOD__ . '-cache' );
-			$this->mTables = $wgLangConvMemc->get( $this->mCacheKey );
+			$this->mTables = $cache->get( $this->mCacheKey );
 			wfProfileOut( __METHOD__ . '-cache' );
 		}
 		if ( !$this->mTables || !array_key_exists( self::CACHE_VERSION_KEY, $this->mTables ) ) {
@@ -878,10 +861,9 @@ class LanguageConverter {
 			$this->postLoadTables();
 			$this->mTables[self::CACHE_VERSION_KEY] = true;
 
-			$wgLangConvMemc->set( $this->mCacheKey, $this->mTables, 43200 );
+			$cache->set( $this->mCacheKey, $this->mTables, 43200 );
 			wfProfileOut( __METHOD__ . '-recache' );
 		}
-		wfProfileOut( __METHOD__ );
 	}
 
 	/**
@@ -1010,7 +992,7 @@ class LanguageConverter {
 		if ( $recursive ) {
 			foreach ( $sublinks as $link ) {
 				$s = $this->parseCachedTable( $code, $link, $recursive );
-				$ret = array_merge( $ret, $s );
+				$ret = $s + $ret;
 			}
 		}
 

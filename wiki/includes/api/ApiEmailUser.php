@@ -95,34 +95,21 @@ class ApiEmailUser extends ApiBase {
 			),
 			'subject' => null,
 			'text' => array(
-				ApiBase::PARAM_TYPE => 'string',
+				ApiBase::PARAM_TYPE => 'text',
 				ApiBase::PARAM_REQUIRED => true
 			),
 			'ccme' => false,
 		);
 	}
 
-	public function getParamDescription() {
-		return array(
-			'target' => 'User to send email to',
-			'subject' => 'Subject header',
-			'text' => 'Mail body',
-			'ccme' => 'Send a copy of this mail to me',
-		);
-	}
-
-	public function getDescription() {
-		return 'Email a user.';
-	}
-
 	public function needsToken() {
 		return 'csrf';
 	}
 
-	public function getExamples() {
+	protected function getExamplesMessages() {
 		return array(
-			'api.php?action=emailuser&target=WikiSysop&text=Content&token=123ABC'
-				=> 'Send an email to the User "WikiSysop" with the text "Content"',
+			'action=emailuser&target=WikiSysop&text=Content&token=123ABC'
+				=> 'apihelp-emailuser-example-email',
 		);
 	}
 

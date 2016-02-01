@@ -80,7 +80,6 @@ class UserCache {
 	 * @param string $caller The calling method
 	 */
 	public function doQuery( array $userIds, $options = array(), $caller = '' ) {
-		wfProfileIn( __METHOD__ );
 
 		$usersToCheck = array();
 		$usersToQuery = array();
@@ -124,17 +123,16 @@ class UserCache {
 		$lb = new LinkBatch();
 		foreach ( $usersToCheck as $userId => $name ) {
 			if ( $this->queryNeeded( $userId, 'userpage', $options ) ) {
-				$lb->add( NS_USER, str_replace( ' ', '_', $row->user_name ) );
+				$lb->add( NS_USER, $name );
 				$this->typesCached[$userId]['userpage'] = 1;
 			}
 			if ( $this->queryNeeded( $userId, 'usertalk', $options ) ) {
-				$lb->add( NS_USER_TALK, str_replace( ' ', '_', $row->user_name ) );
+				$lb->add( NS_USER_TALK, $name );
 				$this->typesCached[$userId]['usertalk'] = 1;
 			}
 		}
 		$lb->execute();
 
-		wfProfileOut( __METHOD__ );
 	}
 
 	/**

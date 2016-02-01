@@ -14,8 +14,7 @@
 		this.each( function () {
 			var $el = $( this );
 			// add the element to our array of collapsible managers
-			$.collapsibleTabs.instances = ( $.collapsibleTabs.instances.length === 0 ?
-				$el : $.collapsibleTabs.instances.add( $el ) );
+			$.collapsibleTabs.instances = $.collapsibleTabs.instances.add( $el );
 			// attach the settings to the elements
 			$el.data( 'collapsibleTabsSettings', settings );
 			// attach data to our collapsible elements
@@ -37,7 +36,7 @@
 		return this;
 	};
 	$.collapsibleTabs = {
-		instances: [],
+		instances: $( [] ),
 		boundEvent: null,
 		defaults: {
 			expandedContainer: '#p-views ul',
@@ -95,7 +94,7 @@
 				if ( $( data.collapsedContainer + ' ' + data.collapsible ).length > 0 &&
 						data.expandCondition( $.collapsibleTabs.getSettings( $( data.collapsedContainer ).children(
 								data.collapsible + ':first' ) ).expandedWidth ) ) {
-					//move the element from the dropdown to the tab
+					// move the element from the dropdown to the tab
 					$el.trigger( 'beforeTabExpand' );
 					$.collapsibleTabs
 						.moveToExpanded( data.collapsedContainer + ' ' + data.collapsible + ':first' );

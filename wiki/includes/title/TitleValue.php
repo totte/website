@@ -21,6 +21,7 @@
  * @license GPL 2+
  * @author Daniel Kinzler
  */
+use Wikimedia\Assert\Assert;
 
 /**
  * Represents a page (or page fragment) title within %MediaWiki.
@@ -32,6 +33,7 @@
  * It does not represent a link, and does not support interwiki prefixes etc.
  *
  * @see https://www.mediawiki.org/wiki/Requests_for_comment/TitleValue
+ * @since 1.23
  */
 class TitleValue {
 	/**
@@ -66,26 +68,13 @@ class TitleValue {
 	 * @throws InvalidArgumentException
 	 */
 	public function __construct( $namespace, $dbkey, $fragment = '' ) {
-		if ( !is_int( $namespace ) ) {
-			throw new InvalidArgumentException( '$namespace must be an integer' );
-		}
-
-		if ( !is_string( $dbkey ) ) {
-			throw new InvalidArgumentException( '$dbkey must be a string' );
-		}
+		Assert::parameterType( 'integer', $namespace, '$namespace' );
+		Assert::parameterType( 'string', $dbkey, '$dbkey' );
+		Assert::parameterType( 'string', $fragment, '$fragment' );
 
 		// Sanity check, no full validation or normalization applied here!
-		if ( preg_match( '/^_|[ \r\n\t]|_$/', $dbkey ) ) {
-			throw new InvalidArgumentException( '$dbkey must be a valid DB key: ' . $dbkey );
-		}
-
-		if ( !is_string( $fragment ) ) {
-			throw new InvalidArgumentException( '$fragment must be a string' );
-		}
-
-		if ( $dbkey === '' ) {
-			throw new InvalidArgumentException( '$dbkey must not be empty' );
-		}
+		Assert::parameter( !preg_match( '/^_|[ \r\n\t]|_$/', $dbkey ), '$dbkey', 'invalid DB key' );
+		Assert::parameter( $dbkey !== '', '$dbkey', 'should not be empty' );
 
 		$this->namespace = $namespace;
 		$this->dbkey = $dbkey;

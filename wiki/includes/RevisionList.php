@@ -30,6 +30,7 @@ abstract class RevisionListBase extends ContextSource {
 	/** @var array */
 	protected $ids;
 
+	/** @var ResultWrapper|bool */
 	protected $res;
 
 	/** @var bool|object */
@@ -317,7 +318,7 @@ class RevisionItem extends RevisionItemBase {
 	}
 
 	public function getAuthorNameField() {
-		return 'user_name'; // see Revision::selectUserFields()
+		return 'rev_user_text';
 	}
 
 	public function canView() {
@@ -334,15 +335,19 @@ class RevisionItem extends RevisionItemBase {
 
 	/**
 	 * Get the HTML link to the revision text.
-	 * Overridden by RevDelArchiveItem.
+	 * @todo Essentially a copy of RevDelRevisionItem::getRevisionLink. That class
+	 * should inherit from this one, and implement an appropriate interface instead
+	 * of extending RevDelItem
 	 * @return string
 	 */
 	protected function getRevisionLink() {
-		$date = $this->list->getLanguage()->timeanddate( $this->revision->getTimestamp(), true );
+		$date = htmlspecialchars( $this->list->getLanguage()->userTimeAndDate(
+			$this->revision->getTimestamp(), $this->list->getUser() ) );
+
 		if ( $this->isDeleted() && !$this->canViewContent() ) {
 			return $date;
 		}
-		return Linker::link(
+		return Linker::linkKnown(
 			$this->list->title,
 			$date,
 			array(),
@@ -355,30 +360,34 @@ class RevisionItem extends RevisionItemBase {
 
 	/**
 	 * Get the HTML link to the diff.
-	 * Overridden by RevDelArchiveItem
+	 * @todo Essentially a copy of RevDelRevisionItem::getDiffLink. That class
+	 * should inherit from this one, and implement an appropriate interface instead
+	 * of extending RevDelItem
 	 * @return string
 	 */
 	protected function getDiffLink() {
 		if ( $this->isDeleted() && !$this->canViewContent() ) {
 			return $this->context->msg( 'diff' )->escaped();
 		} else {
-			return Linker::link(
+			return Linker::linkKnown(
 					$this->list->title,
-					$this->context->msg( 'diff' )->escaped(),
+					$this->list->msg( 'diff' )->escaped(),
 					array(),
 					array(
 						'diff' => $this->revision->getId(),
 						'oldid' => 'prev',
 						'unhide' => 1
-					),
-					array(
-						'known',
-						'noclasses'
 					)
 				);
 		}
 	}
 
+	/**
+	 * @todo Essentially a copy of RevDelRevisionItem::getHTML. That class
+	 * should inherit from this one, and implement an appropriate interface instead
+	 * of extending RevDelItem
+	 * @return string
+	 */
 	public function getHTML() {
 		$difflink = $this->context->msg( 'parentheses' )
 			->rawParams( $this->getDiffLink() )->escaped();

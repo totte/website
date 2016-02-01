@@ -27,7 +27,7 @@
  * articles are in one or all of a given subset of categories.
  *
  * Example use :
- * <code>
+ * @code
  *     # Determines whether the article with the page_id 12345 is in both
  *     # "Category 1" and "Category 2" or their subcategories, respectively
  *
@@ -39,7 +39,7 @@
  *     );
  *     $a = $cf->run();
  *     print implode( ',' , $a );
- * </code>
+ * @endcode
  *
  */
 class CategoryFinder {
@@ -185,7 +185,6 @@ class CategoryFinder {
 	 * Scans a "parent layer" of the articles/categories in $this->next
 	 */
 	private function scanNextLayer() {
-		$profiler = new ProfileSection( __METHOD__ );
 
 		# Find all parents of the article currently in $this->next
 		$layer = array();
