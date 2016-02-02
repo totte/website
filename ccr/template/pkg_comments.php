@@ -24,14 +24,14 @@ while (list($indx, $carr) = each($comments)) { ?>
 		echo $commentHeader; ?>
 	</div>
 	<blockquote class="comment-body">
-	<br /> 
+	<br />
 	<?php
-		$parsecode=ccr_htmlspecialchars($carr['Comments']); 
+		$parsecode=ccr_htmlspecialchars($carr['Comments']);
 		// make links clickable
-		$parsecode=do_clickable($parsecode); 
+		$parsecode=do_clickable($parsecode);
 		// add smilies
-		$parsecode=do_smilies($parsecode); 
-		?> 
+		$parsecode=do_smilies($parsecode);
+		?>
 		<pre><?php echo stripslashes($parsecode) ?></pre>
 	</blockquote>
 <?php } ?>
@@ -42,7 +42,7 @@ $count = package_comments_count($_GET['ID']);
 if ($count > 10 && !isset($_GET['comments'])) {
 ?> 	<div class="pgbox">
 		<div class="show_results">
-			<? echo '<a href="'. $_SERVER['REQUEST_URI'] . '&comments=all">'. __("Show all %s comments", $count) . '</a>'; ?>
+			<?php echo '<a href="'. $_SERVER['REQUEST_URI'] . '&comments=all">'. __("Show all %s comments", $count) . '</a>'; ?>
 		</div>
 	</div>
 <?php } ?>
