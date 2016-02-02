@@ -3,7 +3,7 @@
 </div>
 <div class="col-md-8">
 	<div class="alert alert-info" role="alert">
-		<p>Please have in mind that the current ISO is a bit dated, so expect a big update after installation. A new updated ISO is currently in beta and will be released soon (rough ETA 1-2 weeks).</p>
+		<p>Please have in mind that the current ISO is a bit dated, so expect a big update after installation. A new updated ISO is currently being tested and will be released soon (rough ETA 1-2 weeks).</p>
 </div>
 	<h3>Chakra 2015.11 "Fermi"</h3>
 	<a class="btn btn-primary btn-lg" href="http://rsync.chakraos.org/torrents/chakra-2015.11-fermi-x86_64.iso.torrent">
