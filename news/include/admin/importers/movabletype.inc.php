@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -9,7 +9,7 @@
 switch ($serendipity['lang']) {
     case 'de':
         @define('IMPORTER_MT_WARN_PLUGIN',     'Bitte installieren Sie das Plugin "%s"');
-        @define('IMPORTER_MT_NOTE', 'Falls Sie weiter machen, ohne die Plugins zu installieren, werden mÃ¶glicherweise ZeilenumbrÃ¼che falsch importiert (verdoppelt oder entfernt)');
+        @define('IMPORTER_MT_NOTE', 'Falls Sie weiter machen, ohne die Plugins zu installieren, werden möglicherweise Zeilenumbrüche falsch importiert (verdoppelt oder entfernt)');
         break;
 
     case 'en':
@@ -138,7 +138,7 @@ class Serendipity_Import_MovableType extends Serendipity_Import {
                     if ( !isset($authors[$data]) ) {
                         $au_inf = serendipity_fetchAuthor($data);
                         if ( !is_array($au_inf) ) {
-                            $tasks[] = sprintf(CREATE_AUTHOR, htmlspecialchars($data));
+                            $tasks[] = sprintf(CREATE_AUTHOR, serendipity_specialchars($data));
                             $tasks[] = '<ul class="plainList"><li>Input array is: ' . print_r($data, true) . '</li><<li>Return is: ' . print_r($au_inf, true) . '</li></ul>';
                             $au_inf = serendipity_fetchAuthor($serendipity['authorid']);
                         }
@@ -197,7 +197,7 @@ class Serendipity_Import_MovableType extends Serendipity_Import {
                                     $entry['categories'][] = $this->categories[$y]['categoryid'];
                                 }
                             } else {
-                                $tasks[] = sprintf(CREATE_CATEGORY, htmlspecialchars($data));
+                                $tasks[] = sprintf(CREATE_CATEGORY, serendipity_specialchars($data));
                             }
                         }
                     }
@@ -427,7 +427,7 @@ class Serendipity_Import_MovableType extends Serendipity_Import {
         if ( !sizeof($tasks) || $force == true ) {
             serendipity_db_begin_transaction();
             foreach ($entries as $entry) {
-                #echo '<pre>' . print_r($entry, true) . '</pre>';
+                #echo '<pre>' . printR_($entry, true) . '</pre>';
                 #continue;
                 if (empty($entry['authorid'])) {
                     $entry['authorid'] = $serendipity['authorid'];

@@ -1,7 +1,7 @@
-<?php
+<?php # $Id: lang_cs.inc.php 1381 2008-01-20 01:31:00 VladaAjgl $
 
 /**
- *  @file lang_cs.inc.php 1381 2008-01-20 01:31:00 VladaAjgl
+ *  @version $Revision: 1381 $
  *  @author Vladimír Ajgl <vlada@ajgl.cz>
  *  EN-Revision: Revision of lang_en.inc.php
  */
@@ -22,3 +22,4 @@
 @define('PLUGIN_EVENT_MAILER_ISTOSENDIT',       'Poslat tento příspěvek mailem');
 @define('PLUGIN_EVENT_MAILER_SENDTOALL',        'Poslat všem autorům');
 
+?>

@@ -1,7 +1,7 @@
-<?php #
+<?php
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Kostas CoSTa Brzezinski <costa@kofeina.net>
  *  EN-Revision: Revision of lang_en.inc.php
  */

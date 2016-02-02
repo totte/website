@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Tadashi Jokagi <elf2000@users.sourceforge.net>
  *  EN-Revision: 690
  */
@@ -20,3 +20,4 @@
 @define('PLUGIN_CREATIVECOMMONS_ND_DESC',     'The licensor permits others to copy, distribute, display and perform only unaltered copies of the work -- not derivative works based on it.');
 @define('PLUGIN_CREATIVECOMMONS_SA_DESC',     'Yes, as long as others share alike');
 
+?>

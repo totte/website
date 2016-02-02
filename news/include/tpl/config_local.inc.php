@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -361,7 +361,7 @@
                                           'description' => COMMENT_TOKENS_DESC,
                                           'type'        => 'bool',
                                           'default'     => false,
-                                          'permission'  => 'blogConfiguration'), 
+                                          'permission'  => 'blogConfiguration'),
 
                                     array('var'         => 'lang',
                                           'title'       => INSTALL_LANG,
@@ -397,6 +397,20 @@
                                           'description' => PERMISSION_FORBIDDEN_ENABLE_DESC,
                                           'type'        => 'bool',
                                           'default'     => false,
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array('var'         => 'updateCheck',
+                                          'title'       => UPDATE_NOTIFICATION,
+                                          'description' => UPDATE_NOTIFICATION_DESC,
+                                          'type'        => 'list',
+                                          'default'     => array('stable' => UPDATE_STABLE, 'beta' => UPDATE_BETA, 'false' => NO),
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array('var'         => 'logLevel',
+                                          'title'       => LOG_LEVEL,
+                                          'description' => LOG_LEVEL_DESC,
+                                          'type'        => 'list',
+                                          'default'     => array('Off' => NO, 'error' => ERROR, 'debug' => DEBUG),
                                           'permission'  => 'blogConfiguration'),
                             ));
 
@@ -445,14 +459,6 @@
                                           'permission'  => 'siteConfiguration',
                                           'default'     => false),
 
-                                    array('var'         => 'wysiwyg',
-                                          'title'       => INSTALL_WYSIWYG,
-                                          'description' => INSTALL_WYSIWYG_DESC,
-                                          'type'        => 'bool',
-                                          'default'     => false,
-                                          'permission'  => 'blogConfiguration',
-                                          'flags'       => array('simpleInstall', 'installOnly')),
-
                                     array('var'         => 'enablePopup',
                                           'title'       => INSTALL_POPUP,
                                           'description' => INSTALL_POPUP_DESC,
@@ -496,6 +502,7 @@
                                           'permission'  => 'siteConfiguration',
                                           'flags'       => array('probeDefault'))
                             ));
+
     if(function_exists('date_default_timezone_set')) {
         $res['display']['items'][] = array('var'           =>   'useServerOffset',
                                        'title'         =>   INSTALL_OFFSET_ON_SERVER_TIME,
@@ -504,8 +511,6 @@
                                        'default'       =>   true,
                                        'permission'    =>   'blogConfiguration'
                                        );
-
-
     }
 
     array_push( $res['display']['items'],
@@ -531,6 +536,88 @@
                                           'default'     => true,
                                           'permission'  => 'blogConfiguration')
                             );
+
+     $res['feeds'] =
+             array('title'          => INSTALL_CAT_FEEDS,
+                   'description'    => INSTALL_CAT_FEEDS_DESC,
+                   'items' => array(
+                                    array('var'         => 'feedFull',
+                                          'title'       => SYNDICATION_PLUGIN_FULLFEED,
+                                          'description' => '',
+                                          'type'        => 'list',
+                                          'default'     => array(false => NO, true => YES, 'client' => 'Client'),
+                                          'permission'  => 'siteConfiguration'),
+
+                                    array('var'         => 'feedBannerURL',
+                                          'title'       => SYNDICATION_PLUGIN_BANNERURL,
+                                          'description' => SYNDICATION_PLUGIN_BANNERURL_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array('var'         => 'feedBannerWidth',
+                                          'title'       => SYNDICATION_PLUGIN_BANNERWIDTH,
+                                          'description' => SYNDICATION_PLUGIN_BANNERWIDTH_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array('var'         => 'feedBannerHeight',
+                                          'title'       => SYNDICATION_PLUGIN_BANNERHEIGHT,
+                                          'description' => SYNDICATION_PLUGIN_BANNERHEIGHT_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array('var'         => 'feedShowMail',
+                                          'title'       => SYNDICATION_PLUGIN_SHOW_MAIL,
+                                          'description' => '',
+                                          'type'        => 'bool',
+                                          'default'     => false,
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array ('var'        => 'feedManagingEditor',
+                                          'title'       => SYNDICATION_PLUGIN_MANAGINGEDITOR,
+                                          'description' => SYNDICATION_PLUGIN_MANAGINGEDITOR_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array ('var'        => 'feedWebmaster',
+                                          'title'       => SYNDICATION_PLUGIN_WEBMASTER,
+                                          'description' => SYNDICATION_PLUGIN_WEBMASTER_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array ('var'        => 'feedTtl',
+                                          'title'       => SYNDICATION_PLUGIN_TTL,
+                                          'description' => SYNDICATION_PLUGIN_TTL_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array ('var'        => 'feedPubDate',
+                                          'title'       => SYNDICATION_PLUGIN_PUBDATE,
+                                          'description' => SYNDICATION_PLUGIN_PUBDATE_DESC,
+                                          'type'        => 'bool',
+                                          'default'     => true,
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array ('var'        => 'feedCustom',
+                                          'title'       => FEED_CUSTOM,
+                                          'description' => FEED_CUSTOM_DESC,
+                                          'type'        => 'string',
+                                          'default'     => '',
+                                          'permission'  => 'blogConfiguration'),
+
+                                    array ('var'        => 'feedForceCustom',
+                                          'title'       => FEED_FORCE,
+                                          'description' => FEED_FORCE_DESC,
+                                          'type'        => 'bool',
+                                          'default'     => false,
+                                          'permission'  => 'blogConfiguration')
+                            ));
 
     $res['imagehandling'] =
              array('title' => INSTALL_CAT_IMAGECONV,
@@ -561,7 +648,7 @@
                                           'description' => INSTALL_THUMBWIDTH_DESC,
                                           'type'        => 'int',
                                           'permission'  => 'siteConfiguration',
-                                          'default'     => 110),
+                                          'default'     => 400),
 
                                     array('var'         => 'thumbConstraint',
                                           'title'       => INSTALL_THUMBDIM,
@@ -593,6 +680,13 @@
                                           'type'        => 'int',
                                           'permission'  => 'blogConfiguration',
                                           'default'     => ''),
+
+                                    array('var'         => 'uploadResize',
+                                          'title'       => MEDIA_UPLOAD_RESIZE,
+                                          'description' => MEDIA_UPLOAD_RESIZE_DESC,
+                                          'type'        => 'bool',
+                                          'permission'  => 'siteConfiguration',
+                                          'default'     => false),
 
                                     array('var'         => 'onTheFlySynch',
                                           'title'       => ONTHEFLYSYNCH,

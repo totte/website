@@ -1,8 +1,9 @@
-<?php #
+<?php # $Id$
 
 /************
   TODO:
 
+  - Perform Serendipity version checks to only install plugins available for version
   - Allow fetching files from mirrors / different locations - don't use ViewCVS hack (revision 1.999 dumbness)
 
  ***********/
@@ -27,7 +28,7 @@ class serendipity_event_spartacus extends serendipity_event
         $propbag->add('description',   PLUGIN_EVENT_SPARTACUS_DESC);
         $propbag->add('stackable',     false);
         $propbag->add('author',        'Garvin Hicking');
-        $propbag->add('version',       '2.30');
+        $propbag->add('version',       '2.31');
         $propbag->add('requirements',  array(
             'serendipity' => '0.9',
             'smarty'      => '2.6.7',
@@ -41,8 +42,7 @@ class serendipity_event_spartacus extends serendipity_event
             'backend_templates_fetchtemplate'    => true,
 
             'backend_pluginlisting_header'         => true,
-            'backend_pluginlisting_header_upgrade' => true,
-
+            
             'external_plugin'                      => true,
 
             'backend_directory_create'             => true
@@ -217,7 +217,7 @@ class serendipity_event_spartacus extends serendipity_event
                     }
                 }
                 break;
-
+                
             case 'ftp_server':
                 if (function_exists('ftp_connect')) {
                     $propbag->add('type',        'string');
@@ -226,7 +226,7 @@ class serendipity_event_spartacus extends serendipity_event
                     $propbag->add('default',     '');
                 }
                 break;
-
+            
             case 'ftp_username':
                 if (function_exists('ftp_connect')) {
                     $propbag->add('type',        'string');
@@ -235,7 +235,7 @@ class serendipity_event_spartacus extends serendipity_event
                     $propbag->add('default',     '');
                 }
                 break;
-
+            
             case 'ftp_password':
                 if (function_exists('ftp_connect')) {
                     $propbag->add('type',        'string');
@@ -244,7 +244,7 @@ class serendipity_event_spartacus extends serendipity_event
                     $propbag->add('default',     '');
                 }
                 break;
-
+            
             case 'ftp_basedir':
                 if (function_exists('ftp_connect')) {
                     $propbag->add('type',        'string');
@@ -305,7 +305,7 @@ class serendipity_event_spartacus extends serendipity_event
         if (serendipity_db_bool($this->get_config('use_ftp')) && $this->get_config('ftp_password') != '') {
             return $this->make_dir_via_ftp($dir);
         }
-
+        
         $spaths = explode('/', $serendipity['serendipityPath'] . $sub . '/');
         $paths  = explode('/', $dir);
 
@@ -356,26 +356,27 @@ class serendipity_event_spartacus extends serendipity_event
     function outputMSG($status, $msg) {
         switch($status) {
             case 'notice':
-                echo '<div class="serendipityAdminMsgNotice"><img style="width: 22px; height: 22px; border: 0px; padding-right: 4px; vertical-align: middle" src="' . serendipity_getTemplateFile('admin/img/admin_msg_note.png') . '" alt="" />' . $msg . '</div>' . "\n";
+                echo '<span class="msg_notice"><span class="icon-info-circled"></span> '. $msg .'</span>' . "\n";
                 break;
 
             case 'error':
-                echo '<div class="serendipityAdminMsgError"><img style="width: 22px; height: 22px; border: 0px; padding-right: 4px; vertical-align: middle" src="' . serendipity_getTemplateFile('admin/img/admin_msg_error.png') . '" alt="" />' . $msg . '</div>' . "\n";
+                echo '<span class="msg_error"><span class="icon-attention-circled"></span> '. $msg .'</span>' . "\n";
                 break;
 
             default:
             case 'success':
-                echo '<div class="serendipityAdminMsgSuccess"><img style="height: 22px; width: 22px; border: 0px; padding-right: 4px; vertical-align: middle" src="' . serendipity_getTemplateFile('admin/img/admin_msg_success.png') . '" alt="" />' . $msg . '</div>' . "\n";
+                echo '<span class="msg_success"><span class="icon-ok-circled"></span> '. $msg .'</span>' . "\n";
                 break;
         }
     }
 
     function &fetchfile($url, $target, $cacheTimeout = 0, $decode_utf8 = false, $sub = 'plugins') {
+        global $serendipity;
         static $error = false;
 
         // Fix double URL strings.
         $url = preg_replace('@http(s)?:/@i', 'http\1://', str_replace('//', '/', $url));
-
+        
         // --JAM: Get the URL's IP in the most error-free way possible
         $url_parts = @parse_url($url);
         $url_hostname = 'localhost';
@@ -383,12 +384,10 @@ class serendipity_event_spartacus extends serendipity_event
             $url_hostname = $url_parts['host'];
         }
         $url_ip = gethostbyname($url_hostname);
-
-        $this->outputMSG('notice', sprintf(PLUGIN_EVENT_SPARTACUS_FETCHING, '<a href="' . $url . '">' . basename($url) . '</a>'));
-
+        if (is_object($serendipity['logger'])) $serendipity['logger']->debug(sprintf(PLUGIN_EVENT_SPARTACUS_FETCHING, '<a target="_blank" href="' . $url . '">' . basename($url) . '</a>'));
         if (file_exists($target) && filesize($target) > 0 && filemtime($target) >= (time()-$cacheTimeout)) {
             $data = file_get_contents($target);
-            $this->outputMSG('success', sprintf(PLUGIN_EVENT_SPARTACUS_FETCHED_BYTES_CACHE, strlen($data), $target));
+            if (is_object($serendipity['logger'])) $serendipity['logger']->debug(sprintf(PLUGIN_EVENT_SPARTACUS_FETCHED_BYTES_CACHE, strlen($data), $target));
         } else {
             require_once S9Y_PEAR_PATH . 'HTTP/Request.php';
             $options = array('allowRedirects' => true, 'maxRedirects' => 5);
@@ -461,15 +460,13 @@ class serendipity_event_spartacus extends serendipity_event
                 if (file_exists($target) && filesize($target) > 0) {
                     $data = file_get_contents($target);
                     $this->outputMSG('success', sprintf(PLUGIN_EVENT_SPARTACUS_FETCHED_BYTES_CACHE, strlen($data), $target));
-                    echo "<br />\n";
                 }
             } else {
                 // Fetch file
                 if (!$data) {
                     $data = $req->getResponseBody();
                 }
-                $this->outputMSG('success', sprintf(PLUGIN_EVENT_SPARTACUS_FETCHED_BYTES_URL, strlen($data), $target));
-
+                if (is_object($serendipity['logger'])) $serendipity['logger']->debug(sprintf(PLUGIN_EVENT_SPARTACUS_FETCHED_BYTES_URL, strlen($data), $target));
                 $tdir = dirname($target);
                 if (!is_dir($tdir) && !$this->rmkdir($tdir, $sub)) {
                     $this->outputMSG('error', sprintf(FILE_WRITE_ERROR, $tdir));
@@ -493,7 +490,6 @@ class serendipity_event_spartacus extends serendipity_event
 
                 $this->fileperm($target, false);
 
-                $this->outputMSG('success', PLUGIN_EVENT_SPARTACUS_FETCHED_DONE);
                 $this->purgeCache = true;
             }
             serendipity_request_end();
@@ -568,12 +564,11 @@ class serendipity_event_spartacus extends serendipity_event
 
                 $url    = $server . '/package_' . $url_type .  $lang . '.xml';
                 $target = $serendipity['serendipityPath'] . PATH_SMARTY_COMPILE . '/package_' . $url_type . $lang . '.xml';
-
+        
                 $xml = $this->fetchfile($url, $target, $cacheTimeout, true);
                 if (strlen($xml) > 0) {
                     $valid = true;
                 }
-                echo '<br /><br />';
             }
 
         } else {
@@ -582,9 +577,8 @@ class serendipity_event_spartacus extends serendipity_event
             $url    = $mirror . '/package_' . $url_type .  $lang . '.xml';
             $cacheTimeout = 60*60*12; // XML file is cached for half a day
             $target = $serendipity['serendipityPath'] . PATH_SMARTY_COMPILE . '/package_' . $url_type . $lang . '.xml';
-
+    
             $xml = $this->fetchfile($url, $target, $cacheTimeout, true);
-            echo '<br /><br />';
         }
 
         $new_crc  = md5($xml);
@@ -802,6 +796,7 @@ class serendipity_event_spartacus extends serendipity_event
     }
 
     function &buildTemplateList(&$tree) {
+        global $serendipity;
         $pluginstack = array();
         $i = 0;
         $gitloc = '';
@@ -820,6 +815,10 @@ class serendipity_event_spartacus extends serendipity_event
         }
 
         $this->checkArray($tree);
+
+        if (! file_exists($serendipity['serendipityPath'] . '/templates_c/template_cache')) {
+            mkdir($serendipity['serendipityPath'] . '/templates_c/template_cache');
+        }
 
         foreach($tree[0]['children'] AS $idx => $subtree) {
             if ($subtree['tag'] == 'package') {
@@ -876,7 +875,24 @@ class serendipity_event_spartacus extends serendipity_event
 
                 $plugname = $pluginstack[$i]['template'];
                 $pluginstack[$i]['previewURL'] = $this->fixUrl($mirror . '/additional_themes/' . $gitloc . $plugname . '/preview.png?revision=1.9999');
-                $pluginstack[$i]['preview_fullsizeURL'] = $this->fixUrl($mirror . '/additional_themes/' . $gitloc . $plugname . '/preview_fullsize.jpg?revision=1.9999');
+                $preview_fullsizeURL = $this->fixUrl($mirror . '/additional_themes/' . $gitloc . $plugname . '/preview_fullsize.jpg?revision=1.9999');
+                if (file_exists($serendipity['serendipityPath'] . '/templates_c/template_cache/'. $plugname .'.jpg')) {
+                    $pluginstack[$i]['preview_fullsizeURL'] = $preview_fullsizeURL;
+                } else {
+                    if ( ! file_exists($serendipity['serendipityPath'] . '/templates_c/template_cache/'. $plugname)) { 
+                        $file = @fopen($preview_fullsizeURL, 'r');
+                        if ($file) {
+                            file_put_contents($serendipity['serendipityPath'] . '/templates_c/template_cache/'. $plugname .'.jpg', $file);
+                            $pluginstack[$i]['preview_fullsizeURL'] = $preview_fullsizeURL;
+                        } else {
+                            // place an empty file, so we don't have to check the server on every load
+                            file_put_contents($serendipity['serendipityPath'] . '/templates_c/template_cache/'. $plugname, $file);
+                        }
+                    }
+                }
+                
+                
+                
                 $pluginstack[$i]['customURI']  = '&amp;serendipity[spartacus_fetch]=' . $plugname;
                 $pluginstack[$i]['customIcon'] = '_spartacus';
 
@@ -969,7 +985,7 @@ class serendipity_event_spartacus extends serendipity_event
             $servers = explode('|', $custom);
             $mirror = $servers[0];
         }
-
+        
         if (stristr($mirror, 'github.com')) {
             $gitloc = 'master/';
         }
@@ -988,17 +1004,18 @@ class serendipity_event_spartacus extends serendipity_event
         }
 
         if (isset($baseDir)) {
+            $this->outputMSG('success', PLUGIN_EVENT_SPARTACUS_FETCHED_DONE);
             return $baseDir;
         }
     }
 
     function make_dir_via_ftp($dir) {
         global $serendipity;
-
+        
         if (!serendipity_db_bool($this->get_config('use_ftp'))) {
             return false;
         }
-
+        
         $ftp_server    = $this->get_config('ftp_server');
         $ftp_user_name = $this->get_config('ftp_username');
         $ftp_user_pass = $this->get_config('ftp_password');
@@ -1010,11 +1027,11 @@ class serendipity_event_spartacus extends serendipity_event
         }
 
         $dir = str_replace($serendipity['serendipityPath'],"",$dir);
-
+    
         // set up basic connection and log in with username and password
         $conn_id       = ftp_connect($ftp_server);
         $login_result  = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-
+    
         // check connection
         if ((!$conn_id) || (!$login_result)) {
             $this->outputMSG('error',PLUGIN_EVENT_SPARTACUS_FTP_ERROR_CONNECT);
@@ -1065,34 +1082,34 @@ class serendipity_event_spartacus extends serendipity_event
 
                         $avail['event']   = $this->buildList($this->fetchOnline('event'), 'event');
                         $avail['sidebar'] = $this->buildList($this->fetchOnline('sidebar'), 'sidebar');
-
+                        
                         $install['event']   = serendipity_plugin_api::enum_plugin_classes(true);
                         $install['sidebar'] = serendipity_plugin_api::enum_plugin_classes(false);
-
+                        
                         foreach($meth AS $method) {
                             echo "LISTING: $method\n-------------------\n";
                             foreach ($install[$method] as $class_data) {
                                 $pluginFile = serendipity_plugin_api::probePlugin($class_data['name'], $class_data['classname'], $class_data['pluginPath']);
                                 $plugin     = serendipity_plugin_api::getPluginInfo($pluginFile, $class_data, $method);
-
+                        
                                 if (is_object($plugin)) {
                                     // Object is returned when a plugin could not be cached.
                                     $bag = new serendipity_property_bag;
                                     $plugin->introspect($bag);
-
+                        
                                     // If a foreign plugin is upgradable, keep the new version number.
                                     if (isset($avail[$method][$class_data['name']]) && $avail[$method][$class_data['name']]['upgradable']) {
                                         $class_data['upgrade_version'] = $avail[$method][$class_data['name']]['upgrade_version'];
                                     }
                                     $props = serendipity_plugin_api::setPluginInfo($plugin, $pluginFile, $bag, $class_data, 'local', $avail[$method]);
-
+                                    
                                 } elseif (is_array($plugin)) {
                                     // Array is returned if a plugin could be fetched from info cache
                                     $props = $plugin;
                                 } else {
                                     $props = false;
                                 }
-
+                        
                                 if (is_array($props)) {
                                     #print_r($props);
                                     if (version_compare($props['version'], $props['upgrade_version'], '<')) {
@@ -1112,17 +1129,11 @@ class serendipity_event_spartacus extends serendipity_event
 
                 case 'backend_pluginlisting_header':
                     if (serendipity_db_bool($this->get_config('enable_plugins'))) {
-                        echo '<div id="upgrade_notice" class="serendipityAdminMsgSuccess">';
-                        echo '<a href="?serendipity[adminModule]=plugins&amp;serendipity[adminAction]=addnew&amp;serendipity[only_group]=UPGRADE" class="serendipityIconLink upgrade_sidebar"><img src="' . serendipity_getTemplateFile('admin/img/upgrade_now.png') . '" style="border: 0px none ; vertical-align: middle; display: inline;" alt="" />' . PLUGIN_EVENT_SPARTACUS_CHECK_SIDEBAR . '</a> &nbsp; ';
-                        echo '<a href="?serendipity[adminModule]=plugins&amp;serendipity[adminAction]=addnew&amp;serendipity[only_group]=UPGRADE&amp;serendipity[type]=event" class="serendipityIconLink upgrade_event"><img src="' . serendipity_getTemplateFile('admin/img/upgrade_now.png') . '" style="border: 0px none ; vertical-align: middle; display: inline;" alt="" />' . PLUGIN_EVENT_SPARTACUS_CHECK_EVENT . '</a> ';
+                        echo '<div id="upgrade_notice" class="clearfix">';
+                        echo '<a id="upgrade_sidebar" class="button_link" href="?serendipity[adminModule]=plugins&amp;serendipity[adminAction]=addnew&amp;serendipity[only_group]=UPGRADE">'. PLUGIN_EVENT_SPARTACUS_CHECK_SIDEBAR .'</a>';
+                        echo '<a id="upgrade_event" class="button_link" href="?serendipity[adminModule]=plugins&amp;serendipity[adminAction]=addnew&amp;serendipity[only_group]=UPGRADE&amp;serendipity[type]=event">'. PLUGIN_EVENT_SPARTACUS_CHECK_EVENT .'</a> ';
                         echo '</div>';
                     }
-
-                    return true;
-                    break;
-
-                case 'backend_pluginlisting_header_upgrade':
-                    echo '<em>' . PLUGIN_EVENT_SPARTACUS_CHECK_HINT . '</em><br />';
 
                     return true;
                     break;
@@ -1190,7 +1201,7 @@ class serendipity_event_spartacus extends serendipity_event
                     if (serendipity_db_bool($this->get_config('use_ftp')) && (!is_dir($eventData))) {
                         return $this->make_dir_via_ftp($eventData);
                     }
-
+                
                     return true;
                     break;
 

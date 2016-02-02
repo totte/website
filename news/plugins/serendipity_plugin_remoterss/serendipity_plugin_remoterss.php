@@ -1,4 +1,4 @@
-<?php #
+<?php # $Id$
 
 // Contributed by Udo Gerhards <udo@babyblaue-seiten.de>
 // OPML Contributed by Richard Thomas Harrison <rich@mibnet.plus.com>
@@ -385,7 +385,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
 
             case 'template':
                 $select = array('plugin_remoterss.tpl' => 'Default (plugin_remoterss.tpl)', 'plugin_remoterss_nasaiotd.tpl' => 'NASA Image of the day');
-
+                
                 $add_files = glob(dirname(__FILE__) . '/*.tpl');
                 foreach($add_files AS $add_file) {
                     $bn = basename($add_file);
@@ -470,7 +470,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
         if (!$cachetime || !is_numeric($cachetime)) {
             $cachetime = 10800; // 3 hours in seconds
         }
-
+        
         $smarty = serendipity_db_bool($this->get_config('smarty'));
         if ($this->get_config('template') != 'plugin_remoterss.tpl') {
             $smarty = true;
@@ -507,7 +507,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $content .= '<div class="rss_item">';
 
                         if ($use_rss_link) {
-                            $content .= '<div class="rss_link"><a href="' . htmlspecialchars($this->decode($item['link'])) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . '>';
+                            $content .= '<div class="rss_link"><a href="' . serendipity_specialchars($this->decode($item['link'])) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . '>';
                         }
 
                         if (!empty($bulletimg)) {
@@ -517,7 +517,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $is_first = true;
                         foreach($rss_elements AS $rss_element) {
                             $rss_element = trim($rss_element);
-
+                            
                             if (!$is_first) {
                                 $content .= '<span class="rss_' . preg_replace('@[^a-z0-9]@imsU', '', $rss_element) . '">';
                             }
@@ -525,13 +525,13 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                             if ($escape_rss) {
                                 $content .= $this->decode($item[$rss_element]);
                             } else {
-                                $content .= htmlspecialchars($this->decode($item[$rss_element]));
+                                $content .= serendipity_specialchars($this->decode($item[$rss_element]));
                             }
-
+                            
                             if ($smarty) {
                                 $item['display_elements'][preg_replace('@[^a-z0-9]@imsU', '', $rss_element)] = $this->decode($item[$rss_element]);
                             }
-
+                            
                             if (!$is_first) {
                                 $content .= '</span>';
                             }
@@ -551,11 +551,11 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $item['timestamp'] = @strtotime(isset($item['pubdate']) ? $item['pubdate'] : $item['dc:date']);
                         if (!($item['timestamp'] == -1) AND ($displaydate == 'true')) {
                             $content .= '<div class="serendipitySideBarDate">'
-                                      . htmlspecialchars(serendipity_formatTime($dateformat, $item['timestamp'], false))
+                                      . serendipity_specialchars(serendipity_formatTime($dateformat, $item['timestamp'], false))
                                       . '</div>';
 
                         }
-
+                        
                         if ($smarty) {
                             $smarty_items['items'][$i] = $item;
                             $smarty_items['items'][$i]['css_class'] = preg_replace('@[^a-z0-9]@imsU', '', $rss_element);
@@ -580,7 +580,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         if (empty($tpl)) {
                             $tpl = 'plugin_remoterss.tpl';
                         }
-
+                        
                         // Template specifics go here
                         switch($tpl) {
                             case 'plugin_remoterss_nasaiotd.tpl':
@@ -650,7 +650,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $content .= '<div class="rss_item">';
 
                         if ($use_rss_link) {
-                            $content .= '<div class="rss_link"><a href="' . htmlspecialchars($this->decode($item['link'])) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . '>';
+                            $content .= '<div class="rss_link"><a href="' . serendipity_specialchars($this->decode($item['link'])) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . '>';
                         }
 
                         if (!empty($bulletimg)) {
@@ -660,7 +660,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $is_first = true;
                         foreach($rss_elements AS $rss_element) {
                             $rss_element = trim($rss_element);
-
+                            
                             if (!$is_first) {
                                 $content .= '<span class="rss_' . preg_replace('@[^a-z0-9]@imsU', '', $rss_element) . '">';
                             }
@@ -668,13 +668,13 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                             if ($escape_rss) {
                                 $content .= $this->decode($item[$rss_element]);
                             } else {
-                                $content .= htmlspecialchars($this->decode($item[$rss_element]));
+                                $content .= serendipity_specialchars($this->decode($item[$rss_element]));
                             }
-
+                            
                             if ($smarty) {
                                 $item['display_elements'][preg_replace('@[^a-z0-9]@imsU', '', $rss_element)] = $this->decode($item[$rss_element]);
                             }
-
+                            
                             if (!$is_first) {
                                 $content .= '</span>';
                             }
@@ -694,11 +694,11 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $item['timestamp'] = @strtotime(isset($item['pubdate']) ? $item['pubdate'] : $item['dc:date']);
                         if (!($item['timestamp'] == -1) AND ($displaydate == 'true')) {
                             $content .= '<div class="serendipitySideBarDate">'
-                                      . htmlspecialchars(serendipity_formatTime($dateformat, $item['timestamp'], false))
+                                      . serendipity_specialchars(serendipity_formatTime($dateformat, $item['timestamp'], false))
                                       . '</div>';
 
                         }
-
+                        
                         if ($smarty) {
                             $smarty_items['items'][$i] = $item;
                             $smarty_items['items'][$i]['css_class'] = preg_replace('@[^a-z0-9]@imsU', '', $rss_element);
@@ -709,7 +709,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         $content .= '</div>'; // end of rss_item
                         ++$i;
                     }
-
+                    
                     if ($smarty) {
                         $smarty_items['use_rss_link'] = $use_rss_link;
                         $smarty_items['bulletimg']    = $bulletimg;
@@ -723,7 +723,7 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                         if (empty($tpl)) {
                             $tpl = 'plugin_remoterss.tpl';
                         }
-
+                        
                         // Template specifics go here
                         switch($tpl) {
                             case 'plugin_remoterss_nasaiotd.tpl':
@@ -782,23 +782,23 @@ class serendipity_plugin_remoterss extends serendipity_plugin {
                             }
 
                             if (!empty($item['text'])) {
-                                $text = htmlspecialchars($this->decode($item['text']));
+                                $text = serendipity_specialchars($this->decode($item['text']));
                             } elseif (!empty($item['title'])) {
-                                $text = htmlspecialchars($this->decode($item['title']));
+                                $text = serendipity_specialchars($this->decode($item['title']));
                             } elseif (!empty($item['description'])) {
-                                $text = htmlspecialchars($this->decode($item['description']));
+                                $text = serendipity_specialchars($this->decode($item['description']));
                             } else {
                                 $text = '';
                             }
 
                             if ($blogrolling === true && (!empty($text) || !empty($url))) {
-                                $content .= '&bull; <a href="' . htmlspecialchars($url) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . ' title="' . $text . '">' . $text . "</a>";
+                                $content .= '&bull; <a href="' . serendipity_specialchars($url) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . ' title="' . $text . '">' . $text . "</a>";
                                 if (isset($item['isRecent'])) {
                                     $content .= ' <span style="color: Red; ">*</span>';
                                 }
                                 $content .= "<br />";
                             } elseif ((isset($item['type']) && $item['type'] == 'url') || !empty($url)) {
-                                $content .= '&bull; <a href="' . htmlspecialchars($url) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . ' title="' . $text . '">' . $text . "</a>";
+                                $content .= '&bull; <a href="' . serendipity_specialchars($url) . '" ' . (!empty($target) ? 'target="'.$target.'"' : '') . ' title="' . $text . '">' . $text . "</a>";
                                 $content .= "<br />";
                             }
                             ++$i;

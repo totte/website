@@ -1,12 +1,10 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Ivan Cenov jwalker@hotmail.bg
- *  EN-Revision: Revision of lang_es.inc.php
  */
 
-@define('PLUGIN_EVENT_S9YMARKUP_NAME', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: Serendipity');
-@define('PLUGIN_EVENT_S9YMARKUP_DESC', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ');
-@define('PLUGIN_EVENT_S9YMARKUP_TRANSFORM', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ bold (*пїЅпїЅпїЅпїЅпїЅ*), пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ "_" (_пїЅпїЅпїЅпїЅпїЅ_)');
-
+    @define('PLUGIN_EVENT_S9YMARKUP_NAME', 'Текстово форматиране: Serendipity');
+    @define('PLUGIN_EVENT_S9YMARKUP_DESC', 'Прилага базово форматиране на текст');
+    @define('PLUGIN_EVENT_S9YMARKUP_TRANSFORM', 'Звездички означават bold (*текст*), подчертаване се прави с "_" (_текст_)');

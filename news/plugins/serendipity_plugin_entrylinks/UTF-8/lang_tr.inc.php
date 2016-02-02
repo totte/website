@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Ahmet Usal <ahmetusal@gmail.com>
  *  First public version: lang_tr.inc.php
  */
@@ -20,3 +20,4 @@
 @define('PLUGIN_ENTRYLINKS_ORDERBY_DAY', 'Tarih');
 @define('PLUGIN_ENTRYLINKS_ORDERBY_FULLCOUNT', 'Web Bağlantılarının sayısı');
 
+?>

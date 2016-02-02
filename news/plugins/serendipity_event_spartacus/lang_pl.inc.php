@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Kostas CoSTa Brzezinski <costa@kofeina.net>
  *  EN-Revision: Revision of lang_en.inc.php
  */
@@ -22,7 +22,7 @@
 @define('PLUGIN_EVENT_SPARTACUS_HEALTHDOWN', '<P>SPARTACUS mo¿e po³±czyæ siê z Google ale nie mo¿e po³±czyæ siê z repozytorium. Jest mo¿liwe, ¿e Twój serwer blokuje pewne po³±czenia wychodz±ce albo ¿e strona z repozytorium SPARTACUSa aktualnie nie dzia³a. Skontaktuj siê z firm± hostuj±c± Twoj± stronê i upewnij siê, ¿e po³±czenia wychodz±ce s± dozwolone. <b>Nie bêdziesz móg³ u¿ywaæ SPARTACUSa dopóki Twój serwer nie bêdzie móg³ kontaktowaæ siê z repozytorium SPARTACUSa.</b></P>');
 @define('PLUGIN_EVENT_SPARTACUS_MIRROR_XML', 'Lokalizacja pliku/mirrora (metadane XML)');
 @define('PLUGIN_EVENT_SPARTACUS_MIRROR_FILES', 'Lokalizacja pliku/mirrora (pliki)');
-@define('PLUGIN_EVENT_SPARTACUS_MIRROR_DESC', 'Wybierz lokalizacjê, z której bêd± pobierane dane. NIE zmieniaj tej warto¶ci o ile dobrze nie wiesz, co robisz i o ile serwer jest dostêpny. Opcja istnieje g³ównie dla kompatybilno¶ci z przysz³ymi wersjami wtyczki.');
+@define('PLUGIN_EVENT_SPARTACUS_MIRROR_DESC', 'Wybierz lokalizacjê, z której bêd± pobierane dane. NIE zmieniaj tej warto¶ci o ile dobrze nie wiesz, co robisz i o ile serwer jest dostêpny.	Opcja istnieje g³ównie dla kompatybilno¶ci z przysz³ymi wersjami wtyczki.');
 @define('PLUGIN_EVENT_SPARTACUS_CHOWN', 'W³a¶ciciel pobranych plików');
 @define('PLUGIN_EVENT_SPARTACUS_CHOWN_DESC', 'Tu mo¿esz podaæ w³a¶ciciela (jak np. "nobody") plików pobieranych i zapisywanych przez Spartacusa. Pozostawienie pustego pola nie spowoduje zmian uprawnieñ do plików.');
 @define('PLUGIN_EVENT_SPARTACUS_CHMOD', 'Upraweniania pobieranych plików');
@@ -33,4 +33,4 @@
 @define('PLUGIN_EVENT_SPARTACUS_CHECK_SIDEBAR', 'Sprawd¼ czy s± nowe wtyczki Panelu bocznego');
 @define('PLUGIN_EVENT_SPARTACUS_CHECK_EVENT', 'Sprawd¼ czy s± nowe wtyczki Zdarzeñ');
 @define('PLUGIN_EVENT_SPARTACUS_CHECK_HINT', 'Podpowied¼: Mo¿esz uaktualniæ kilka wtyczek jednocze¶nie klikaj±c link uaktualnienia ¶rodkowym klawiszem myszy, tak by otworzyæ ten link w nowym oknie lub nowym tabie (zak³adce) przegl±darki. Zauwa¿, ¿e uaktualnianie kilku wtyczek jednocze¶nie mog³oby prowadziæ do timeoutów i problemów z pobieraniem plików a w efekcie - nagromadzenia ¶mieci i potencjalnych problemów. Dlatego taka funkcjonalno¶æ nie zosta³a zaimplementowana rozmy¶lnie.');
-
+?>

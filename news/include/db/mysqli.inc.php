@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -249,9 +249,9 @@ function serendipity_db_reconnect() {
 
     if (isset($serendipity['dbCharset'])) {
         mysqli_query($serendipity['dbConn'], "SET NAMES " . $serendipity['dbCharset']);
-        define('SQL_CHARSET_INIT', true);
+        @define('SQL_CHARSET_INIT', true);
     } elseif (defined('SQL_CHARSET') && $serendipity['dbNames'] && !defined('SQL_CHARSET_INIT')) {
-        mysqli_query($serendipity['dbConn'], "SET NAMES " . SQL_CHARSET, $serendipity['dbConn']);
+        mysqli_query($serendipity['dbConn'], "SET NAMES " . SQL_CHARSET);
     }
 }
 
@@ -321,7 +321,7 @@ function serendipity_db_probe($hash, &$errs) {
 
     if (!$c) {
         $errs[] = 'Could not connect to database; check your settings.';
-        $errs[] = 'The mySQL error was: ' . htmlspecialchars(mysqli_connect_error());
+        $errs[] = 'The mySQL error was: ' . serendipity_specialchars(mysqli_connect_error());
         return false;
     }
 
@@ -329,7 +329,7 @@ function serendipity_db_probe($hash, &$errs) {
 
     if ( !@mysqli_select_db($c, $hash['dbName']) ) {
         $errs[] = 'The database you specified does not exist.';
-        $errs[] = 'The mySQL error was: ' . htmlspecialchars(mysqli_error($c));
+        $errs[] = 'The mySQL error was: ' . serendipity_specialchars(mysqli_error($c));
         return false;
     }
 

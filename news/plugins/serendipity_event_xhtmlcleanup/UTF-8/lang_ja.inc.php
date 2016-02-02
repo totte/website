@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Tadashi Jokagi <elf2000@users.sourceforge.net>
  *  EN-Revision: 690
  */
@@ -13,3 +13,4 @@
 @define('PLUGIN_EVENT_XHTMLCLEANUP_UTF8', 'UTF-8 エントリを掃除しますか?');
 @define('PLUGIN_EVENT_XHTMLCLEANUP_UTF8_DESC', 'If enabled, HTML entities derived from UTF-8 characters will be properly converted and not double-encoded in your output.');
 
+?>

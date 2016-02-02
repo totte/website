@@ -1,17 +1,6 @@
-<?php #
+<?php # $Id$
 
 @serendipity_plugin_api::load_language(dirname(__FILE__));
-
-if (!function_exists('html_entity_decode')) {
-    function html_entity_decode($given_html, $quote_style = ENT_QUOTES) {
-        $trans_table = get_html_translation_table(HTML_SPECIALCHARS, $quote_style);
-        if ($trans_table["'"] != '&#039;') { # some versions of PHP match single quotes to &#39;
-          $trans_table["'"] = '&#039;';
-        }
-
-        return (strtr($given_html, array_flip($trans_table)));
-    }
-}
 
 class serendipity_event_xhtmlcleanup extends serendipity_event
 {
@@ -190,7 +179,7 @@ class serendipity_event_xhtmlcleanup extends serendipity_event
     function youtubify(&$text) {
         $text = preg_replace_callback('@<object(.*)>(.*)</object>@imsU', array($this, 'youtubify_regex'), $text);
     }
-
+    
     function youtubify_regex($matches) {
         if (!preg_match('@<embed@i', $matches[2])) return $matches[0];
 
@@ -202,7 +191,7 @@ class serendipity_event_xhtmlcleanup extends serendipity_event
 
         preg_match('@<param name="movie" value="(.+)"[\s/]*?>@imsU', $matches[2], $m);
         $movie = $m[1];
-
+        
         if (empty($movie)) {
             preg_match('@<param value="(.+)" name="movie"[\s/]*?>@imsU', $matches[2], $m);
             $movie = $m[1];
@@ -232,7 +221,7 @@ class serendipity_event_xhtmlcleanup extends serendipity_event
             case 'utf-8':
                 $p = xml_parser_create(LANG_CHARSET);
                 break;
-
+            
             default:
                 $p = xml_parser_create('');
         }
@@ -254,7 +243,7 @@ class serendipity_event_xhtmlcleanup extends serendipity_event
             // Reconstruct XHTML tag.
             $atts = ' ';
             foreach($vals[0]['attributes'] AS $att => $att_con) {
-                $atts .= strtolower($att) . '="' . ($this->cleanup_parse ? htmlspecialchars($att_con) : $att_con) . '" ';
+                $atts .= strtolower($att) . '="' . ($this->cleanup_parse ? serendipity_specialchars($att_con) : $att_con) . '" ';
             }
 
             return '<' . strtolower($tag) . $atts . ' />';
@@ -264,7 +253,7 @@ class serendipity_event_xhtmlcleanup extends serendipity_event
     }
 
     function clean_htmlspecialchars($given, $quote_style = ENT_QUOTES) {
-        return '<' . $given[1] . $given[2] . $given[3] . '=' . $given[4] . htmlspecialchars(html_entity_decode($given[5], $quote_style), $quote_style) . $given[6];
+        return '<' . $given[1] . $given[2] . $given[3] . '=' . $given[4] . serendipity_specialchars(serendipity_entity_decode($given[5], $quote_style), $quote_style) . $given[6];
     }
 }
 

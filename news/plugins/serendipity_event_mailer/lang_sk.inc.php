@@ -1,4 +1,4 @@
-<?php #
+<?php
 
 /**
  *  @author Martin Matu¹ka <martin@matuska.org>
@@ -21,3 +21,4 @@
 @define('PLUGIN_EVENT_MAILER_ISTOSENDIT',       'Posla» tento príspevok e-mailom');
 @define('PLUGIN_EVENT_MAILER_SENDTOALL',        'Posla» v¹etkým autorom');
 
+?>

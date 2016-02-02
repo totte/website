@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Rodrigo Lazo Paz <rlazo.paz@gmail.com>
  *  EN-Revision: 690
  */
@@ -26,3 +26,4 @@
 @define('PLUGIN_REMOTERSS_DISPLAYDATE', '¿Mostrar fecha?');
 @define('PLUGIN_REMOTERSS_DISPLAYDATE_BLAHBLAH', '¿Mostrar la fecha luego del titular?');
 
+?>

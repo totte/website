@@ -1,7 +1,7 @@
-<?php
+<?php # $Id: lang_cz.inc.php 1381 2007-11-23 15:30:00Z VladaAjgl $
 
 /**
- *  @file lang_cz.inc.php 1381 2007-11-23 15:30:00Z VladaAjgl
+ *  @version $Revision: 1381 $
  *  @author Vladimír Ajgl <vlada@ajgl.cz>
  *  EN-Revision: Revision of lang_en.inc.php
  *  Translated on 2007/11/23
@@ -21,3 +21,4 @@
 @define('PLUGIN_ENTRYLINKS_ORDERBY_DAY',        'Datum');
 @define('PLUGIN_ENTRYLINKS_ORDERBY_FULLCOUNT',  'Poøadí v textu');
 
+?>

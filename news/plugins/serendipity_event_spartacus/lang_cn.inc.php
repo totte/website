@@ -1,11 +1,4 @@
-<?php #
-
-/**
- *  @version  
- *  @file 
- *  @author 
- *  EN-Revision: Revision of lang_en.inc.php
- */
+<?php
 
 @define('PLUGIN_EVENT_SPARTACUS_NAME', 'Spartacus插件下载、配置及协调系统');
 @define('PLUGIN_EVENT_SPARTACUS_DESC', '[S]erendipity [P]lugin [A]ccess [R]epository [T]ool [A]nd [C]ustomization/[U]nification [S]ystem - Spartacus允许您从网上插件库中下载插件');
@@ -41,4 +34,3 @@
 
 @define('PLUGIN_EVENT_SPARTACUS_ENABLE_PLUGINS', '使用Spartacus来下载插件？');
 @define('PLUGIN_EVENT_SPARTACUS_ENABLE_THEMES', '使用Spartacus来下载主题？');
-

@@ -1,4 +1,4 @@
-<?php #
+<?php
 
 // Contributed by Christian Machmeier <cm@redsplash.de>
 // Randomizing contributed by Christian Brabandt <cb@256bit.org>
@@ -15,7 +15,7 @@ class serendipity_plugin_recententries extends serendipity_plugin {
         $propbag->add('description',   PLUGIN_RECENTENTRIES_BLAHBLAH);
         $propbag->add('stackable',     true);
         $propbag->add('author',        'Christian Machmeier, Christian Brabandt, Judebert, Don Chambers');
-        $propbag->add('version',       '2.4');
+        $propbag->add('version',       '2.5');
         $propbag->add('requirements',  array(
             'serendipity' => '0.8',
             'smarty'      => '2.6.7',
@@ -52,7 +52,7 @@ class serendipity_plugin_recententries extends serendipity_plugin {
                     ));
                 $propbag->add('default', 'all');
             break;
-
+                
             case 'randomize':
                 $propbag->add('type', 'radio');
                 $propbag->add('name', PLUGIN_RECENTENTRIES_RANDOMIZE);
@@ -67,7 +67,7 @@ class serendipity_plugin_recententries extends serendipity_plugin {
             case 'dateformat':
                 $propbag->add('type', 'string');
                 $propbag->add('name', GENERAL_PLUGIN_DATEFORMAT);
-                $propbag->add('description', sprintf(GENERAL_PLUGIN_DATEFORMAT_BLAHBLAH, '%A, %B %e %Y'));
+                $propbag->add('description', sprintf(GENERAL_PLUGIN_DATEFORMAT_BLAHBLAH, '%A, %B %e %Y') . '. ' . PLUGIN_RECENTENTRIES_DATEFORMAT_WIN);
                 $propbag->add('default', '%A, %B %e %Y');
                 break;
 
@@ -110,7 +110,7 @@ class serendipity_plugin_recententries extends serendipity_plugin {
                 $propbag->add('description', '');
                 $propbag->add('default',     'both');
             break;
-
+                
             default:
                 return false;
         }
@@ -120,9 +120,9 @@ class serendipity_plugin_recententries extends serendipity_plugin {
     function generate_content(&$title) {
         global $serendipity;
 
-        $number         = $this->get_config('number');
-        $dateformat     = $this->get_config('dateformat');
-        $category       = $this->get_config('category', 'none');
+        $number     = $this->get_config('number');
+        $dateformat = $this->get_config('dateformat');
+        $category   = $this->get_config('category', 'none');
         $show_where = $this->get_config('show_where', 'both');
 
         if ($show_where == 'extended' && (!isset($serendipity['GET']['id']) || !is_numeric($serendipity['GET']['id']))) {
@@ -147,14 +147,14 @@ class serendipity_plugin_recententries extends serendipity_plugin {
         $sql_condition['and']   = '';
 
         if ($category != 'none' && !empty($category)) {
- 
+                         
             $sql_categories = array();
             if (is_numeric($category)) {
                 $sql_categories[] = $category;
             } else {
                 $sql_categories = explode('^', $category);
             }
-
+            
             $category_parts = array();
             foreach($sql_categories AS $sql_category) {
                 $category_parts[] = "\n" . implode(' AND ', serendipity_fetchCategoryRange($sql_category));
@@ -215,9 +215,9 @@ class serendipity_plugin_recententries extends serendipity_plugin {
                           WHERE isdraft = 'false' {$sql_condition['and']}
                                 $sql_order
                                 $sql_number";
-
+        
         $entries = serendipity_db_query($entries_query);
-
+        
         if (is_string($entries)) {
             echo $entries . "<br />\n";
             echo $entries_query . "<br />\n";
@@ -241,9 +241,9 @@ class serendipity_plugin_recententries extends serendipity_plugin {
                     $entry['title'] = '#' . $entry['id'];
                 }
 
-                echo '<dt class="serendipity_recententries_entrylink"><a href="' . $entryLink . '" title="' . htmlspecialchars($entry['title']) . '">' . htmlspecialchars($entry['title']) . '</a></dt>' . "\n"
+                echo '<dt class="serendipity_recententries_entrylink"><a href="' . $entryLink . '" title="' . serendipity_specialchars($entry['title']) . '">' . serendipity_specialchars($entry['title']) . '</a></dt>' . "\n"
                      . '<dd class="serendipity_recententries_entrydate serendipitySideBarDate">'
-                     . htmlspecialchars(serendipity_strftime($dateformat, $entry['timestamp']))
+                     . serendipity_specialchars(serendipity_strftime($dateformat, $entry['timestamp']))
                      . '</dd>' . "\n";
             }
             echo '</dl>' . "\n\n";

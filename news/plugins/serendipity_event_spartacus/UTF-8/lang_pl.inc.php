@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Kostas CoSTa Brzezinski <costa@kofeina.net>
  *  EN-Revision: Revision of lang_en.inc.php
  */
@@ -22,7 +22,7 @@
 @define('PLUGIN_EVENT_SPARTACUS_HEALTHDOWN', '<P>SPARTACUS może połączyć się z Google ale nie może połączyć się z repozytorium. Jest możliwe, że Twój serwer blokuje pewne połączenia wychodzące albo że strona z repozytorium SPARTACUSa aktualnie nie działa. Skontaktuj się z firmą hostującą Twoją stronę i upewnij się, że połączenia wychodzące są dozwolone. <b>Nie będziesz mógł używać SPARTACUSa dopóki Twój serwer nie będzie mógł kontaktować się z repozytorium SPARTACUSa.</b></P>');
 @define('PLUGIN_EVENT_SPARTACUS_MIRROR_XML', 'Lokalizacja pliku/mirrora (metadane XML)');
 @define('PLUGIN_EVENT_SPARTACUS_MIRROR_FILES', 'Lokalizacja pliku/mirrora (pliki)');
-@define('PLUGIN_EVENT_SPARTACUS_MIRROR_DESC', 'Wybierz lokalizację, z której będą pobierane dane. NIE zmieniaj tej wartości o ile dobrze nie wiesz, co robisz i o ile serwer jest dostępny. Opcja istnieje głównie dla kompatybilności z przyszłymi wersjami wtyczki.');
+@define('PLUGIN_EVENT_SPARTACUS_MIRROR_DESC', 'Wybierz lokalizację, z której będą pobierane dane. NIE zmieniaj tej wartości o ile dobrze nie wiesz, co robisz i o ile serwer jest dostępny.	Opcja istnieje głównie dla kompatybilności z przyszłymi wersjami wtyczki.');
 @define('PLUGIN_EVENT_SPARTACUS_CHOWN', 'Właściciel pobranych plików');
 @define('PLUGIN_EVENT_SPARTACUS_CHOWN_DESC', 'Tu możesz podać właściciela (jak np. "nobody") plików pobieranych i zapisywanych przez Spartacusa. Pozostawienie pustego pola nie spowoduje zmian uprawnień do plików.');
 @define('PLUGIN_EVENT_SPARTACUS_CHMOD', 'Upraweniania pobieranych plików');
@@ -33,4 +33,4 @@
 @define('PLUGIN_EVENT_SPARTACUS_CHECK_SIDEBAR', 'Sprawdź czy są nowe wtyczki Panelu bocznego');
 @define('PLUGIN_EVENT_SPARTACUS_CHECK_EVENT', 'Sprawdź czy są nowe wtyczki Zdarzeń');
 @define('PLUGIN_EVENT_SPARTACUS_CHECK_HINT', 'Podpowiedź: Możesz uaktualnić kilka wtyczek jednocześnie klikając link uaktualnienia środkowym klawiszem myszy, tak by otworzyć ten link w nowym oknie lub nowym tabie (zakładce) przeglądarki. Zauważ, że uaktualnianie kilku wtyczek jednocześnie mogłoby prowadzić do timeoutów i problemów z pobieraniem plików a w efekcie - nagromadzenia śmieci i potencjalnych problemów. Dlatego taka funkcjonalność nie została zaimplementowana rozmyślnie.');
-
+?>

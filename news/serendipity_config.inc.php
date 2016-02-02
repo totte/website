@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -7,10 +7,12 @@ if (defined('S9Y_FRAMEWORK')) {
 }
 
 @define('S9Y_FRAMEWORK', true);
-
-if (!headers_sent()) {
+if (!headers_sent() && php_sapi_name() !== 'cli') {
     // Only set the session name, if no session has yet been issued.
     if (session_id() == '') {
+        $cookieParams = session_get_cookie_params();
+        $cookieParams['secure'] = (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? true : false);
+        session_set_cookie_params($cookieParams['lifetime'], $cookieParams['path'], $cookieParams['domain'], $cookieParams['secure'], $cookieParams['httponly']);
         session_name('s9y_' . md5(dirname(__FILE__)));
         session_start();
     }
@@ -41,15 +43,16 @@ if (!defined('IN_serendipity')) {
 
 include(S9Y_INCLUDE_PATH . 'include/compat.inc.php');
 if (defined('USE_MEMSNAP')) {
-    memSnap('Framework init');
+    echo memSnap('Framework init');
 }
 
 // The version string
-$serendipity['version']         = '1.7.8';
+$serendipity['version'] = '2.0.3';
 
-// Setting this to 'false' will enable debugging output. All alpa/beta/cvs snapshot versions will emit debug information by default. To increase the debug level (to enable Smarty debugging), set this flag to 'debug'.
+
+// Setting this to 'false' will enable debugging output. All alpha/beta/cvs snapshot versions will emit debug information by default. To increase the debug level (to enable Smarty debugging), set this flag to 'debug'.
 if (!isset($serendipity['production'])) {
-    $serendipity['production']      = (preg_match('@\-(alpha|beta|cvs|rc)@', $serendipity['version']) ? false : true);
+    $serendipity['production'] = ! preg_match('@\-(alpha|beta|cvs|rc).*@', $serendipity['version']);
 }
 
 // Set error reporting
@@ -66,10 +69,10 @@ $serendipity['errorhandler'] = 'errorToExceptionHandler';
 
 
 // Default rewrite method
-$serendipity['rewrite']         = 'none';
+$serendipity['rewrite'] = 'none';
 
 // Message container
-$serendipity['messagestack']    = array();
+$serendipity['messagestack'] = array();
 
 // Can the user change the date of publishing for an entry?
 $serendipity['allowDateManipulation'] = true;
@@ -77,14 +80,14 @@ $serendipity['allowDateManipulation'] = true;
 // How much time is allowed to pass since the publising of an entry, so that a comment to that entry
 // will update it's LastModified stamp? If the time is passed, a comment to an old entry will no longer
 // push an article as being updated.
-$serendipity['max_last_modified']    = 60 * 60 * 24 * 7;
+$serendipity['max_last_modified'] = 60 * 60 * 24 * 7;
 
 // Clients can send a If-Modified Header to the RSS Feed (Conditional Get) and receive all articles beyond
 // that date. However it is still limited by the number below of maximum entries
-$serendipity['max_fetch_limit']      = 50;
+$serendipity['max_fetch_limit'] = 50;
 
 // How many bytes are allowed for fetching trackbacks, so that no binary files get accidently trackbacked?
-$serendipity['trackback_filelimit']  = 150 * 1024;
+$serendipity['trackback_filelimit'] = 150 * 1024;
 
 if (!isset($serendipity['fetchLimit'])) {
     $serendipity['fetchLimit'] = 15;
@@ -121,9 +124,14 @@ $serendipity['use_iframe'] = true;
 $serendipity['autolang'] = 'en';
 
 /* Name of folder for the default theme */
-$serendipity['defaultTemplate'] = 'bulletproof';
+$serendipity['defaultTemplate'] = '2k11';
 
-/* Availiable languages */
+/* Default backend theme */
+if (!isset($serendipity['template_backend'])) {
+    $serendipity['template_backend'] = '2k11';
+}
+
+/* Available languages */
 if (!isset($serendipity['languages'])) {
     $serendipity['languages'] = array('en' => 'English',
                                   'de' => 'German',
@@ -179,6 +187,13 @@ $serendipity['charsets'] = array(
 @define('VIEWMODE_THREADED', 'threaded');
 @define('VIEWMODE_LINEAR', 'linear');
 
+if (!version_compare(phpversion(), '5.3', '>=')) {
+    $serendipity['lang'] = 'en';
+    include(S9Y_INCLUDE_PATH . 'include/lang.inc.php');
+    serendipity_die(sprintf(SERENDIPITY_PHPVERSION_FAIL, phpversion(), '5.3'));
+}
+
+
 /*
  *   Kill the script if we are not installed, and not inside the installer
  */
@@ -198,6 +213,8 @@ if (function_exists('get_include_path')) {
 }
 
 
+require_once("bundled-libs/autoload.php");
+
 $new_include = ($serendipity['use_PEAR'] ? $old_include . PATH_SEPARATOR : '')
              . S9Y_INCLUDE_PATH . 'bundled-libs/' . PATH_SEPARATOR
              . S9Y_INCLUDE_PATH . 'bundled-libs/Smarty/libs/' . PATH_SEPARATOR
@@ -210,7 +227,7 @@ if (function_exists('set_include_path')) {
     $use_include = @ini_set('include_path', $new_include);
 }
 
-if ($use_include !== $false && $use_include == $new_include) {
+if ($use_include !== false && $use_include == $new_include) {
     @define('S9Y_PEAR',      true);
     @define('S9Y_PEAR_PATH', '');
 } else {
@@ -263,7 +280,7 @@ if(is_callable($serendipity['errorhandler'], false, $callable_name)) {
     if ($serendipity['production'] === 'debug') {
         set_error_handler($serendipity['errorhandler'], error_reporting()); // Yes, DEBUG mode should actually report E_STRICT errors! In PHP 5.4s is contained in E_ALL already, but not in PHP 5.2.
     } else {
-    // Caution! If we want to have the same noshow effect as upper set error_reporting(E_ALL) in 'debug' mode, 
+    // Caution! If we want to have the same noshow effect as upper set error_reporting(E_ALL) in 'debug' mode,
     // do not clone it to set_error_handler(E_ALL), else everythimg is haltet to debug, which makes using debug obsolet.
         set_error_handler($serendipity['errorhandler'], E_ALL & ~(E_NOTICE|E_STRICT));
     }
@@ -288,6 +305,7 @@ if (serendipity_FUNCTIONS_LOADED !== true) {
 if (!serendipity_db_connect()) {
     $serendipity['lang'] = 'en';
     include(S9Y_INCLUDE_PATH . 'include/lang.inc.php');
+    if (is_object($serendipity['logger'])) $serendipity['logger']->critical(DATABASE_ERROR);
     serendipity_die(DATABASE_ERROR);
 }
 
@@ -296,11 +314,15 @@ if (!serendipity_db_connect()) {
  */
 
 if (defined('USE_MEMSNAP')) {
-    memSnap('Framework init');
+    echo memSnap('Framework init');
 }
 
 serendipity_load_configuration();
 $serendipity['lang'] = serendipity_getSessionLanguage();
+
+serendipity_initLog();
+
+if (is_object($serendipity['logger'])) serendipity_logTimer('Logger Framework init');
 
 if ( (isset($serendipity['autodetect_baseURL']) && serendipity_db_bool($serendipity['autodetect_baseURL'])) ||
      (isset($serendipity['embed']) && serendipity_db_bool($serendipity['embed'])) ) {
@@ -310,7 +332,7 @@ if ( (isset($serendipity['autodetect_baseURL']) && serendipity_db_bool($serendip
  * If a user is logged in, fetch his preferences. He possibly wants to have a different language
  */
 
-if (IS_installed === true) {
+if (IS_installed === true && php_sapi_name() !== 'cli') {
     // Import HTTP auth (mostly used for RSS feeds)
     if ($serendipity['useHTTP-Auth'] && (isset($_REQUEST['http_auth']) || isset($_SERVER['PHP_AUTH_USER']))) {
         if (!isset($_SERVER['PHP_AUTH_USER'])) {
@@ -351,11 +373,14 @@ serendipity_initPermalinks();
 // Apply constants/definitions from custom permalinks
 serendipity_permalinkPatterns();
 
+if (is_object($serendipity['logger'])) serendipity_logTimer('Permalinks init');
+
 /*
  *   Load main language file again, because now we have the preferred language
  */
 include(S9Y_INCLUDE_PATH . 'include/lang.inc.php');
 
+if (is_object($serendipity['logger'])) serendipity_logTimer('Language init');
 /*
  * Reset charset definition now that final language is known
  */
@@ -393,16 +418,15 @@ $serendipity['permissionLevels'] = array(USERLEVEL_EDITOR => USERLEVEL_EDITOR_DE
                                          USERLEVEL_CHIEF => USERLEVEL_CHIEF_DESC,
                                          USERLEVEL_ADMIN => USERLEVEL_ADMIN_DESC);
 
-/*
- *  Check if the installed version is higher than the version of the config
- */
-
+// Redirect to the upgrader
 if (IS_up2date === false && !defined('IN_upgrader')) {
     if (preg_match(PAT_CSS, $_SERVER['REQUEST_URI'], $matches)) {
         $css_mode = 'serendipity_admin.css';
         return 1;
     }
-
+    if (preg_match('@/(serendipity_editor\.js$)@', $_SERVER['REQUEST_URI'], $matches)) {
+        return 1;
+    }
     serendipity_die(sprintf(SERENDIPITY_NEEDS_UPGRADE, $serendipity['versionInstalled'], $serendipity['version'], $serendipity['serendipityHTTPPath'] . 'serendipity_admin.php'));
 }
 
@@ -413,6 +437,11 @@ if (!isset($serendipity['GET']['action'])) {
 
 if (!isset($serendipity['GET']['adminAction'])) {
     $serendipity['GET']['adminAction'] = (isset($serendipity['POST']['adminAction']) ? $serendipity['POST']['adminAction'] : '');
+}
+
+// Make sure this variable is always properly sanitized. Previously in compat.inc.php, but there LANG_CHARSET was not defined.
+if (isset($serendipity['GET']['searchTerm'])) {
+    $serendipity['GET']['searchTerm'] = serendipity_specialchars(strip_tags($serendipity['GET']['searchTerm']));
 }
 
 // Some stuff...
@@ -427,5 +456,22 @@ if (isset($_SESSION['serendipityUser'])) {
 if (isset($_SESSION['serendipityEmail'])) {
     $serendipity['email'] = $_SESSION['serendipityEmail'];
 }
+
+if (!isset($serendipity['use_autosave'])) {
+    $serendipity['use_autosave'] = true;
+}
+
+// You can set parameters which ImageMagick should use to generate the thumbnails
+// by default, thumbs will get a little more brightness and saturation (modulate)
+// an unsharp-mask (unsharp)
+// and quality-compression of 75% (default would be to use quality of original image)
+if (!isset($serendipity['imagemagick_thumb_parameters'])) {
+    $serendipity['imagemagick_thumb_parameters'] = '';
+    // Set a variable like below in your serendpity_config_local.inc.php
+    //$serendipity['imagemagick_thumb_parameters'] = '-modulate 105,140 -unsharp 0.5x0.5+1.0 -quality 75';
+}
+
+if (is_object($serendipity['logger'])) serendipity_logTimer('Core Framework finish');
+
 serendipity_plugin_api::hook_event('frontend_configure', $serendipity);
 /* vim: set sts=4 ts=4 expandtab : */

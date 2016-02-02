@@ -1,11 +1,4 @@
-<?php #
-
-/**
- *  @version  
- *  @file 
- *  @author 
- *  EN-Revision: Revision of lang_en.inc.php
- */
+<?php
 
 @define('PLUGIN_RECENTENTRIES_TITLE', '最新文章');
 @define('PLUGIN_RECENTENTRIES_BLAHBLAH', '显示最新文章的标题和日期');

@@ -1,7 +1,7 @@
-<?php
+<?php # $Id: lang_cs.inc.php 1381 2008-01-20 01:31:00 VladaAjgl $
 
 /**
- *  @file lang_cs.inc.php 1381 2008-01-20 01:31:00 VladaAjgl
+ *  @version $Revision: 1381 $
  *  @author Vladimír Ajgl <vlada@ajgl.cz>
  *  EN-Revision: Revision of lang_en.inc.php
  */
@@ -17,4 +17,4 @@
 @define('PLUGIN_COMMENTS_ANONYMOUS',            'anonym');
 
 @define('PLUGIN_COMMENTS_ADDURL',               'Pøidat URL adresu autorù do');
-
+?>

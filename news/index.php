@@ -1,19 +1,17 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
-$global_debug = false;
 
-if ($global_debug) {
-    #apd_set_pprof_trace();
+#apd_set_pprof_trace();
 
-    function microtime_float() {
-        list($usec, $sec) = explode(" ", microtime());
-        return ((float)$usec + (float)$sec);
-    }
-
-    $time_start = microtime_float();
+function microtime_float() {
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
 }
+
+$time_start = microtime_float();
+
 
 // We need to set this to return a 200 since we use .htaccess ErrorDocument
 // rules to handle archives.
@@ -23,6 +21,9 @@ header('Status: 200 OK');
 // Session are needed to also remember an autologin user on the frontend
 ob_start();
 include('serendipity_config.inc.php');
+
+if (is_object($serendipity['logger'])) serendipity_logTimer('serendipity_config.inc.php done');
+
 header('Content-Type: text/html; charset='. LANG_CHARSET);
 if ($serendipity['expose_s9y']) {
     header('X-Blog: Serendipity'); // Used for installer detection
@@ -136,6 +137,9 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
 
     /* We must always *assume* that Year, Month and Day are the first 3 arguments */
     list(,$year, $month, $day) = $_args;
+    if ($year == "archives") {
+        unset($year);
+    }
 
     $serendipity['GET']['action']     = 'read';
     $serendipity['GET']['hidefooter'] = true;
@@ -304,8 +308,8 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
 
     $title = serendipity_db_query("SELECT title FROM {$serendipity['dbPrefix']}entries WHERE id=$id AND isdraft = 'false' " . (!serendipity_db_bool($serendipity['showFutureEntries']) ? " AND timestamp <= " . serendipity_db_time() : ''), true);
     if (is_array($title)) {
-        $serendipity['head_title']    = htmlspecialchars($title[0]);
-        $serendipity['head_subtitle'] = htmlspecialchars($serendipity['blogTitle']);
+        $serendipity['head_title']    = serendipity_specialchars($title[0]);
+        $serendipity['head_subtitle'] = serendipity_specialchars($serendipity['blogTitle']);
     } else {
         $serendipity['view'] = '404';
         $serendipity['viewtype'] = '404_1';
@@ -333,7 +337,7 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
     }
 
     if (is_array($matches)) {
-        if (preg_match('@(/?' . preg_quote(PATH_FEEDS, '@') . '/)(.+)\.rss@i', $uri, $uriparts)) {
+        if (preg_match('@(/?' . preg_quote(PATH_FEEDS, '@') . '/)(.+?)(?:\.rss)?$@i', $uri, $uriparts)) {
             if (strpos($uriparts[2], $serendipity['permalinkCategoriesPath']) === 0) {
                 $catid = serendipity_searchPermalink($serendipity['permalinkFeedCategoryStructure'], $uriparts[2], $matches[1], 'category');
                 if (is_numeric($catid) && $catid > 0) {
@@ -363,6 +367,20 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
 
     print $data;
     exit;
+} else if (preg_match(PAT_PLUGIN, $uri, $matches)) {
+    $serendipity['view'] = 'plugin';
+
+    if (strpos($matches[2], 'admin/')  !== false) {
+        include(S9Y_INCLUDE_PATH . 'include/genpage.inc.php');
+    }
+
+    if (is_object($serendipity['logger'])) serendipity_logTimer('external_plugin hook starting');
+
+    #echo $serendipity["handler"]["test.js"];
+    serendipity_plugin_api::hook_event('external_plugin', $matches[2]);
+    if (!defined('NO_EXIT')) {
+        exit;
+    }
 } else if (preg_match(PAT_ADMIN, $uri)) {
     $serendipity['view'] = 'admin';
     $base = $serendipity['baseURL'];
@@ -398,12 +416,6 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
     }
 
     include(S9Y_INCLUDE_PATH . 'include/genpage.inc.php');
-} else if (preg_match(PAT_PLUGIN, $uri, $matches)) {
-    $serendipity['view'] = 'plugin';
-    serendipity_plugin_api::hook_event('external_plugin', $matches[2]);
-    if (!defined('NO_EXIT')) {
-        exit;
-    }
 } else if ($is_multicat || preg_match(PAT_PERMALINK_CATEGORIES, $uri, $matches)) {
     $serendipity['view'] = 'categories';
 
@@ -456,6 +468,9 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
         header('Status: 404 Not found');
     } else {
         $serendipity['head_title']    = $cInfo['category_name'];
+        if (isset($serendipity['GET']['page'])) {
+            $serendipity['head_title'] .= " - " . serendipity_specialchars($serendipity['GET']['page']);
+        }
         $serendipity['head_subtitle'] = $serendipity['blogTitle'];
     }
 
@@ -535,12 +550,45 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
     }
 
     $serendipity['GET']['action']     = 'search';
-    $serendipity['GET']['searchTerm'] = urldecode(htmlspecialchars(strip_tags(implode(' ', $search))));
+    $serendipity['GET']['searchTerm'] = urldecode(serendipity_specialchars(strip_tags(implode(' ', $search))));
     include(S9Y_INCLUDE_PATH . 'include/genpage.inc.php');
 } elseif (preg_match(PAT_CSS, $uri, $matches)) {
+    serendipity_smarty_init();
     $serendipity['view'] = 'css';
     $css_mode = $matches[1];
     include(S9Y_INCLUDE_PATH . 'serendipity.css.php');
+    exit;
+} elseif (preg_match(PAT_JS, $uri, $matches)) {
+    $serendipity['view'] = 'js';
+    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+        header('Cache-Control: no-cache');
+    } else {
+        header('Cache-Control:');
+        header('Pragma:');
+        header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', time()+3600));
+    }
+
+    header('Content-type: application/javascript; charset=' . LANG_CHARSET);
+
+    $out = "";
+
+    include(S9Y_INCLUDE_PATH . 'include/genpage.inc.php');
+
+    // HOTFIX: The staticpage plugin spews out a 404 error in the genpage hook,
+    // because it assumes that all "normal" content pages could belong to it.
+    // We need to override the header at this point (again), so that the files
+    // will be properly parsed. Another (maybe better) idea would be to actually
+    // not include genpage.inc.php at this point and init smarty differently,
+    // or to make sure the "genpage" event hook is not called at this point.
+    header('HTTP/1.0 200 OK');
+    header('Status: 200 OK');
+
+    if ($matches[1] == "serendipity_admin.js") {
+        serendipity_plugin_api::hook_event('js_backend', $out);
+    } else {
+        serendipity_plugin_api::hook_event('js', $out);
+    }
+    echo $out;
     exit;
 } else if (preg_match(PAT_COMMENTS, $uri, $matches)) {
     $serendipity['view'] = 'comments';
@@ -588,7 +636,7 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
         }
     }
 
-    $serendipity['head_title']    = COMMENTS_FROM . ' ' . htmlspecialchars($serendipity['GET']['viewCommentAuthor']);
+    $serendipity['head_title']    = COMMENTS_FROM . ' ' . serendipity_specialchars($serendipity['GET']['viewCommentAuthor']);
     if (isset($timedesc['start']) && isset($timedesc['end'])) {
         $serendipity['head_title'] .= ' (' . $timedesc['start'] . ' - ' . $timedesc['end'] . ')';
     } elseif (isset($timedesc['start'])) {
@@ -599,6 +647,8 @@ if (preg_match(PAT_ARCHIVES, $uri, $matches) || isset($serendipity['GET']['range
     $serendipity['head_subtitle'] = $serendipity['blogTitle'];
     $serendipity['GET']['action']     = 'comments';
     include(S9Y_INCLUDE_PATH . 'include/genpage.inc.php');
+
+
 } else if (preg_match('@/(index(\.php|\.html)?)|'. preg_quote($serendipity['indexFile']) .'@', $uri) ||
            preg_match('@^/' . preg_quote(trim($serendipity['serendipityHTTPPath'], '/')) . '/?(\?.*)?$@', $uri)) {
 
@@ -639,10 +689,6 @@ if (!defined('NO_EXIT')) {
     $serendipity['smarty']->display(serendipity_getTemplateFile($serendipity['smarty_file'], 'serendipityPath'));
 }
 
-if ($global_debug) {
-    /* TODO: Remove (hide) this debug */
-    echo '<div id="s9y_debug" style="text-align: center; color: red; font-size: 10pt; font-weight: bold; padding: 10px">Page delivered in '. round(microtime_float()-$time_start,6) .' seconds, '. sizeof(get_included_files()) .' files included</div>';
-    echo '</div>';
-}
+if (is_object($serendipity['logger'])) serendipity_logTimer('Page delivered in '. round(microtime_float()-$time_start,6) .' seconds, '. sizeof(get_included_files()) .' files included', true);
 
 /* vim: set sts=4 ts=4 expandtab : */

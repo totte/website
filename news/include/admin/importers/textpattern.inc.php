@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -81,13 +81,13 @@ class Serendipity_Import_textpattern extends Serendipity_Import {
         $users = array();
         $entries = array();
 
-        if (!extension_loaded('mysql')) {
+        if (!extension_loaded('mysqli')) {
             return MYSQL_REQUIRED;
         }
 
         $txpdb = @mysql_connect($this->data['host'], $this->data['user'], $this->data['pass']);
         if (!$txpdb) {
-            return sprintf(COULDNT_CONNECT, htmlspecialchars($this->data['host']));
+            return sprintf(COULDNT_CONNECT, serendipity_specialchars($this->data['host']));
         }
 
         if (!@mysql_select_db($this->data['name'])) {

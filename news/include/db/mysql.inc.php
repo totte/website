@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -96,13 +96,13 @@ function &serendipity_db_query($sql, $single = false, $result_type = "both", $re
     }
 
     if (!$expectError && mysql_error($serendipity['dbConn']) != '') {
-        $msg = '<pre>' . htmlspecialchars($sql) . '</pre> / ' . htmlspecialchars(mysql_error($serendipity['dbConn']));
+        $msg = '<pre>' . serendipity_specialchars($sql) . '</pre> / ' . serendipity_specialchars(mysql_error($serendipity['dbConn']));
         return $msg;
     }
 
     if (!$c) {
         if (!$expectError && !$serendipity['production']) {
-            print '<pre>' . htmlspecialchars($sql) . '</pre> / ' . htmlspecialchars(mysql_error($serendipity['dbConn']));
+            print '<pre>' . serendipity_specialchars($sql) . '</pre> / ' . serendipity_specialchars(mysql_error($serendipity['dbConn']));
             if (function_exists('debug_backtrace') && $reportErr == true) {
                 highlight_string(var_export(debug_backtrace(), 1));
             }
@@ -279,7 +279,7 @@ function serendipity_db_reconnect() {
 
     if (isset($serendipity['dbCharset'])) {
         mysql_query("SET NAMES " . $serendipity['dbCharset'], $serendipity['dbConn']);
-        define('SQL_CHARSET_INIT', true);
+        @define('SQL_CHARSET_INIT', true);
     } elseif (defined('SQL_CHARSET') && $serendipity['dbNames'] && !defined('SQL_CHARSET_INIT')) {
         mysql_query("SET NAMES " . SQL_CHARSET, $serendipity['dbConn']);
     }
@@ -340,7 +340,7 @@ function serendipity_db_probe($hash, &$errs) {
 
     if (!($c = @mysql_connect($hash['dbHost'], $hash['dbUser'], $hash['dbPass']))) {
         $errs[] = 'Could not connect to database; check your settings.';
-        $errs[] = 'The mySQL error was: ' . htmlspecialchars(mysql_error());
+        $errs[] = 'The mySQL error was: ' . serendipity_specialchars(mysql_error());
         return false;
     }
 
@@ -348,7 +348,7 @@ function serendipity_db_probe($hash, &$errs) {
 
     if (!@mysql_select_db($hash['dbName'])) {
         $errs[] = 'The database you specified does not exist.';
-        $errs[] = 'The mySQL error was: ' . htmlspecialchars(mysql_error());
+        $errs[] = 'The mySQL error was: ' . serendipity_specialchars(mysql_error());
         return false;
     }
 

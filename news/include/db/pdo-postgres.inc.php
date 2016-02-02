@@ -1,4 +1,5 @@
-<?php # $Id: postgres.inc.php 1178 2006-05-01 13:53:40Z garvinhicking $
+<?php
+# $Id: postgres.inc.php 1178 2006-05-01 13:53:40Z garvinhicking $
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -216,12 +217,12 @@ function &serendipity_db_query($sql, $single = false, $result_type = "both", $re
 
     if (!$serendipity['dbSth']) {
         if (!$expectError && !$serendipity['production']) {
-            print "Error in $sql<br/>\n";
+            print "<span class='msg_error'>Error in $sql</span>";
             print $serendipity['dbConn']->errorInfo() . "<BR/>\n";
             if (function_exists('debug_backtrace')) {
                 highlight_string(var_export(debug_backtrace(), 1));
             }
-            print "<br><code>$sql</code>\n";
+            print "<pre>$sql</pre>\n";
         }
         return $type_map['false'];
     }

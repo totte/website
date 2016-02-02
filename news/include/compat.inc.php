@@ -1,15 +1,10 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
 if (IN_serendipity !== true) {
     die ("Don't hack!");
 }
-
-if (defined('S9Y_FRAMEWORK_COMPAT')) {
-    return;
-}
-@define('S9Y_FRAMEWORK_COMPAT', true);
 
 $serendipity = array();
 @ini_set('magic_quotes_runtime', 'off');
@@ -63,14 +58,14 @@ function memSnap($tshow = '') {
     }
 
     $current = memory_get_usage();
-    echo '[' . date('d.m.Y H:i') . '] ' . number_format($current - $memUsage, 2, ',', '.') . ' label "' . $tshow . '", totalling ' . number_format($current, 2, ',', '.') . '<br />' . "\n";
     $memUsage = $current;
+    return '[' . date('d.m.Y H:i') . '] ' . number_format($current - $memUsage, 2, ',', '.') . ' label "' . $tshow . '", totalling ' . number_format($current, 2, ',', '.') . '<br />' . "\n";
 }
 
 /**
  * Set our own exeption handler to convert all errors into exeptions automatically
  * function_exists() avoids 'cannot redeclare previously declared' fatal errors in XML feed context.
- * 
+ *
  * See Notes about returning false
  *
  * @access public
@@ -110,7 +105,7 @@ if (!function_exists('errorToExceptionHandler')) {
                 }
                 print_r($debugbacktrace);
             }
-            //print_r($args); // debugging
+            //print_r($args); // debugging [Use with care! Not to public, since holding password and credentials!!!]
             // debugbacktrace is nice, but additional it is good to have the verbosity of SPL EXCEPTIONS, except for db connect errors
             // compare version to not get strange T_NEW parse errors (http://board.s9y.org/viewtopic.php?f=10&t=19436)
             if (!$serendipity['dbConn'] || version_compare(PHP_VERSION, '5.3', '<')) {
@@ -140,21 +135,23 @@ if (!function_exists('errorToExceptionHandler')) {
                 $str .= '<p>' . $errStr . ' in ' . $errFile . ' on line ' . $errLine . '</p>';
                 #var_dump(headers_list());
                 if (headers_sent()) {
-                    serendipity_die($str); // case HTTP headers: needs to halt with die() here, else it will path through and gets written underneath blog content, which hardly isn't seen by many users
+                    serendipity_die($str); // case HTTP headers: needs to halt with die() here, else it will path through and gets written underneath blog content, or into streamed js files, which hardly isn't seen by many users
                 } else {
                     // see global include of function in plugin_api.inc.php
-                    // this also reacts on non eye-displayed errors with following small javascript, 
+                    // this also reacts on non eye-displayed errors with following small javascript,
                     // while being in tags like <select> to push on top of page, else return non javascript use $str just there
                     // sadly we can not use HEREDOC notation here, since this does not execute the javascript after finished writing
                     echo "\n".'<script>
-var fragment = window.top.create("Error redirect: '.addslashes($str).'");
+if(typeof errorHandlerCreateDOM == "function") {
+var fragment = window.top.errorHandlerCreateDOM("Error redirect: '.addslashes($str).'");
 document.body.insertBefore(fragment, document.body.childNodes[0]);
-' . "\n</script>\n<noscript>" . $str . "</noscript>\n";
+}' . "\n</script>\n<noscript>" . $str . "</noscript>\n";
                 }
             }
         }
     }
 }
+
 
 if (!function_exists('file_get_contents')) {
     function file_get_contents($filename, $use_include_path = 0) {
@@ -283,11 +280,6 @@ if (empty($_SERVER['REQUEST_URI'])) {
     $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] . '?' . (!empty($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
 }
 
-// Some security issues
-if (isset($serendipity['GET']['searchTerm'])) {
-    $serendipity['GET']['searchTerm'] = htmlspecialchars(strip_tags($serendipity['GET']['searchTerm']));
-}
-
 /**
  * Translate values coming from the Database into native PHP variables to detect boolean values.
  *
@@ -355,7 +347,7 @@ function serendipity_detectLang($use_include = false) {
             $preferred_language = strtolower(preg_replace('@^([^\-_;]*)_?.*$@', '\1', $lang));
             if (in_array($preferred_language, $supported_languages)) {
                 if ($use_include) {
-                    @include(S9Y_INCLUDE_PATH . 'lang/' . $charset . 'serendipity_lang_' . $preferred_language . '.inc.php');
+                    @include_once(S9Y_INCLUDE_PATH . 'lang/' . $charset . 'serendipity_lang_' . $preferred_language . '.inc.php');
                     $serendipity['autolang'] = $preferred_language;
                 }
                 return $preferred_language;
@@ -385,10 +377,11 @@ function serendipity_getCoreVersion($version) {
  * @return null
  */
 function serendipity_die($html) {
+    $charset = !defined('LANG_CHARSET') ? 'UTF-8' : LANG_CHARSET;
     die(
 '<html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=' . LANG_CHARSET . '">
+        <meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">
     </head>
     <body>' . $html . '</body>
 </html>');
@@ -409,6 +402,70 @@ if (function_exists('date_default_timezone_get')) {
     // We currently offer no Timezone setting (only offset to UTC), so we
     // rely on the OS' timezone.
     @date_default_timezone_set(@date_default_timezone_get());
+}
+
+/**
+ * In PHP 5.4, the default encoding of htmlspecialchar changed to UTF-8 and it will emit empty strings when given
+ * native encoded strings containing umlauts. This wrapper should to be used in the core until PHP 5.6 fixes the bug.
+ */
+function serendipity_specialchars($string, $flags = null, $encoding = LANG_CHARSET, $double_encode = true) {
+    if ($flags == null) {
+        if (defined('ENT_HTML401')) {
+            // Added with PHP 5.4.x
+            $flags = ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE;
+        } else {
+            // For PHP < 5.4 compatibility
+            $flags = ENT_COMPAT;
+        }
+    }
+
+    if ($encoding == 'LANG_CHARSET') {
+        // if called before LANG_CHARSET is set, we need to set a fallback encoding to not throw a php warning that
+        // would kill s9y blogs sometimes (https://github.com/s9y/Serendipity/issues/236)
+        $encoding = 'UTF-8';
+    }
+
+    return htmlspecialchars($string, $flags, $encoding, $double_encode);
+}
+
+/**
+ * see serendipity_specialchars
+ */
+function serendipity_entities($string, $flags = null, $encoding = LANG_CHARSET, $double_encode = true) {
+    if ($flags == null) {
+        if (defined('ENT_HTML401')) {
+            // Added with PHP 5.4.x
+            $flags = ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE;
+        } else {
+            // For PHP < 5.4 compatibility
+            $flags = ENT_COMPAT;
+        }
+    }
+    if ($encoding == 'LANG_CHARSET') {
+        $encoding = 'UTF-8';
+    }
+    return htmlentities($string, $flags, $encoding, $double_encode);
+}
+
+/**
+ * serendipity_specialchars
+ */
+function serendipity_entity_decode($string, $flags = null, $encoding = LANG_CHARSET) {
+    if ($flags == null) {
+        # NOTE: ENT_SUBSTITUTE does not exist for this function, and the documentation does not specify that it will
+        # ever echo empty strings on charset errors
+        if (defined('ENT_HTML401')) {
+            // Added with PHP 5.4.x
+            $flags = ENT_COMPAT | ENT_HTML401;
+        } else {
+            // For PHP < 5.4 compatibility
+            $flags = ENT_COMPAT;
+        }
+    }
+    if ($encoding == 'LANG_CHARSET') {
+        $encoding = 'UTF-8';
+    }
+    return html_entity_decode($string, $flags, $encoding);
 }
 
 /* vim: set sts=4 ts=4 expandtab : */

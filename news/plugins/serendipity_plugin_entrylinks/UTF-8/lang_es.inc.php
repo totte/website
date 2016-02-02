@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Rodrigo Lazo Paz <rlazo.paz@gmail.com>
  *  EN-Revision: 690
  */
@@ -20,3 +20,4 @@
 @define('PLUGIN_ENTRYLINKS_ORDERBY_DAY', 'Fecha');
 @define('PLUGIN_ENTRYLINKS_ORDERBY_FULLCOUNT', 'Número de enlaces');
 
+?>

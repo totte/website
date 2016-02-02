@@ -1,7 +1,7 @@
-<?php #
+<?php
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Ahmet Usal <ahmetusal@gmail.com>
  *  First public version: lang_tr.inc.php
  */

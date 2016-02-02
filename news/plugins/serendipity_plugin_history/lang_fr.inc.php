@@ -1,11 +1,17 @@
-<?php #
+<?php # $Id$
 
-/**
- *  @version  
- *  @file 
- *  @author Sebastian Mordziol <argh@php-tools.net> http://sebastian.mordziol.de
- *  EN-Revision: Revision of lang_en.inc.php
- */
+##########################################################################
+# serendipity - another blogger...                                       #
+##########################################################################
+#                                                                        #
+# (c) 2003 Jannis Hermanns <J@hacked.it>                                 #
+# http://www.jannis.to/programming/serendipity.html                      #
+#                                                                        #
+# Translated by                                                          #
+# Sebastian Mordziol <argh@php-tools.net>                                #
+# http://sebastian.mordziol.de                                           #
+#                                                                        #
+##########################################################################
 
 @define('PLUGIN_HISTORY_NAME', 'Historique');
 @define('PLUGIN_HISTORY_DESC', 'Affiche des billets par leur âge.');
@@ -32,3 +38,5 @@
 @define('PLUGIN_HISTORY_OYA', 'Il y a un an');
 @define('PLUGIN_HISTORY_MYSELF', 'Je veux le définir moi-même');
 
+/* vim: set sts=4 ts=4 expandtab : */
+?>

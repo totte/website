@@ -1,7 +1,7 @@
-<?php #
+<?php
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Tadashi Jokagi <elf2000@users.sourceforge.net>
  *  EN-Revision: 688
  */

@@ -27,9 +27,9 @@ if (!empty($_REQUEST['c']) && !empty($_REQUEST['hash'])) {
     $serendipity['view'] = 'notification';
     $serendipity['GET']['action'] = 'custom';
     $serendipity['smarty_custom_vars'] = array(
-        'content_message'           => ($res ? NOTIFICATION_CONFIRM_MAIL : NOTIFICATION_CONFIRM_MAIL_FAIL),
-        'subscribe_confirm_error'   => !$res,
-        'subscribe_confirm_success' => $res,
+        'content_message'       => ($res ? NOTIFICATION_CONFIRM_MAIL : NOTIFICATION_CONFIRM_MAIL_FAIL),
+        'subscribe_confirm_error'				=> !$res,
+        'subscribe_confirm_success'				=> $res,
     );
     include S9Y_INCLUDE_PATH . 'include/genpage.inc.php';
     $serendipity['smarty']->display(serendipity_getTemplateFile('index.tpl', 'serendipityPath'));
@@ -41,9 +41,9 @@ if (!empty($_REQUEST['optin'])) {
     $serendipity['view'] = 'notification';
     $serendipity['GET']['action'] = 'custom';
     $serendipity['smarty_custom_vars'] = array(
-        'content_message'           => ($res ? NOTIFICATION_CONFIRM_SUBMAIL : NOTIFICATION_CONFIRM_SUBMAIL_FAIL),
-        'subscribe_confirm_error'   => !$res,
-        'subscribe_confirm_success' => $res,
+        'content_message'       => ($res ? NOTIFICATION_CONFIRM_SUBMAIL : NOTIFICATION_CONFIRM_SUBMAIL_FAIL),
+        'subscribe_confirm_error'				=> !$res,
+        'subscribe_confirm_success'				=> $res,
     );
     include S9Y_INCLUDE_PATH . 'include/genpage.inc.php';
     $serendipity['smarty']->display(serendipity_getTemplateFile('index.tpl', 'serendipityPath'));
@@ -70,10 +70,10 @@ if (!($type = @$_REQUEST['type'])) {
         ob_end_clean();
         log_pingback('NO TYPE HANDED!');
     }
-
+    
     // WordPress pingbacks don't give any parameter. If it is a XML POST asume it's a pigback
     if ($_SERVER['CONTENT_TYPE'] == 'text/xml' && isset($HTTP_RAW_POST_DATA)) {
-        $type = 'pingback';
+        $type = 'pingback'; 
     }
     else {
         $type = 'normal';
@@ -159,7 +159,7 @@ if ($type == 'trackback') {
         $serendipity['smarty']->assign(
             array(
                 'is_comment_added'   => true,
-                'comment_url'        => htmlspecialchars($_GET['url']) . '&amp;serendipity[entry_id]=' . $id,
+                'comment_url'        => serendipity_specialchars($_GET['url']) . '&amp;serendipity[entry_id]=' . $id,
                 'comment_string'     => explode('%s', COMMENT_ADDED_CLICK)
             )
         );
@@ -210,7 +210,7 @@ if ($type == 'trackback') {
                 $serendipity['smarty']->assign(
                     array(
                         'is_comment_notadded' => true,
-                        'comment_url'         => htmlspecialchars($_SERVER['HTTP_REFERER']),
+                        'comment_url'         => serendipity_specialchars($_SERVER['HTTP_REFERER']),
                         'comment_string'      => explode('%s', COMMENT_NOT_ADDED_CLICK)
                     )
                 );
@@ -219,7 +219,7 @@ if ($type == 'trackback') {
             $serendipity['smarty']->assign(
                 array(
                     'is_comment_empty' => true,
-                    'comment_url'      => htmlspecialchars($_SERVER['HTTP_REFERER']),
+                    'comment_url'      => serendipity_specialchars($_SERVER['HTTP_REFERER']),
                     'comment_string'   => explode('%s', EMPTY_COMMENT)
                 )
             );

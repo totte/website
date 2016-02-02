@@ -1,7 +1,7 @@
-<?php #
+<?php
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Omid Mottaghi <webmaster@oxygenws.com>
  *  EN-Revision: Revision of lang_fa.inc.php
  */

@@ -1,4 +1,4 @@
-<?php # $Id$
+<?php
 # Copyright (c) 2003-2005, Jannis Hermanns (on behalf the Serendipity Developer Team)
 # All rights reserved.  See LICENSE file for licensing details
 
@@ -84,7 +84,7 @@ class Serendipity_Import_WordPress extends Serendipity_Import {
         $categories = array();
         $entries = array();
 
-        if ( !extension_loaded('mysql') ) {
+        if (!extension_loaded('mysql')) {
             return MYSQL_REQUIRED;
         }
 
@@ -94,10 +94,10 @@ class Serendipity_Import_WordPress extends Serendipity_Import {
 
         $wpdb = @mysql_connect($this->data['host'], $this->data['user'], $this->data['pass']);
         if (!$wpdb) {
-            return sprintf(COULDNT_CONNECT, htmlspecialchars($this->data['host']));
+            return sprintf(COULDNT_CONNECT, serendipity_specialchars($this->data['host']));
         }
 
-        if (!@mysql_select_db($this->data['name'])) {
+        if (!@mysql_select_db($this->data['name'], $wpdb)) {
             return sprintf(COULDNT_SELECT_DB, mysql_error($wpdb));
         }
 

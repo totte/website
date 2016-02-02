@@ -1,9 +1,8 @@
-<?php #
+<?php
 
  /**
- *  @version 
+ *  @version $Revision$
  *  @author Ivan Cenov jwalker@hotmail.bg
- *  EN-Revision: Revision of lang_es.inc.php
  */
 
 @define('PLUGIN_RECENTENTRIES_TITLE', 'Последни постинги');

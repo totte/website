@@ -37,11 +37,11 @@ while(($file = readdir($d)) !== false) {
     if ($file[0] == '.') {
         continue;
     }
-
+    
     if (!is_dir($base . '/' . $file)) {
         continue;
     }
-
+    
     $tfile = $base . '/' . $file . '/lang_en.inc.php';
     $sfile = $base . '/' . $file . '/lang_' . $lang . '.inc.php';
 
@@ -56,14 +56,14 @@ while(($file = readdir($d)) !== false) {
         echo "NOTICE: English language of $file does not exist.\n";
         continue;
     }
-
+    
     if (file_exists($sfile)) {
         echo "Parsing differences for $file - ";
         include $sfile;
         $current = get_defined_constants();
         $const['missing'][$file] = array_diff($current, $const['checked']);
         $const['checked'] = array_merge($const['checked'], $current);
-
+       
         echo count($const['missing'][$file]) . " missing constants.\n";
     } else {
         $const['missing'][$file] = $const['native'][$file];
@@ -80,81 +80,66 @@ foreach($const['missing'] AS $file => $constants) {
     }
     echo "---------------------------\n";
 }
-@define('PERM_SET_CHILD', 'Set the same permissions on all child directories');
-@define('PERMISSION_FORBIDDEN_PLUGINS', 'Forbidden plugins');
-@define('PERMISSION_FORBIDDEN_HOOKS', 'Forbidden events');
-@define('PERMISSION_FORBIDDEN_ENABLE', 'Enable Plugin ACL for usergroups?');
-@define('PERMISSION_FORBIDDEN_ENABLE_DESC', 'If the option "Plugin ACL for usergroups" is enabled in the configuration, you can specify which usergroups are allowed to execute certain plugins/events.');
-@define('DELETE_SELECTED_ENTRIES', 'Delete selected entries');
-@define('PLUGIN_AUTHORS_MINCOUNT', 'Show only authors with at least X articles');
-@define('FURTHER_LINKS_S9Y_BOOKMARKLET', 'Bookmarklet');
-@define('FURTHER_LINKS_S9Y_BOOKMARKLET_DESC', 'Bookmark this link and then use it on any page you want to blog about to quickly access your Serendipity Blog.');
-@define('IMPORT_WP_PAGES', 'Also fetch attachments and staticpages as normal blog entries?');
-@define('USERCONF_CREATE', 'Disable user / forbid activity?');
-@define('USERCONF_CREATE_DESC', 'If selected, the user will not have any editing or creation possibilities on the blog anymore. When logging in to the backend, he cannot do anything else apart from logging out and viewing his personal configuration.');
-@define('CATEGORY_HIDE_SUB', 'Hide postings made to sub-categories?');
-@define('CATEGORY_HIDE_SUB_DESC', 'By default, when you browse a category also entries of any subcategory are displayed. If this option is turned on, only postings of the currently selected category are displayed.');
-@define('PINGBACK_SENDING', 'Sending pingback to URI %s...');
-@define('PINGBACK_SENT', 'Pingback successful');
-@define('PINGBACK_FAILED', 'Pingback failed: %s');
-@define('PINGBACK_NOT_FOUND', 'No pingback-URI found.');
-@define('CATEGORY_PLUGIN_HIDEZEROCOUNT', 'Hide archives link when no entries were made in that timespan (requires counting entries)');
-@define('RSS_IMPORT_WPXRSS', 'WordPress eXtended RSS import, requires PHP5 and might take up much memory');
-@define('SET_TO_MODERATED', 'Moderate');
-@define('COMMENT_MODERATED', 'Comment #%s has successfully been set as moderated');
-@define('CENTER', 'center');
-@define('FULL_COMMENT_TEXT', 'Yes, with full comment text');
+@define('RESET_FILTERS', 'Reset filters');
+@define('UPDATE_FAILMSG', 'Check for new Serendipity version failed. This can happen because either the URL https://raw.github.com/s9y/Serendipity/master/docs/RELEASE is down, your server blocks outgoing connections or there are other connection issues.');
+@define('UPDATE_FAILACTION', 'Disable automatic update check');
+@define('UPDATE_NOTIFICATION_DESC', 'Show the update notification in the Dashboard, and for which channel?');
+@define('FRONTEND', 'Frontend');
+@define('BACKEND', 'Backend');
+@define('MEDIA_UPLOAD_RESIZE', 'Resize before Upload');
+@define('MEDIA_UPLOAD_RESIZE_DESC', 'Resize images before the upload using Javascript. This will also change the uploader to use Ajax and thus remove the Property-Button');
+@define('LOG_LEVEL', 'Log Level');
+@define('LOG_LEVEL_DESC', 'At certain places in the Serendipity code we have placed debugging breakpoints. If this option is set to "Debug", it will write this debug output to templates_c/logs/. You should only enable this option if you are experiencing bugs in those areas, or if you are a developer. Setting this option to "Error" will enable logging PHP errors, overwriting the PHP error_log setting.');
+@define('DEBUG', 'Debug');
+@define('CUSTOM_CONFIG', 'Custom configuration file');
+@define('PLUGIN_ALREADY_INSTALLED', 'Plugin already installed, and does not support multiple installation ("stackable").');
+@define('INSTALL_DBPREFIX_INVALID', 'The database table name prefix must not be empty and may only contain letters, numbers and the underscore character.');
+@define('SYNDICATION_PLUGIN_SUBTOME', 'subToMe');
+@define('SYNDICATION_PLUGIN_SUBTOME_DESC', 'Show the subToMe button, a layer to make feed subscription easier');
+@define('SYNDICATE_THIS_BLOG', 'Subscribe');@define('SYNDICATION_PLUGIN_BIGIMG_DESC', 'Display a (big) image at the top of the feeds in sidebar, enter full or absolute URL to image file. Set to "none" to show a textlink (the old default)');
+@define('INSTALL_BACKENDPOPUP', 'Enable use of popup windows for the backend');
+@define('INSTALL_BACKENDPOPUP_DESC', 'Do you want to use popup windows for some backend functionality? When disabled (default), inline modal dialogs will be used for e.g. the category selector and media library.');
+@define('UPDATE_STABLE', 'stable');
+@define('UPDATE_BETA', 'beta');
+@define('SYNDICATION_PLUGIN_FEEDFORMAT', 'Feed format');
+@define('SYNDICATION_PLUGIN_FEEDFORMAT_DESC', 'Which format shall be used for all feeds. Both are supported in all common readers');
+@define('SYNDICATION_PLUGIN_COMMENTFEED', 'Comment feed');
+@define('SYNDICATION_PLUGIN_COMMENTFEED_DESC', 'Show an additional link to a comment feed. This should be interesting only to the blogauthor itself');
+@define('SYNDICATION_PLUGIN_FEEDICON', 'Feed icon');
+@define('SYNDICATION_PLUGIN_FEEDICON_DESC', 'Show a (big) icon insteaf of a textlink to the feed. Set to "none" to deactivate, or to "feedburner" to show a feedburner counter if an id is given below');
+@define('SYNDICATION_PLUGIN_CUSTOMURL', 'Custom URL');
+@define('SYNDICATION_PLUGIN_CUSTOMURL_DESC', 'If you want to link to the custom feed specified in the blog configuration, enable this option.');
+@define('FEED_CUSTOM', 'Custom feed URL');
+@define('FEED_CUSTOM_DESC', 'If set, a custom feed URL can be set to forward Feedreaders to a specific URL. Useful for statistical analyzers like Feedburner, in which case you would enter your Feedburner-URL here.');
+@define('FEED_FORCE', 'Force custom feed URL?');
+@define('FEED_FORCE_DESC', 'If enabled, the URL entered above will be mandatory for Feedreaders, and your usual feed cannot be accessed from clients.');
+@define('NO_UPDATES', 'No plugin updates are available');
+@define('PLUGIN_GROUP_ALL', 'All categories');
 
-@define('COMMENT_TOKENS', 'Use Tokens for Comment Moderation?');
-@define('COMMENT_TOKENS_DESC', 'If tokens are used, comments can be approved and deleted by clicking the email links without requiring login access to the blog. Note that this is a convenience feature, and if your mails get hijacked, those people can approve/delete the referenced comment without further authentication.');
-@define('COMMENT_NOTOKENMATCH', 'Moderation link has expired or comment #%s has already been approved or deleted');
-@define('TRACKBACK_NOTOKENMATCH', 'Moderation link has expired or trackback #%s has already been approved or deleted');
-@define('BADTOKEN', 'Invalid Moderation Link');
+@define('CONF_USE_AUTOSAVE', 'Enable autosave-feature');
+@define('CONF_USE_AUTOSAVE_DESC', 'When enabled, the text you enter into blog entries will be periodically saved in your browser\'s session storage. If your browser crashes during writing, the next time you create a new entry, the text will be restored from this autosave.');
+@define('INSTALL_CAT_FEEDS', 'Feed Settings');
+@define('USERCONF_USE_CORE_WYSIWYG_TOOLBAR', 'Toolbar for WYSIWYG editor');
+@define('USERCONF_USE_CORE_WYSIWYG_TOOLBAR_DESC', 'Sets the list of available toolbar buttons for the WYSIWYG-Editor. If you need to further change those presets, you can create a file templates/XXX/admin/ckeditor_custom_config.js. For further details please check out the files htmlarea/ckeditor_s9y_config.js and htmlarea/ckeditor_s9y_plugin.js.');
+@define('USERCONF_WYSIWYG_PRESET_S9Y', 'Serendipity (default)');
+@define('USERCONF_WYSIWYG_PRESET_BASIC', 'Reduced');
+@define('USERCONF_WYSIWYG_PRESET_FULL', 'Full');
+@define('USERCONF_WYSIWYG_PRESET_STANDARD', 'Alternate');
+@define('USERCONF_WYSIWYG_PRESET_CKE', 'CKEditor Full');
+@define('USERCONF_WYSIWYG_PRESET_NOCC_S9Y', 'Force: Serendipity');
+@define('USERCONF_WYSIWYG_PRESET_NOCC_BASIC', 'Force: Reduced');
+@define('USERCONF_WYSIWYG_PRESET_NOCC_FULL', 'Force: Full');
+@define('USERCONF_WYSIWYG_PRESET_NOCC_STANDARD', 'Force: Alternate');
+@define('USERCONF_WYSIWYG_PRESET_NOCC_CKE', 'Force: CKEditor Full');
 
-@define('CONFIRMATION_MAIL_ALWAYS', "Hello %s,\n\nYou have sent a new comment to \"%s\". Your comment was:\n\n%s\n\nThe owner of the blog has enabled mail verification, so you need to click on the following link to authenticate your comment:\n<%s>\n");
-@define('CONFIRMATION_MAIL_ONCE', "Hello %s,\n\nYou have sent a new comment to \"%s\". Your comment was:\n\n%s\n\nThe owner of the blog has enabled one-time mail verification, so you need to click on the following link to authenticate your comment:\n<%s>\n\nAfter you have done that, you can always post comments on that blog with your username and e-mail address without receiving such notifications.");
-@define('INSTALL_SUBSCRIBE_OPTIN', 'Use Double-Opt In for comment subscriptions?');
-@define('INSTALL_SUBSCRIBE_OPTIN_DESC', 'If enabled, when a comment is made where the person wants to be notified via e-mail about new comments to the same entry, he must confirm his subscription to the entry. This Double-Opt In is required by german law, for example.');
-@define('CONFIRMATION_MAIL_SUBSCRIPTION', "Hello %s,\n\nYou have requested to be notified for comments to \"%s\" (<%s>). To approve this subscription (\"Double Opt In\") please click this link:\n<%s>\n.");
-@define('NOTIFICATION_CONFIRM_SUBMAIL', 'Your confirmation of your comment subscription has been successfully entered.');
-@define('NOTIFICATION_CONFIRM_MAIL', 'Your confirmation of the comment has been successfully entered.');
-@define('NOTIFICATION_CONFIRM_SUBMAIL_FAIL', 'Your comment subscription could not be confirmed. Please check the link you clicked on for completion. If the link was sent more than 3 weeks ago, you must request a new confirmation mail.');
-@define('NOTIFICATION_CONFIRM_MAIL_FAIL', 'Your comment confirmation could not be confirmed.  Please check the link you clicked on for completion. If the link was sent more than 3 weeks ago, you must send your comment again.');
-@define('PLUGIN_DOCUMENTATION', 'Documentation');
-@define('PLUGIN_DOCUMENTATION_LOCAL', 'Local Documentation');
-@define('PLUGIN_DOCUMENTATION_CHANGELOG', 'Version history');
-@define('SYNDICATION_PLUGIN_BIGIMG', 'Big Image');
-@define('SYNDICATION_PLUGIN_BIGIMG_DESC', 'Display a (big) image at the top of the feeds in sidebar, enter full or absolute URL to image file.');
-@define('SYNDICATION_PLUGIN_FEEDNAME', 'Displayed name for "feed"');
-@define('SYNDICATION_PLUGIN_FEEDNAME_DESC', 'Enter an optional custom name for the feeds (defaults to "feed" when empty)');
-@define('SYNDICATION_PLUGIN_COMMENTNAME', 'Displayed name for "comment" feed');
-@define('SYNDICATION_PLUGIN_COMMENTNAME_DESC', 'Enter an optional custom name for the comment feed');
-@define('SYNDICATION_PLUGIN_FEEDBURNERID_FORWARD', '(If you enter an absolute URL with http://... here, this URL will be used as the redirection target in case you have enabled the "Force" option for FeedBurner. Note that this can also be a URL independent to FeedBurner. For new Google FeedBurner feeds, you need to enter http://feeds2.feedburner.com/yourfeedname here)');
+@define('CATEGORY_PLUGIN_SHOWALL', 'Show a link to "All categories"?');
+@define('CATEGORY_PLUGIN_SHOWALL', 'If enabled, a link for the visitor to display the blog with no category restriction will be added.');
+@define('SERENDIPITY_PHPVERSION_FAIL', 'Serendipity requires a PHP version >= %2$s - you are running a lower version (%1$s) and need to upgrade your PHP version. Most providers offer you to switch to newer PHP versions through their admin panels or .htaccess directives.');
+@define('TOGGLE_VIEW', 'Switch category view mode');
+@define('PUBLISH_NOW', 'Publish this entry now (sets current time and date)');
+@define('EDITOR_TAGS', 'Tags');
+@define('EDITOR_NO_TAGS', 'No tags');
+@define('DASHBOARD_ENTRIES', 'In Progress');
+@define('JS_FAILURE', 'The Serendipity JavaScript-library could not be loaded. This can happen due to PHP or Plugin errors, or even a malformed browser cache. To check the exact error please open <a href="%1$s">%1$s</a> manually in your browser and check for error messages.');
 
-@define('SYNDICATION_PLUGIN_FEEDBURNERID_FORWARD2', 'If you set this option to "Force" you can forward the RSS feed to any webservice, not only FeedBurner. Look at the option "Feedburner ID" below to enter an absolute URL)');
-@define('COMMENTS_FILTER_NEED_CONFIRM', 'Pending user confirmation');
-@define('NOT_WRITABLE_SPARTACUS', ' (Only required when you plan to use Spartacus plugin for remote plugin download)');
-@define('MEDIA_ALT', 'ALT-Attribute (depiction or short description)');
-@define('MEDIA_PROPERTY_COMMENT1', 'Depiction (summary for ALT-Attribute)');
-
-@define('MEDIA_TITLE', 'TITLE-Attribute (will be displayed on mouse over)');
-
-@define('QUICKSEARCH_SORT', 'How should search-results be sorted?');
-
-@define('QUICKSEARCH_SORT_RELEVANCE', 'Relevance');
-
-@define('PERMISSION_HIDDENGROUP', 'Hidden group / Non-Author');
-
-@define('SEARCH_FULLENTRY', 'Show full entry');
-@define('NAVLINK_AMOUNT', 'Enter number of links in the navbar (needs reload of the Manage Styles page)');
-@define('NAV_LINK_TEXT', 'Enter the navbar link text');
-@define('NAV_LINK_URL', 'Enter the full URL of your link');
-@define('MODERATE_SELECTED_COMMENTS', 'Accept selected comments');
-@define('WEBLOG', 'Weblog');
-@define('ACTIVE_COMMENT_SUBSCRIPTION', 'Subscribed');
-@define('PENDING_COMMENT_SUBSCRIPTION', 'Pending confirmation');
-@define('NO_COMMENT_SUBSCRIPTION', 'Not subscribed');
-@define('SUMMARY', 'Summary');
-@define('ARCHIVE_SORT_STABLE', 'Stable Archives');
-@define('ARCHIVE_SORT_STABLE_DESC', 'Sort the archive-pages descending, so they are stable and search-crawler do not have to reindex them.');
-@define('PLAIN_ASCII_NAMES', '(no special characters, umlauts)');
+@define('SYNDICATION_PLUGIN_XML_DESC', 'Set to "none" if you only want to show a text link.');

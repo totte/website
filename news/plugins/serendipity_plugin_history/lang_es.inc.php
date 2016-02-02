@@ -1,7 +1,7 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Rodrigo Lazo Paz <rlazo.paz@gmail.com>
  *  EN-Revision: 690
  */
@@ -31,3 +31,4 @@
 @define('PLUGIN_HISTORY_OYA', 'Hace un año');
 @define('PLUGIN_HISTORY_MYSELF', 'Yo definiré uno');
 
+?>

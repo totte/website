@@ -1,6 +1,4 @@
-<?php #
-
-# serendipity_event_nl2br.php 2014-02-01 Ian $
+<?php
 
 @serendipity_plugin_api::load_language(dirname(__FILE__));
 
@@ -86,7 +84,7 @@ class serendipity_event_nl2br extends serendipity_event
     }
 
     function example() {
-        echo '<h3>PLEASE NOTE the implications of this markup plugin:</h3>
+        return '<h3>PLEASE NOTE the implications of this markup plugin:</h3>
         <p>This plugin transfers linebreaks to HTML-linebreaks, so that they show up in your blog entry.</p>
         <p>In two cases this can raise problematic issues for you:</p>
         <ul>
@@ -157,7 +155,7 @@ class serendipity_event_nl2br extends serendipity_event
                 $propbag->add('type',        'boolean');
                 $propbag->add('name',        constant($name));
                 $propbag->add('description', sprintf(APPLY_MARKUP_TO, constant($name)));
-                $propbag->add('default', 'true');
+                $propbag->add('default',     'true');
         }
         return true;
     }
@@ -277,6 +275,7 @@ class serendipity_event_nl2br extends serendipity_event
                             }
                         }
                     }
+
                 return true;
                 break;
 

@@ -1,22 +1,23 @@
-<?php #
+<?php # $Id$
 
 /**
- *  @version 
+ *  @version $Revision$
  *  @author Ahmet Usal <ahmetusal@gmail.com>
  *  First public version: lang_tr.inc.php
  */
 
-@define('PLUGIN_ENTRYLINKS_NAME', 'Yazï¿½-Makale\lerin Web baï¿½lantï¿½larï¿½');
-@define('PLUGIN_ENTRYLINKS_BLAHBLAH', 'Tï¿½m web baï¿½lantï¿½larï¿½ makalede/yazï¿½da baï¿½vuru adresi olarak gï¿½sterilsin');
-@define('PLUGIN_ENTRYLINKS_NEWWIN', 'Web baï¿½lantï¿½larï¿½ yeni pencerede aï¿½ï¿½lsï¿½n mï¿½?');
-@define('PLUGIN_ENTRYLINKS_NEWWIN_BLAHBLAH', 'Web baï¿½lantï¿½larï¿½nï¿½n yeni pencerede aï¿½ï¿½lmasï¿½nï¿½ istediï¿½inize emin misiniz? (ï¿½ntanï¿½mlï¿½: ï¿½imdiki sayfanï¿½n ï¿½stï¿½ne aï¿½ï¿½lsï¿½n)');
-@define('PLUGIN_ENTRYLINKS_REFERERS', 'ï¿½lgili web baï¿½lantï¿½larï¿½');
-@define('PLUGIN_ENTRYLINKS_WORDWRAP', 'Kelime kaydï¿½r');
-@define('PLUGIN_ENTRYLINKS_WORDWRAP_BLAHBLAH', 'Kaï¿½ adet kelimeye kadar kelime kaydï¿½rma uygulanmasï¿½n? (ï¿½ntanï¿½mlï¿½: 30)');
-@define('PLUGIN_ENTRYLINKS_MAXREF', 'Eklenebilecek en ï¿½ok ilgili web baï¿½lantï¿½sï¿½ sayï¿½sï¿½');
-@define('PLUGIN_ENTRYLINKS_MAXREF_BLAHBLAH', 'Konuyla ilgili en ï¿½ok kaï¿½ adet web baï¿½lantï¿½sï¿½ gï¿½sterilsin? (ï¿½ntanï¿½mlï¿½: 15)');
-@define('PLUGIN_ENTRYLINKS_ORDERBY', 'ï¿½lgili web baï¿½lantï¿½larï¿½nï¿½ sï¿½rala');
-@define('PLUGIN_ENTRYLINKS_ORDERBY_BLAHBLAH', 'ï¿½lgili web baï¿½lantï¿½larï¿½nï¿½n sï¿½ralanmasï¿½nda hangi anahtar ifade kullanï¿½lsï¿½n? (ï¿½ntanï¿½mlï¿½: Web Baï¿½lantï¿½larï¿½nï¿½n sayï¿½sï¿½)');
+@define('PLUGIN_ENTRYLINKS_NAME', 'Yazý-Makale\lerin Web baðlantýlarý');
+@define('PLUGIN_ENTRYLINKS_BLAHBLAH', 'Tüm web baðlantýlarý makalede/yazýda baþvuru adresi olarak gösterilsin');
+@define('PLUGIN_ENTRYLINKS_NEWWIN', 'Web baðlantýlarý yeni pencerede açýlsýn mý?');
+@define('PLUGIN_ENTRYLINKS_NEWWIN_BLAHBLAH', 'Web baðlantýlarýnýn yeni pencerede açýlmasýný istediðinize emin misiniz? (Öntanýmlý: Þimdiki sayfanýn üstüne açýlsýn)');
+@define('PLUGIN_ENTRYLINKS_REFERERS', 'Ýlgili web baðlantýlarý');
+@define('PLUGIN_ENTRYLINKS_WORDWRAP', 'Kelime kaydýr');
+@define('PLUGIN_ENTRYLINKS_WORDWRAP_BLAHBLAH', 'Kaç adet kelimeye kadar kelime kaydýrma uygulanmasýn? (Öntanýmlý: 30)');
+@define('PLUGIN_ENTRYLINKS_MAXREF', 'Eklenebilecek en çok ilgili web baðlantýsý sayýsý');
+@define('PLUGIN_ENTRYLINKS_MAXREF_BLAHBLAH', 'Konuyla ilgili en çok kaç adet web baðlantýsý gösterilsin? (Öntanýmlý: 15)');
+@define('PLUGIN_ENTRYLINKS_ORDERBY', 'Ýlgili web baðlantýlarýný sýrala');
+@define('PLUGIN_ENTRYLINKS_ORDERBY_BLAHBLAH', 'Ýlgili web baðlantýlarýnýn sýralanmasýnda hangi anahtar ifade kullanýlsýn? (Öntanýmlý: Web Baðlantýlarýnýn sayýsý)');
 @define('PLUGIN_ENTRYLINKS_ORDERBY_DAY', 'Tarih');
-@define('PLUGIN_ENTRYLINKS_ORDERBY_FULLCOUNT', 'Web Baï¿½lantï¿½larï¿½nï¿½n sayï¿½sï¿½');
+@define('PLUGIN_ENTRYLINKS_ORDERBY_FULLCOUNT', 'Web Baðlantýlarýnýn sayýsý');
 
+?>
