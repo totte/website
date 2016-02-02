@@ -29,7 +29,7 @@ html_header(); ?>
 
 <div class="pgbox">
 	<div class="pgboxtitle">
-		<span class="f3"><? print __("Votes for") ?>  <a href="packages.php?ID=<?php echo urlencode($pkgid); ?>"><?php echo htmlentities(pkgname_from_id($pkgid)); ?></a></span>
+		<span class="f3"><?php print __("Votes for") ?>  <a href="packages.php?ID=<?php echo urlencode($pkgid); ?>"><?php echo htmlentities(pkgname_from_id($pkgid)); ?></a></span>
 	</div>
 	<div class="pgboxbody"><?php
 		while ($row = mysql_fetch_assoc($votes)) {
@@ -41,7 +41,7 @@ html_header(); ?>
 		?>
 	</div>
 </div>
-<?php 
+<?php
 html_footer(AUR_VERSION);
 ?>
 </body>

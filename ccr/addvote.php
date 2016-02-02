@@ -9,7 +9,7 @@ html_header();
 ?>
 <div class="pgbox">
 	<div class="pgboxtitle">
-		<span class="f3"><? print __("Proposal") ?></span>
+		<span class="f3"><?php print __("Proposal") ?></span>
 	</div>
 	<div class="pgboxbody">
 <?php
@@ -21,10 +21,10 @@ if (isset($_COOKIE["AURSID"])) {
 
 if ($atype == "Trusted User" OR $atype == "Developer") {
 	$dbh = db_connect();
-	
+
 	if (!empty($_POST['addVote'])) {
 		$error = "";
-		
+
 		if (!empty($_POST['user'])) {
 			$qcheck = "SELECT * FROM Users WHERE Username = '" . mysql_real_escape_string($_POST['user']) . "'";
 			$check = mysql_num_rows(db_query($qcheck, $dbh));
@@ -70,7 +70,7 @@ if ($atype == "Trusted User" OR $atype == "Developer") {
 		print "<p>" . __("New proposal submitted.") . "</p>\n";
 	} else {
 ?>
-	<p><br /><?php print __("Submit a proposal to vote on.") ?></p><?php 
+	<p><br /><?php print __("Submit a proposal to vote on.") ?></p><?php
 	if (!empty($error)) { print $error . "<br />"; } ?>
 		<form action='addvote.php' method='post'>
 			<b><?php print __('Applicant/TU') ?></b>&nbsp;
