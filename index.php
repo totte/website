@@ -85,24 +85,29 @@ require_once 'functions.php';
 						<ul>
 							<li><a href="https://twitter.com/chakraos"
 								   target="_blank"><img
-										src="static/img/twitter32.png"
+										src="static/img/logotype_twitter_32x32.pngtwitter32.png"
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
 							<li>
 								<a href="https://www.facebook.com/chakraos"
 								   target="_blank"><img
-										src="static/img/facebook32.png"
+										src="static/img/logotype_facebook_32x32.pngfacebook32.png"
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
 							<li>
 								<a href="https://plus.google.com/+chakraosorg"
 								   target="_blank"><img
-										src="static/img/googleplus32.png"
+										src="static/img/logotype_googleplus_32x32.pnggoogleplus32.png"
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
 							<li><a href="https://www.reddit.com/r/chakra"
 								   target="_blank"><img
 										src="static/img/logotype_reddit_32x32.png"
+										border="0" alt="" width="22" height="22"
+										style="margin-top: -3px;"/></a></li>
+							<li><a href="https://t.co/jTcgfv8zld"
+								   target="_blank"><img
+										src="static/img/logotype_telegram_32x32.png_32x32.png"
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
 							<li><a href="https://www.identi.ca/thechakraproject"
