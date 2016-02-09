@@ -105,7 +105,7 @@ require_once 'functions.php';
 										src="static/img/logotype_reddit_32x32.png"
 										border="0" alt="" width="22" height="22"
 										style="margin-top: -3px;"/></a></li>
-							<li><a href="https://t.co/jTcgfv8zld"
+							<li><a href="https://telegram.me/joinchat/ANIPGQZo-N4_5u0zveXBjg"
 								   target="_blank"><img
 										src="static/img/logotype_telegram_32x32.png"
 										border="0" alt="" width="22" height="22"
