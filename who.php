@@ -277,9 +277,9 @@
 			"");
 	*/?>
 	<h2>Sponsors</h2>
-	<a href="http://www.host1plus.com"><img src="static/img/h1p_logo.png" /></a>
+	<a href="http://www.host1plus.com"><img src="static/img/logotype_host1plus.png" /></a>
 	<p>We'd like to thank <a href="http://www.host1plus.com">Host1Plus</a> who provides us with our main server at a great discount.</p>
-	<a href="http://www.jetbrains.com"><img src="static/img/jetbrains_logo.png" /></a>
+	<a href="http://www.jetbrains.com"><img src="static/img/logotype_jetbrains.png" /></a>
 	<p>We'd also like to thank <a href="http://www.jetbrains.com">JetBrains</a> who have licensed their Python IDE <a href="https://www.jetbrains.com/pycharm/">PyCharm Professional Edition</a> to our developers at no cost.</p>
 	<a id="mirrorproviders"></a><h3>Mirror providers</h3>
 	<ul>
