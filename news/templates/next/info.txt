@@ -1,4 +1,0 @@
-Name: Next
-Author: Matthias Mees, mm@yellowled.de
-Date: 2015-05-07
-Require Serendipity: 2.0
