@@ -137,7 +137,7 @@ require_once 'functions.php';
 					} elseif (isset($_GET['campaign'])) {
 						require_once('campaign.php');
                     } elseif (isset($_GET['mirrors'])) {
-                        require_once('mirrors.php');
+                        require_once('mirrors.html');
                     } elseif (isset($_GET['codeofconduct'])) {
                         require_once('codeofconduct.php');
 					} elseif (isset($_GET['legal'])) {
