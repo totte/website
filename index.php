@@ -125,25 +125,25 @@ require_once 'functions.php';
 					</div>
 					<?php
 					if (isset($_GET['get'])) {
-						require_once('get.php');
+						require_once('get.html');
 					} elseif (isset($_GET['what'])) {
-						require_once('what.php');
+						require_once('what.html');
 					} elseif (isset($_GET['who'])) {
 						require_once('who.php');
 					} elseif (isset($_GET['welcome'])) {
-						require_once('welcome.php');
+						require_once('welcome.html');
 					} elseif (isset($_GET['donations'])) {
-						require_once('donations.php');
+						require_once('donations.html');
 					} elseif (isset($_GET['campaign'])) {
-						require_once('campaign.php');
+						require_once('campaign.html');
 					} elseif (isset($_GET['mirrors'])) {
 						require_once('mirrors.html');
 					} elseif (isset($_GET['codeofconduct'])) {
-						require_once('codeofconduct.php');
+						require_once('codeofconduct.html');
 					} elseif (isset($_GET['legal'])) {
-						require_once('legal.php');
+						require_once('legal.html');
 					} else {
-						require_once('home.php');
+						require_once('home.html');
 					}
 					?>
 				</div>
