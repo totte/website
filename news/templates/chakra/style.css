@@ -76,7 +76,7 @@ a:hover {
 /* wrapper for page */
 #wrap {
 	width:98%;
-	margin:0 auto; 
+	margin:0 auto;
         background: white;
 }
 
@@ -218,7 +218,7 @@ div.serendipity_entryFooter {
     clear: both;
     text-align: right;
 }
-   
+
 
 /* style for links within the page footer */
 div.serendipity_entryFooter a {
@@ -656,7 +656,7 @@ body {
 }
 
 /* FOOTER */
-#foot {
+#footer {
 	padding: 15px;
 	background: black url({TEMPLATE_PATH}img/footer2.png) no-repeat;
 	color: #f2f2f2;
@@ -664,23 +664,23 @@ body {
 	margin: 0 0 0 0;
 	font-size: 10pt;
 }
-#foot a:link {
+#footer a:link {
 	color: #f2f2f2;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-#foot a:visited {
+#footer a:visited {
 	color: #f2f2f2;
 	text-decoration: none;
 	font-weight: bold;
 }
-#foot a:hover{
+#footer a:hover{
 	color: #32adf1;
 	text-decoration: none;
 	font-weight: bold;
 }
-#foot a:active {
+#footer a:active {
 	color: white;
 	text-decoration: none;
 	font-weight: bold;
@@ -746,8 +746,8 @@ MENU BAR
 	margin: 0px auto;
 }
 
-.rbcontent { 
+.rbcontent {
 	width: 960px;
-	background: transparent url({TEMPLATE_PATH}img/shadow_r.png) repeat-y right; 
+	background: transparent url({TEMPLATE_PATH}img/shadow_r.png) repeat-y right;
 }
 

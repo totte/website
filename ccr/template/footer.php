@@ -9,11 +9,11 @@
 							&nbsp;
 							&middot;
 							&nbsp;
-							<a href="?legal">Legal information</a>
+							<a href="https://chakraos.org/index.php?legal">Legal information</a>
 							&nbsp;
 							&middot;
 							&nbsp;
-							<a href="?codeofconduct">Code of Conduct</a>
+							<a href="https://chakraos.org/index.php?codeofconduct">Code of Conduct</a>
 							&nbsp;
 							&middot;
 							&nbsp;
