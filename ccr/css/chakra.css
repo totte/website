@@ -149,9 +149,9 @@ pre {
   font-size: 9pt;
   font-weight: normal;
 }
-#lang_bar { 
+#lang_bar {
   text-align: left;
-  padding-top: 10px; 
+  padding-top: 10px;
 }
 #updates {
   font-size: small;
@@ -432,15 +432,15 @@ textarea.vLargeTextField {
 .pgbuildbody {
 	padding: 10px;
 	overflow-x: auto;
-	font-size: 14px; 
+	font-size: 14px;
 }
-	
+
 
 /* screenshots */
 .screenshot {
   border: 4px solid #808080;
   padding: 1px;
-  background: #fff; 
+  background: #fff;
   max-width: 266px;
   max-height: 200px;
   width: expression(this.width > 266 ? "266px" : true);
@@ -503,7 +503,7 @@ textarea.vLargeTextField {
 
 
 /* FOOTER */
-#foot {
+#footer {
 	padding: 15px;
 	background: transparent url("../images/footer2.png") no-repeat;
         /* background: #32adf1; */
@@ -512,25 +512,25 @@ textarea.vLargeTextField {
 	margin: 0px 0 0 0;
 	font-size: 10pt;
 }
-#foot a:link {
+#footer a:link {
 	color: #f2f2f2;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-#foot a:visited {
+#footer a:visited {
 	color: #f2f2f2;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-#foot a:hover{
+#footer a:hover{
 	color: #32adf1;
 	text-decoration: none;
 	font-weight: bold;
 }
 
-#foot a:active {
+#footer a:active {
 	color: white;
 	text-decoration: none;
 	font-weight: bold;
@@ -544,7 +544,7 @@ textarea.vLargeTextField {
   margin: 0px auto;
 }
 
-#shadow_right { 
+#shadow_right {
   width: 960px;
   background: transparent url('../images/shadow_r.png') repeat-y right; }
 }
