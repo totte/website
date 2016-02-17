@@ -44,3 +44,7 @@ Discussion regarding the development of this website takes place in the channel
 on the Chakra bugtracker: https://chakraos.org/bugtracker/index.php?project=2.
 If you wish to notify us of a security issue or something else that is sensitive
 you can send an e-mail to totte@chakraos.org.
+
+The master branch is automatically deployed to chakraos.org on each push, and
+the development branch is automatically deployed to development.chakraos.org on
+each push.
