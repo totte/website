@@ -37,3 +37,10 @@ php5-mysql
 
 # CODE STYLE
 Stick to tabs, not spaces, for PHP.
+
+# DEVELOPMENT
+Discussion regarding the development of this website takes place in the channel
+#chakra-devel on Freenode, on the mailing list chakra-devel@googlegroups.com and
+on the Chakra bugtracker: https://chakraos.org/bugtracker/index.php?project=2.
+If you wish to notify us of a security issue or something else that is sensitive
+you can send an e-mail to totte@chakraos.org.
