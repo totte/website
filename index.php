@@ -157,6 +157,12 @@
 						<li><a href="?legal">Legal information</a></li>
 						<li class="muted">·</li>
 						<li><a href="?codeofconduct">Code of Conduct</a></li>
+						<li class="muted">·</li>
+						<li><a href="?donations">Donate</a></li>
+						<li class="muted">·</li>
+						<li><a href="?mirrors">Mirrors</a></li>
+						<li class="muted">·</li>
+						<li><a href="?credits">Credits</a></li>
 					</ul>
 					<ul class="footer-links">
 						<li><strong>Hosted by&nbsp;</strong></li>
