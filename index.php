@@ -171,7 +171,7 @@
 				</div>
 				<div class="col-md-6">
 					<ul class="footer-copyright">
-						<li>Copyright &copy; 2006-<?php echo date("Y"); ?> <a href="?who">Chakra Contributors</a></li>
+						<li>Copyright &copy; 2006-<?php echo date("Y"); ?> <a href="http://spi-inc.org/">Software in the Public Interest, Inc. </a></li>
 						<li>The icons used on this site are taken from the <a href="http://www.oxygen-icons.org/">Oxygen Icons</a>, the default KDE 4.x icon set, which is licensed under the GPL. KDE® and the K Desktop Environment® logo are registered trademarks of <a href="http://ev.kde.org/">KDE e.V.</a> The registered trademark Linux® is used pursuant to a sublicense from LMI, the exclusive licensee of Linus Torvalds, owner of the mark on a world-wide basis. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes.</li>
 					</ul>
 				</div>
