@@ -103,8 +103,6 @@
 					require_once('welcome.html');
 				} elseif (isset($_GET['donations'])) {
 					require_once('donations.html');
-				} elseif (isset($_GET['campaign'])) {
-					require_once('campaign.html');
 				} elseif (isset($_GET['mirrors'])) {
 					require_once('mirrors.html');
 				} elseif (isset($_GET['codeofconduct'])) {
