@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 		<link rel="stylesheet" href="static/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="static/css/chakra3.css"/>
+		<link rel="stylesheet" href="static/css/chakra.css"/>
 		<link rel="icon" href="static/img/favicon.ico" type="image/x-icon"/>
 		<link rel="search" href="opensearch_ssl.xml" type="application/opensearchdescription+xml" title="DuckDuckGo (Chakra)"/>
 		<script type="text/javascript" src="static/js/jquery-1.9.1.js"></script>
