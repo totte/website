@@ -101,8 +101,8 @@
 					require_once('who.php');
 				} elseif (isset($_GET['welcome'])) {
 					require_once('welcome.html');
-				} elseif (isset($_GET['donations'])) {
-					require_once('donations.html');
+				} elseif (isset($_GET['donate'])) {
+					require_once('donate.html');
 				} elseif (isset($_GET['mirrors'])) {
 					require_once('mirrors.html');
 				} elseif (isset($_GET['codeofconduct'])) {
@@ -156,7 +156,7 @@
 						<li class="muted">·</li>
 						<li><a href="?codeofconduct">Code of Conduct</a></li>
 						<li class="muted">·</li>
-						<li><a href="?donations">Donate</a></li>
+						<li><a href="?donate">Donate</a></li>
 						<li class="muted">·</li>
 						<li><a href="?mirrors">Mirrors</a></li>
 						<li class="muted">·</li>
