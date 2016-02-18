@@ -3,14 +3,7 @@
 html,
 body {
     height: 100%;
-    background: url('../img/background.png') repeat;
-}
-
-#wrap {
-    min-height: 100%;
-    height: auto;
-    margin: 0 auto -128px;
-    padding: 0 0 128px;
+    background: #efefef;
 }
 
 .navbar-brand {
@@ -41,18 +34,13 @@ body {
 
 .jumbotron {
     margin: 64px 0;
-    background: #fff;
-    border-radius: 6px;
 }
 
 .row {
     margin: 64px 0 8px 0;
-    background: #fff;
-    border-radius: 6px;
 }
 
 .row-footer {
-    border-radius: 6px;
     font-size: 80%;
 }
 
@@ -65,7 +53,7 @@ body {
 #footer {
     height: 128px;
     color: #fff;
-    background-color: #323232;
+    background-color: #646464;
     background-image: url(../img/logotype.png);
     background-repeat:no-repeat;
     background-position: 99% 50%;

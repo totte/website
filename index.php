@@ -55,7 +55,6 @@
 		<![endif]-->
 	</head>
 	<body>
-	<div id="wrap">
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
@@ -175,6 +174,5 @@
 				</div>
 			</div>
 		</div>
-	</div><!-- /#footer -->
 	</body>
 </html>
