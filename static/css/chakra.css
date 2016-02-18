@@ -71,6 +71,9 @@ body {
     display: inline;
     padding: 0 2px;
 }
+.footer-links li a, .footer-copyright li a {
+    color: #32adf1;
+}
 .footer-links li:first-child {
     padding-left: 0;
 }
