@@ -80,12 +80,6 @@
 						<!--<li><a href="reviewboard/">Review Board</a></li>-->
 <!--						<li><a href="?get">Download</a></li>-->
 					</ul>
-					<form class="navbar-form navbar-right" role="form" method="get" id="search" action="http://duckduckgo.com/">
-						<div class="form-group">
-							<input type="text" name="q" maxlength="255" placeholder="!chakrapkg, !chakraforum, !chakrawiki, !ccr" class="form-control">
-						</div>
-						<button type="submit" class="btn btn-primary">Search</button>
-					</form>
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
