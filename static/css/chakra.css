@@ -32,10 +32,6 @@ body {
     background-color: #2C5D87;
 }
 
-.jumbotron {
-    margin: 64px 0;
-}
-
 .row {
     margin: 64px 0 8px 0;
 }
@@ -87,4 +83,8 @@ body {
 }
 .footer-copyright li:first-child {
     padding-bottom: 4px;
+}
+
+.jumbotron {
+    background-color: #f0a;
 }
