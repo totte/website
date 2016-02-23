@@ -76,7 +76,7 @@
 						<li><a href="wiki/">Wiki</a></li>
 						<li><a href="bugtracker/">Bugtracker</a></li>
 <!--						<li><a href="?donations">Donate</a></li>-->
-						<li><a href="http://git.chakraos.org">Git</a></li>
+						<li><a href="http://git.chakraos.org">Source code</a></li>
 						<!--<li><a href="reviewboard/">Review Board</a></li>-->
 <!--						<li><a href="?get">Download</a></li>-->
 					</ul>
