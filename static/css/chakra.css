@@ -47,10 +47,8 @@ body {
 }
 
 #footer {
-    height: 128px;
     color: #fff;
     background-color: #646464;
-    background-image: url(../img/logotype.png);
     background-repeat:no-repeat;
     background-position: 99% 50%;
 }
