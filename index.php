@@ -20,23 +20,6 @@
 			});
 		</script>
 		<script type="text/javascript">
-			$(document).ready(
-				function () {
-					$('ul#animated-portfolio').animatedinnerfade({
-						speed: 2000,
-						timeout: 6000,
-						type: 'random',
-						containerheight: '255px',
-						containerwidth: '340px',
-						animationSpeed: 5000,
-						animationtype: 'fade',
-						bgFrame: 'none',
-						controlBox: 'none',
-						displayTitle: 'none'
-					});
-				});
-		</script>
-		<script type="text/javascript">
 			/* <![CDATA[ */
 			(function () {
 				var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
