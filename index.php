@@ -90,13 +90,13 @@
 					require_once('get.html');
 				} elseif (isset($_GET['what'])) {
 					require_once('what.html');
-				} elseif (isset($_GET['who'])) {
-					require_once('who.php');
+				} elseif (isset($_GET['contributors'])) {
+					require_once('contributors.php');
 				} elseif (isset($_GET['welcome'])) {
 					require_once('welcome.html');
 				} elseif (isset($_GET['donate'])) {
 					require_once('donate.html');
-				} elseif (isset($_GET['mirrors'])) {
+				} elseif (isset($_GET['mirrorstatus'])) {
 					require_once('mirrors.html');
 				} elseif (isset($_GET['codeofconduct'])) {
 					require_once('codeofconduct.html');
@@ -120,6 +120,12 @@
 						<li><a href="mailto:chakra-packagers@googlegroups.com">Packagers</a></li>
 					</ul>
 					<ul class="footer-links">
+						<li><strong>IRC channels&nbsp;</strong></li>
+						<li><a href="http://webchat.freenode.net/?channels=chakra">Users</a></li>
+						<li class="muted">·</li>
+						<li><a href="http://webchat.freenode.net/?channels=chakra-devel">Developers & Packagers</a></li>
+					</ul>
+					<ul class="footer-links">
 						<li><strong>Social networks&nbsp;</strong></li>
 						<li><a href="https://www.reddit.com/r/chakra">Reddit</a></li>
 						<li class="muted">·</li>
@@ -136,24 +142,26 @@
 						<li><a href="https://telegram.me/joinchat/ANIPGQZo-N4_5u0zveXBjg">Telegram</a></li>
 					</ul>
 					<ul class="footer-links">
-						<li><strong>IRC channels&nbsp;</strong></li>
-						<li><a href="http://webchat.freenode.net/?channels=chakra">#chakra</a></li>
+						<li><strong>About&nbsp;</strong></li>
+						<li><a href="?aboutchakra">About Chakra</a></li>
 						<li class="muted">·</li>
-						<li><a href="http://webchat.freenode.net/?channels=chakra-devel">#chakra-devel</a></li>
+						<li><a href="?contributors">Contributors</a></li>
+						<li class="muted">·</li>
+						<li><a href="?acknowledgements">Acknowledgements</a></li><!-- Former contributors, sponsors, donors, mirror providers etc. -->
+						<li class="muted">·</li>
+						<li><a href="?contact">Contact us</a></li>
+						<li class="muted">·</li>
+						<li><a href="?donate">Donate</a></li>
+						<li class="muted">·</li>
+						<li><a href="?getinvolved">Get involved</a></li>
 					</ul>
 					<ul class="footer-links">
 						<li><strong>Miscellaneous&nbsp;</strong></li>
-						<li><a href="?contact">Contact</a></li>
-						<li class="muted">·</li>
 						<li><a href="?legal">Legal information</a></li>
 						<li class="muted">·</li>
 						<li><a href="?codeofconduct">Code of Conduct</a></li>
 						<li class="muted">·</li>
-						<li><a href="?donate">Donate</a></li>
-						<li class="muted">·</li>
-						<li><a href="?mirrors">Mirrors</a></li>
-						<li class="muted">·</li>
-						<li><a href="?credits">Credits</a></li>
+						<li><a href="?mirrorstatus">Mirror status</a></li>
 					</ul>
 					<ul class="footer-links">
 						<li><strong>Hosted by&nbsp;</strong></li>
@@ -162,8 +170,9 @@
 				</div>
 				<div class="col-md-6">
 					<ul class="footer-copyright">
-						<li>Copyright &copy; 2006-<?php echo date("Y"); ?> <a href="http://spi-inc.org/">Software in the Public Interest, Inc. </a></li>
-						<li>The icons used on this site are taken from the <a href="http://www.oxygen-icons.org/">Oxygen Icons</a>, the default KDE 4.x icon set, which is licensed under the GPL. KDE® and the K Desktop Environment® logo are registered trademarks of <a href="http://ev.kde.org/">KDE e.V.</a> The registered trademark Linux® is used pursuant to a sublicense from LMI, the exclusive licensee of Linus Torvalds, owner of the mark on a world-wide basis. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes.</li>
+						<li><a href="https://co.clickandpledge.com/advanced/default.aspx?wid=92751"><img src="static/img/click_and_pledge.png" alt="Donate via Click&Pledge to Chakra" /></a></li>
+						<li>Copyright &copy; 2006-<?php echo date("Y"); ?> <a href="http://spi-inc.org/">Software in the Public Interest, Inc.</a></li>
+						<li>KDE® and the K Desktop Environment® logo are registered trademarks of <a href="http://ev.kde.org/">KDE e.V.</a> The registered trademark Linux® is used pursuant to a sublicense from LMI, the exclusive licensee of Linus Torvalds, owner of the mark on a world-wide basis. All other trademarks and copyrights are property of their respective owners and are only mentioned for informative purposes.</li>
 					</ul>
 				</div>
 			</div>
