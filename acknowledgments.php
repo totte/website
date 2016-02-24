@@ -237,7 +237,14 @@
 	</ul>
 
 	<!-- DONORS -->
-	<h2>Donors</h2>
+	<h2>Past donors</h2>
+	<ul>
+		<li>H W Tovetjärn</li>
+		<li>stes</li>
+		<li>statmonkey</li>
+		<li>TheFaico</li>
+		<li>ugjka</li>
+	</ul>
 
 	<!-- OTHERS -->
 	<h2>Others</h2>
