@@ -264,4 +264,5 @@
 		<li>Freenode</li>
 		<li>SPI</li>
 	</ul>
+	<p>Chakra is associated with SPI, a non-profit organization which was founded to help organizations develop and distribute open hardware and software.</p>
 </div>
