@@ -88,8 +88,8 @@
 				<?php
 				if (isset($_GET['get'])) {
 					require_once('get.html');
-				} elseif (isset($_GET['what'])) {
-					require_once('what.html');
+				} elseif (isset($_GET['about'])) {
+					require_once('about.html');
 				} elseif (isset($_GET['contributors'])) {
 					require_once('contributors.php');
 				} elseif (isset($_GET['acknowledgments'])) {
