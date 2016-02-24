@@ -155,7 +155,7 @@
 						<li class="muted">·</li>
 						<li><a href="?acknowledgments">Acknowledgements</a></li><!-- Former contributors, sponsors, donors, mirror providers etc. -->
 						<li class="muted">·</li>
-						<li><a href="?contact">Contact us</a></li>
+						<li><a href="?contact">Contact</a></li>
 						<li class="muted">·</li>
 						<li><a href="?donate">Donate</a></li>
 						<li class="muted">·</li>
