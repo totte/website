@@ -6,6 +6,11 @@ body {
     background: #efefef;
 }
 
+h1,
+h2 {
+    color: rgb(50, 118, 177);
+}
+
 .navbar-brand {
     padding: 12px;
 }
