@@ -84,5 +84,9 @@ body {
 }
 
 .jumbotron {
-    background-color: #dedede;
+    background-color: #eee;
+}
+
+hr {
+    border-color: rgb(50, 118, 177);
 }
