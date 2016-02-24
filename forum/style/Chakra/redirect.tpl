@@ -2,14 +2,14 @@
 	                <html xmlns="http://www.w3.org/1999/xhtml">
 	                <head>
 		                <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-		                <link rel="stylesheet" href="static/css/bootstrap.min.css"/>
-		                <link rel="stylesheet" href="static/css/chakra.css"/>
-		                <link rel="icon" href="static/img/favicon.ico" type="image/x-icon"/>
-		                <link rel="search" href="opensearch_ssl.xml" type="application/opensearchdescription+xml" title="DuckDuckGo (Chakra)"/>
-		                <script type="text/javascript" src="static/js/jquery-1.9.1.js"></script>
-		                <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
-		                <script type="text/javascript" src="static/js/jquery-ui.js"></script>
-		                <script type="text/javascript" src="static/js/jquery.animated.innerfade.js"></script>
+		                <link rel="stylesheet" href="../../../static/css/bootstrap.min.css"/>
+		                <link rel="stylesheet" href="../../../static/css/chakra.css"/>
+		                <link rel="icon" href="../../../static/img/favicon.ico" type="image/x-icon"/>
+		                <link rel="search" href="../../../opensearch_ssl.xml" type="application/opensearchdescription+xml" title="DuckDuckGo (Chakra)"/>
+		                <script type="text/javascript" src="../../../static/js/jquery-1.9.1.js"></script>
+		                <script type="text/javascript" src="../../../static/js/bootstrap.min.js"></script>
+		                <script type="text/javascript" src="../../../static/js/jquery-ui.js"></script>
+		                <script type="text/javascript" src="../../../static/js/jquery.animated.innerfade.js"></script>
 		                <script type="text/javascript">
 			                $(function () {
 				                $("#tabs").tabs();
@@ -29,8 +29,8 @@
 		                <title>Chakra - Stable core, bleeding edge applications!</title>
 		                <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		                <!--[if lt IE 9]>
-		                <script type="text/javascript" src="static/js/html5shiv.js"></script>
-		                <script type="text/javascript" src="static/js/respond.min.js"></script>
+		                <script type="text/javascript" src="../../../static/js/html5shiv.js"></script>
+		                <script type="text/javascript" src="../../../static/js/respond.min.js"></script>
 		                <![endif]-->
 		                <pun_head>
 			                </head>
@@ -44,15 +44,15 @@
 					                <span class="icon-bar"></span>
 					                <span class="icon-bar"></span>
 				                </button>
-				                <a class="navbar-brand" href="https://chakraos.org"><img src="static/img/logotype.png" style="max-width: 24px" />&nbsp;Chakra</a>
+				                <a class="navbar-brand" href="https://chakraos.org"><img src="../../../static/img/logotype.png" style="max-width: 24px" />&nbsp;Chakra</a>
 			                </div>
 			                <div class="collapse navbar-collapse">
 				                <ul class="nav navbar-nav">
-					                <li class="active"><a href="index.php">Home</a></li>
+					                <li><a href="https://chakraos.org">Home</a></li>
 					                <li><a href="news/">News</a></li>
 					                <li><a href="http://rsync.chakraos.org/packages">Packages</a></li>
 					                <li><a href="ccr/">CCR</a></li>
-					                <li><a href="forum/">Forum</a></li>
+					                <li class="active"><a href="forum/">Forum</a></li>
 					                <li><a href="wiki/">Wiki</a></li>
 					                <li><a href="bugtracker/">Bugtracker</a></li>
 					                <li><a href="http://git.chakraos.org">Source code</a></li>
