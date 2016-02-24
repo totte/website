@@ -255,6 +255,11 @@
 		<li>cgit</li>
 		<li>Python</li>
 		<li>Django</li>
+		<li>PostgreSQL</li>
+		<li>Exim</li>
+		<li>Transmission</li>
+		<li>vnstat</li>
+		<li>Munin</li>
 		<li>Xen</li>
 		<li>Freenode</li>
 		<li>SPI</li>
