@@ -90,10 +90,14 @@
 					require_once('get.html');
 				} elseif (isset($_GET['about'])) {
 					require_once('about.html');
+				} elseif (isset($_GET['contact'])) {
+					require_once('contact.html');
 				} elseif (isset($_GET['contributors'])) {
 					require_once('contributors.php');
 				} elseif (isset($_GET['acknowledgments'])) {
 					require_once('acknowledgments.php');
+				} elseif (isset($_GET['getinvolved'])) {
+					require_once('getinvolved.html');
 				} elseif (isset($_GET['welcome'])) {
 					require_once('welcome.html');
 				} elseif (isset($_GET['donate'])) {
@@ -129,27 +133,27 @@
 					</ul>
 					<ul class="footer-links">
 						<li><strong>Social networks&nbsp;</strong></li>
-						<li><a href="https://www.reddit.com/r/chakra">Reddit</a></li>
+						<li><a href="https://joindiaspora.com/people/bbe1261d580884b3">Diaspora</a></li>
 						<li class="muted">·</li>
 						<li><a href="https://www.facebook.com/chakraos">Facebook</a></li>
 						<li class="muted">·</li>
 						<li><a href="https://plus.google.com/+chakraosorg">Google+</a></li>
 						<li class="muted">·</li>
-						<li><a href="https://twitter.com/chakraos">Twitter</a></li>
-						<li class="muted">·</li>
-						<li><a href="https://joindiaspora.com/people/bbe1261d580884b3">Diaspora</a></li>
-						<li class="muted">·</li>
 						<li><a href="https://www.identi.ca/thechakraproject">Identi.ca</a></li>
 						<li class="muted">·</li>
+						<li><a href="https://www.reddit.com/r/chakra">Reddit</a></li>
+						<li class="muted">·</li>
 						<li><a href="https://telegram.me/joinchat/ANIPGQZo-N4_5u0zveXBjg">Telegram</a></li>
+						<li class="muted">·</li>
+						<li><a href="https://twitter.com/chakraos">Twitter</a></li>
 					</ul>
 					<ul class="footer-links">
 						<li><strong>About&nbsp;</strong></li>
-						<li><a href="?aboutchakra">About Chakra</a></li>
+						<li><a href="?about">About Chakra</a></li>
 						<li class="muted">·</li>
 						<li><a href="?contributors">Contributors</a></li>
 						<li class="muted">·</li>
-						<li><a href="?acknowledgements">Acknowledgements</a></li><!-- Former contributors, sponsors, donors, mirror providers etc. -->
+						<li><a href="?acknowledgments">Acknowledgements</a></li><!-- Former contributors, sponsors, donors, mirror providers etc. -->
 						<li class="muted">·</li>
 						<li><a href="?contact">Contact us</a></li>
 						<li class="muted">·</li>
