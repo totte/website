@@ -92,6 +92,8 @@
 					require_once('what.html');
 				} elseif (isset($_GET['contributors'])) {
 					require_once('contributors.php');
+				} elseif (isset($_GET['acknowledgments'])) {
+					require_once('acknowledgments.php');
 				} elseif (isset($_GET['welcome'])) {
 					require_once('welcome.html');
 				} elseif (isset($_GET['donate'])) {
