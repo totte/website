@@ -49,6 +49,8 @@ The master branch is automatically deployed to chakraos.org on each push, and
 the development branch is automatically deployed to development.chakraos.org on
 each push.
 
+TODO: Explain how to create and send in patches
+
 # PALETTE
 Dark blue: #2C5D87
 Not-as-dark blue: rgb(50, 118, 177)
