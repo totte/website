@@ -633,7 +633,9 @@ img.serendipity_freeTag_xmlButton {
 /* Don't remove this! prevents the page offset */
 
 html { overflow-y: scroll; margin:0; padding:0; }
-* { margin: 0; padding: 0; }
+/* Commented out the line below despite the warning above due to unindented lists */
+/* * { margin: 0; padding: 0; } */
+* { margin: 0; }
 
 
 body {
