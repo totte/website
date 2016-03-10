@@ -1,0 +1,4 @@
+REVIEWBOARD_URL = "https://chakraos.org/reviewboard"
+REPOSITORY = "website"
+BRANCH = "master"
+TARGET_GROUPS = "website"
